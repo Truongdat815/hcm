@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: hcm-presentation-game
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node presentation-web/server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 20
