@@ -1089,8 +1089,9 @@
     </div>
   </div>
 
-  <!-- Load Socket.io (CDN with local fallback) -->
-  <script src="/socket.io/socket.io.js" onerror="this.onerror=null;this.src='https://cdn.socket.io/4.8.1/socket.io.min.js';"></script>
+  <!-- Load Config & Socket.io (Works seamlessly on Vercel & VPS) -->
+  <script src="/config.js" onerror="this.onerror=null;this.src='config.js';"></script>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
   <script>
     // Audio Context Synthesizer
     let audioCtx = null;
@@ -1300,8 +1301,16 @@
     // REALTIME SOCKET.IO MULTIPLAYER CONNECTION
     // ======================================================================
     const urlParams = new URLSearchParams(window.location.search);
-    const customServer = urlParams.get('server');
-    const socket = customServer ? io(customServer) : io();
+    const queryServer = urlParams.get('server');
+    const configServer = (window.HCM_CONFIG && window.HCM_CONFIG.BACKEND_URL) || '';
+    const storedServer = localStorage.getItem('hcm_backend_url') || '';
+
+    if (queryServer) {
+      localStorage.setItem('hcm_backend_url', queryServer);
+    }
+
+    const resolvedServer = queryServer || configServer || storedServer;
+    const socket = resolvedServer ? io(resolvedServer, { transports: ['websocket', 'polling'] }) : io({ transports: ['websocket', 'polling'] });
 
     socket.on("connect", () => {
       isConnected = true;

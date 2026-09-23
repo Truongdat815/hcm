@@ -846,6 +846,9 @@
     </div>
 
     <div class="header-actions">
+      <button id="btn-config-server" class="host-btn" title="Cài đặt URL Máy chủ VPS (Cloudflare)">
+        <span>⚙️ Server VPS</span>
+      </button>
       <button id="btn-host-stop" class="host-btn btn-danger-action" title="Dừng trận đấu ngay lập tức và đưa toàn bộ sinh viên về phòng chờ">
         <span>🛑 Dừng Trận Đấu</span>
       </button>
@@ -1090,9 +1093,46 @@
     </div>
   </div>
 
-  <script src="/socket.io/socket.io.js"></script>
+  <!-- Load Config & Socket.io (Works seamlessly on Vercel & VPS) -->
+  <script src="/config.js" onerror="this.onerror=null;this.src='config.js';"></script>
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
   <script>
-    const socket = io();
+    // Resolve Backend Server URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const queryServer = urlParams.get('server');
+    const configServer = (window.HCM_CONFIG && window.HCM_CONFIG.BACKEND_URL) || '';
+    const storedServer = localStorage.getItem('hcm_backend_url') || '';
+
+    if (queryServer) {
+      localStorage.setItem('hcm_backend_url', queryServer);
+    }
+
+    const currentHostIsVercel = window.location.hostname.includes('vercel.app');
+    let backendUrl = queryServer || storedServer || configServer || '';
+    backendUrl = backendUrl.trim().replace(/\/+$/, '');
+
+    // Connect socket to VPS Cloudflare backend or current origin
+    const socket = backendUrl ? io(backendUrl, { transports: ['websocket', 'polling'] }) : io({ transports: ['websocket', 'polling'] });
+
+    // Server Config Button handler
+    const btnConfigServer = document.getElementById('btn-config-server');
+    if (btnConfigServer) {
+      btnConfigServer.addEventListener('click', () => {
+        const currentSaved = localStorage.getItem('hcm_backend_url') || configServer || '';
+        const inputUrl = prompt(
+          '⚙️ CẤU HÌNH ĐƯỜNG DẪN MÁY CHỦ BACKEND (VPS / CLOUDFLARE):\n\n' +
+          'Nhập URL cố định của VPS qua Cloudflare (ví dụ: https://api.yourdomain.com):\n' +
+          '(Để trống nếu muốn quay về mặc định domain hiện tại)',
+          currentSaved
+        );
+        if (inputUrl !== null) {
+          const cleanUrl = inputUrl.trim().replace(/\/+$/, '');
+          localStorage.setItem('hcm_backend_url', cleanUrl);
+          alert('Đã lưu máy chủ backend: ' + (cleanUrl || 'Mặc định') + '\nTrang sẽ tải lại để áp dụng kết nối mới!');
+          window.location.reload();
+        }
+      });
+    }
 
     // Password Gate Management
     const gateOverlay = document.getElementById('gate-overlay');
@@ -1129,23 +1169,37 @@
     // Check on load
     checkAuth();
 
-    // Load QR Code & URL (Instantly works on Vercel & Localhost)
+    // Load QR Code & URL (Instantly works on Vercel & VPS Cloudflare)
     const hostOrigin = window.location.origin;
-    const defaultHostPlayUrl = hostOrigin + '/play';
+    let targetPlayUrl = '';
+
+    if (backendUrl && currentHostIsVercel) {
+      // On Vercel: Phone opens Vercel's play.html with ?server=<VPS_URL>
+      targetPlayUrl = `${hostOrigin}/play?server=${encodeURIComponent(backendUrl)}`;
+    } else if (backendUrl) {
+      targetPlayUrl = `${backendUrl}/play`;
+    } else {
+      targetPlayUrl = `${hostOrigin}/play`;
+    }
+
     const qrImgHost = document.getElementById('qr-img');
     const qrLinkTextHost = document.getElementById('qr-link-text');
 
-    if (qrLinkTextHost) qrLinkTextHost.textContent = defaultHostPlayUrl;
-    if (qrImgHost) qrImgHost.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(defaultHostPlayUrl)}`;
+    if (qrLinkTextHost) qrLinkTextHost.textContent = targetPlayUrl;
+    if (qrImgHost) qrImgHost.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(targetPlayUrl)}`;
 
-    fetch('/api/server-info')
+    // If local Node server, fetch /api/server-info
+    const apiTarget = backendUrl ? `${backendUrl}/api/server-info` : '/api/server-info';
+    fetch(apiTarget)
       .then(res => {
         if (!res.ok) throw new Error('Not local server');
         return res.json();
       })
       .then(data => {
-        if (qrImgHost && data.qrDataUrl) qrImgHost.src = data.qrDataUrl;
-        if (qrLinkTextHost && data.playUrl) qrLinkTextHost.textContent = data.playUrl;
+        if (!backendUrl && !currentHostIsVercel) {
+          if (qrImgHost && data.qrDataUrl) qrImgHost.src = data.qrDataUrl;
+          if (qrLinkTextHost && data.playUrl) qrLinkTextHost.textContent = data.playUrl;
+        }
       })
       .catch(() => {});
 

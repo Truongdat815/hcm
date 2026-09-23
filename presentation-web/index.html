@@ -994,13 +994,24 @@
       }
     }
 
+  <!-- Load Config (Works seamlessly on Vercel & VPS) -->
+  <script src="/config.js" onerror="this.onerror=null;this.src='config.js';"></script>
+  <script>
     // Launch Deck on Load
     document.addEventListener("DOMContentLoaded", () => {
       window.deckApp = new HorizontalMorphDeck();
 
-      // Setup QR Code for Slide 12 (Instantly works on Vercel, Netlify, and Localhost)
+      // Setup QR Code for Slide 12 (Works on Vercel & VPS Cloudflare)
       const currentOrigin = window.location.origin;
-      const defaultPlayUrl = currentOrigin + '/play';
+      const configBackend = (window.HCM_CONFIG && window.HCM_CONFIG.BACKEND_URL) || localStorage.getItem('hcm_backend_url') || '';
+      let defaultPlayUrl = currentOrigin + '/play';
+
+      if (configBackend && window.location.hostname.includes('vercel.app')) {
+        defaultPlayUrl = `${currentOrigin}/play?server=${encodeURIComponent(configBackend)}`;
+      } else if (configBackend) {
+        defaultPlayUrl = `${configBackend}/play`;
+      }
+
       const qrImg = document.getElementById('slide12-qr-img');
       const qrUrl = document.getElementById('slide12-qr-url');
 
@@ -1008,17 +1019,20 @@
       if (qrImg) qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(defaultPlayUrl)}`;
 
       // If running with local Node backend server, get the LAN Wi-Fi IP address
-      fetch('/api/server-info')
+      const apiTarget = configBackend ? `${configBackend}/api/server-info` : '/api/server-info';
+      fetch(apiTarget)
         .then(res => {
           if (!res.ok) throw new Error('Not local server');
           return res.json();
         })
         .then(data => {
-          if (qrImg && data.qrDataUrl) qrImg.src = data.qrDataUrl;
-          if (qrUrl && data.playUrl) qrUrl.textContent = data.playUrl;
+          if (!configBackend) {
+            if (qrImg && data.qrDataUrl) qrImg.src = data.qrDataUrl;
+            if (qrUrl && data.playUrl) qrUrl.textContent = data.playUrl;
+          }
         })
         .catch(() => {
-          // Keep currentOrigin QR code on Vercel
+          // Keep current QR code
         });
     });
   </script>
