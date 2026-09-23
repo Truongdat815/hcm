@@ -413,38 +413,52 @@ html, body {
    ========================================================================== */
 .cover-poster-content {
   flex: 1;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1.15fr 0.9fr;
+  gap: 36px;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  text-align: left;
   background: radial-gradient(ellipse at center, #FFFDF7 0%, #F5E8CB 100%);
-  padding: 24px;
-  border-radius: 4px;
+  padding: 24px 34px;
+  border-radius: 6px;
   border: 2px solid var(--gold-metallic);
   position: relative;
+  overflow: hidden;
+}
+
+.cover-text-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cover-top-emblem-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 8px;
 }
 
 .cover-national-flag, .cover-star-burst {
-  width: 140px;
-  height: 94px;
+  width: 90px;
+  height: 60px;
   border-radius: 4px;
   background: #DA251D; /* Đỏ cờ chuẩn Quốc kỳ Việt Nam */
   color: #FFFF00;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), 0 0 0 3px var(--gold-metallic), 0 0 25px rgba(218, 37, 29, 0.45);
-  margin-bottom: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35), 0 0 0 2.5px var(--gold-metallic), 0 0 20px rgba(218, 37, 29, 0.45);
   border: 2px solid #FFF;
   overflow: hidden;
   position: relative;
+  flex-shrink: 0;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
 }
 
 .cover-national-flag:hover, .cover-star-burst:hover {
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45), 0 0 0 3px var(--gold-star), 0 0 32px rgba(218, 37, 29, 0.65);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45), 0 0 0 3px var(--gold-star), 0 0 28px rgba(218, 37, 29, 0.65);
 }
 
 .cover-national-flag svg, .cover-star-burst svg {
@@ -453,70 +467,211 @@ html, body {
   display: block;
 }
 
+.cover-nation-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
 .cover-nation-header {
   font-family: var(--font-poster);
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 900;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   color: var(--red-flag);
   text-transform: uppercase;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 
 .cover-nation-sub {
   font-family: var(--font-body);
-  font-size: 14.5px;
+  font-size: 13.5px;
   font-weight: 700;
   font-style: italic;
   color: var(--charcoal-ink);
-  margin-bottom: 18px;
 }
 
 .cover-divider-red-gold {
-  width: 180px;
+  width: 140px;
   height: 3px;
-  background: linear-gradient(90deg, transparent, var(--red-flag), var(--gold-star), var(--red-flag), transparent);
-  margin: 0 auto 20px;
+  background: linear-gradient(90deg, var(--red-flag), var(--gold-star), var(--red-flag), transparent);
+  margin: 10px 0 14px 0;
 }
 
 .cover-title-mega {
   font-family: var(--font-poster);
-  font-size: clamp(32px, 3.8vw, 52px);
+  font-size: clamp(26px, 2.7vw, 42px);
   font-weight: 900;
   color: var(--red-darkest);
-  line-height: 1.2;
+  line-height: 1.18;
   text-transform: uppercase;
   letter-spacing: -0.01em;
-  margin-bottom: 14px;
-  text-shadow: 2px 2px 0 rgba(255, 222, 0, 0.4);
+  margin-bottom: 12px;
+  text-shadow: 1.5px 1.5px 0 rgba(255, 222, 0, 0.4);
 }
 
 .cover-slogan-gold {
   font-family: var(--font-poster);
-  font-size: clamp(16px, 1.8vw, 22px);
+  font-size: clamp(13px, 1.2vw, 16px);
   font-weight: 800;
   color: var(--red-flag);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 24px;
-  padding: 6px 20px;
+  letter-spacing: 0.04em;
+  margin-bottom: 14px;
+  padding: 6px 14px;
   background: rgba(192, 32, 24, 0.08);
   border-radius: 4px;
   border: 1px dashed var(--red-flag);
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.cover-desc-lead {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #332B25;
+  margin-bottom: 16px;
+  background: rgba(255, 255, 255, 0.65);
+  padding: 9px 14px;
+  border-left: 3.5px solid var(--red-flag);
+  border-radius: 0 4px 4px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
 
 .cover-dossier-badges {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 18px;
+  justify-content: flex-start;
+  gap: 10px;
   flex-wrap: wrap;
   font-family: var(--font-poster);
-  font-size: 12.5px;
+  font-size: 11.5px;
   font-weight: 700;
   color: var(--charcoal-ink);
-  padding-top: 14px;
-  border-top: 2px solid rgba(142, 17, 10, 0.15);
+  padding-top: 12px;
+  border-top: 1.5px solid rgba(142, 17, 10, 0.15);
+}
+
+/* HISTORIC PHOTO COLUMN */
+.cover-photo-column {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.cover-historic-photo-card {
+  background: #FFF;
+  border: 3px solid var(--gold-metallic);
+  border-radius: 8px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), 0 0 0 3px rgba(192, 32, 24, 0.6), 0 0 25px rgba(232, 185, 54, 0.25);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 530px;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.cover-historic-photo-card:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.45), 0 0 0 4px var(--gold-star), 0 0 35px rgba(255, 222, 0, 0.45);
+}
+
+.historic-photo-badge {
+  background: linear-gradient(90deg, var(--red-flag), var(--red-deep));
+  color: var(--gold-star);
+  font-family: var(--font-poster);
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+.historic-photo-badge .star-gold {
+  color: var(--gold-star);
+  font-size: 13px;
+}
+
+.historic-photo-inner {
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  overflow: hidden;
+  max-height: 330px;
+  background: #000;
+}
+
+.historic-photo-img {
+  width: 100%;
+  height: 100%;
+  max-height: 330px;
+  object-fit: cover;
+  object-position: center 25%;
+  display: block;
+  filter: contrast(1.08) brightness(1.02);
+  transition: transform 0.4s ease;
+}
+
+.cover-historic-photo-card:hover .historic-photo-img {
+  transform: scale(1.03);
+}
+
+.historic-photo-footer {
+  margin-top: 10px;
+  text-align: center;
+  padding: 4px 6px 0;
+}
+
+.historic-quote-lead {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--red-darkest);
+  line-height: 1.35;
+  font-style: italic;
+  margin-bottom: 4px;
+}
+
+.historic-caption-text {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: #555;
+  line-height: 1.35;
+}
+
+@media (max-width: 1100px) {
+  .cover-poster-content {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+    text-align: center;
+    gap: 20px;
+    padding: 16px;
+  }
+  .cover-top-emblem-row {
+    justify-content: center;
+  }
+  .cover-text-column .cover-divider-red-gold {
+    margin: 10px auto 14px;
+  }
+  .cover-text-column .cover-slogan-gold {
+    align-self: center;
+  }
+  .cover-text-column .cover-dossier-badges {
+    justify-content: center;
+  }
+  .cover-historic-photo-card {
+    max-width: 440px;
+    margin: 0 auto;
+  }
 }
 
 .badge-dossier-pill {
