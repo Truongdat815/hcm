@@ -5,6 +5,7 @@
   "main": "presentation-web/server.js",
   "scripts": {
     "start": "node presentation-web/server.js",
+    "online": "node presentation-web/server.js --online",
     "dev": "node presentation-web/server.js",
     "postinstall": "cd presentation-web && npm install"
   },

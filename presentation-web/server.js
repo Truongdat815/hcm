@@ -699,13 +699,39 @@ io.on('connection', (socket) => {
 });
 
 // Start Server
-server.listen(PORT, '0.0.0.0', () => {
+server.listen(PORT, '0.0.0.0', async () => {
   const ip = getLocalIp();
   console.log(`=======================================================`);
   console.log(`🚀 HỒ CHÍ MINH PRESENTATION & MULTIPLAYER MINIGAME SERVER`);
   console.log(`📍 Host / Presentation: http://localhost:${PORT}`);
-  console.log(`🎮 Game Host (Máy Chiếu): http://localhost:${PORT}/game`);
+  console.log(`🎮 Game Host (Máy Chiếu LAN): http://localhost:${PORT}/game`);
   console.log(`📱 Player Join (Điện Thoại LAN): http://${ip}:${PORT}/play`);
   console.log(`🔐 Mật khẩu Quản trò: ${ADMIN_PASSWORD}`);
+
+  if (process.argv.includes('--online') || process.env.ONLINE_MODE === 'true') {
+    try {
+      console.log(`-------------------------------------------------------`);
+      console.log(`📡 Đang thiết lập đường truyền Internet công khai (4G/Wi-Fi)...`);
+      const localtunnel = require('localtunnel');
+      const tunnel = await localtunnel({ port: PORT });
+      process.env.PUBLIC_PLAY_URL = tunnel.url;
+      console.log(`🌐 ----------------------------------------------------`);
+      console.log(`🎉 ĐÃ KÍCH HOẠT THÀNH CÔNG ĐƯỜNG TRUYỀN ONLINE (4G):`);
+      console.log(`💻 MÁY CHIẾU: ${tunnel.url}/game (hoặc http://localhost:${PORT}/game)`);
+      console.log(`📱 ĐIỆN THOẠI CẢ LỚP (4G/BẤT KỲ ĐÂU): ${tunnel.url}/play`);
+      console.log(`👉 Mã QR trên máy chiếu sẽ tự động cập nhật link 4G này!`);
+      console.log(`🌐 ----------------------------------------------------`);
+
+      tunnel.on('close', () => {
+        console.log('⚠️ Đường truyền Online đã đóng.');
+      });
+      tunnel.on('error', (err) => {
+        console.error('Lỗi tunnel:', err.message);
+      });
+    } catch (err) {
+      console.error('⚠️ Không thể khởi tạo tunnel tự động:', err.message);
+      console.log('Bạn vẫn có thể chơi bằng mạng Wi-Fi nội bộ bình thường.');
+    }
+  }
   console.log(`=======================================================`);
 });

@@ -4,34 +4,38 @@ Game **"Đấu Trí Ngoại Giao — Ai Là Triệu Phú"** được thiết k�
 
 ---
 
-## 🎯 CÁCH 1: CHƠI TRỰC TIẾP TRÊN MÁY CHIẾU LỚP HỌC (KHUYÊN DÙNG - MƯỢT NHẤT)
+## 🌟 PHƯƠNG ÁN A: CHƠI ONLINE QUA INTERNET (4G / BẤT KỲ ĐÂU) — TIỆN LỢI NHẤT!
 
-### 📌 Bước 1: Khởi động Server trên Laptop cắm Máy Chiếu
-1. Trên Laptop thuyết trình, **click đúp vào file `CHAY_GAME_TRONG_LOP.bat`** (hoặc mở Terminal gõ `npm start`).
-2. Màn hình console sẽ hiện IP mạng LAN (ví dụ: `http://192.168.1.25:4000/play`).
+> **Ưu điểm lớn nhất:** Cả lớp dùng mạng 4G khác nhau (Viettel, Vina, Mobi) hay bắt Wi-Fi nào cũng đều quét mã vào chơi cùng lúc được!
 
-### 📌 Bước 2: Chiếu màn hình Quản trò lên Máy Chiếu
-1. Trên trình duyệt Laptop, mở:  
-   👉 **`http://localhost:4000/game`**
-2. Nhập mật khẩu quản trò: **`2026`**
-3. Trên màn hình máy chiếu sẽ xuất hiện **Mã QR to rõ** và danh sách phòng chờ.
+### 📌 Bước 1: Khởi động trên Laptop cắm Máy Chiếu
+* **Click đúp vào file [`CHAY_GAME_ONLINE_4G.bat`](file:///d:/01_Du_an_nhom/hcm/CHAY_GAME_ONLINE_4G.bat)** ở thư mục gốc (hoặc gõ `npm run online`).
+* Màn hình đen sẽ hiện thông báo đã kích hoạt đường truyền Internet công khai.
 
-### 📌 Bước 3: Cả lớp dùng điện thoại quét mã QR tham gia
-1. Điều kiện: Điện thoại của các bạn trong lớp kết nối cùng mạng Wi-Fi của lớp (hoặc kết nối vào Hotspot phát từ laptop/điện thoại).
-2. Các bạn chỉ cần mở camera điện thoại quét mã QR trên máy chiếu.
-3. Nhập Họ và Tên -> Bấm **"Vào Thi Đấu"**.
-4. Tên của các bạn sẽ lập tức hiện trên màn hình máy chiếu!
+### 📌 Bước 2: Mở màn hình Quản trò trên Máy Chiếu
+* Mở trình duyệt trên máy tính cắm máy chiếu:  
+  👉 **`http://localhost:4000/game`**
+* Nhập mật khẩu quản trò: **`2026`**
+* Màn hình máy chiếu sẽ tự động xuất hiện **Mã QR trực tuyến công khai**.
+
+### 📌 Bước 3: Cả lớp dùng điện thoại quét mã QR
+* Các bạn trong lớp bật 4G hoặc Wi-Fi, mở camera quét mã QR trên màn hình máy chiếu.
+* Nhập Họ và Tên -> Bấm **"Vào Thi Đấu"**.
+* Tên của các bạn sẽ lập tức hiện trên danh sách phòng chờ của máy chiếu!
 
 ### 📌 Bước 4: Bắt đầu trận đấu!
-1. Khi cả lớp đã vào đông đủ, Quản trò trên máy chiếu bấm nút:  
-   **⚡ "BẮT ĐẦU CHIA ĐỘI & THI ĐẤU"**
-2. Hệ thống sẽ:
-   - Tự động chia cả lớp thành 2 Khối: **Khối Nội Lực** 🇻🇳 vs **Khối Ngoại Lực** 🌐.
-   - Bốc ngẫu nhiên 2 bạn làm **Trưởng Đoàn (Leader)** với giao diện buồng lái riêng.
-   - Phát ngân hàng câu hỏi ngẫu nhiên dạng **Ai Là Triệu Phú** đến từng điện thoại.
-   - Đúng: Được cộng điểm, chúc mừng pháo hoa.
-   - Sai: Phạt chờ 3 giây đọc kiến thức trước khi sang câu tiếp theo.
-   - Điểm số, chuỗi combo 50 câu và biến động 4 Bảo Bình hiển thị trực tiếp trên máy chiếu!
+* Khi lớp đã vào đông đủ, Quản trò trên máy chiếu bấm:  
+  **⚡ "BẮT ĐẦU CHIA ĐỘI & THI ĐẤU"**
+* Hệ thống tự động chia 2 đội: **Khối Nội Lực** 🇻🇳 vs **Khối Ngoại Lực** 🌐, chọn 2 Leader và bắt đầu phát câu hỏi ngẫu nhiên!
+
+---
+
+## 🎯 PHƯƠNG ÁN B: CHƠI TRONG MẠNG WI-FI NỘI BỘ (KHÔNG CẦN INTERNET)
+
+Nếu lớp học có mạng Wi-Fi chung rất khỏe:
+1. Click đúp vào file [`CHAY_GAME_TRONG_LOP.bat`](file:///d:/01_Du_an_nhom/hcm/CHAY_GAME_TRONG_LOP.bat).
+2. Mở máy chiếu vào `http://localhost:4000/game` -> Mật khẩu: `2026`.
+3. Cả lớp bắt chung Wi-Fi và quét mã QR mạng nội bộ.
 
 ---
 

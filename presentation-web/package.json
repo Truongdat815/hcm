@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
+    "online": "node server.js --online",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "type": "commonjs",
   "dependencies": {
     "express": "^5.2.1",
+    "localtunnel": "^2.0.2",
     "qrcode": "^1.5.4",
     "socket.io": "^4.8.3"
   }
