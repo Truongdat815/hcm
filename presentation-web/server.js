@@ -215,6 +215,20 @@ function generateRandomPots() {
   return shuffled;
 }
 
+// Generate shuffled array of question IDs for random, non-repeating questions per player
+function generateShuffledQueue(questions, lastId = null) {
+  const ids = questions.map(q => q.id);
+  for (let i = ids.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [ids[i], ids[j]] = [ids[j], ids[i]];
+  }
+  if (lastId && ids.length > 1 && ids[0] === lastId) {
+    const first = ids.shift();
+    ids.push(first);
+  }
+  return ids;
+}
+
 // ======================================================================
 // SOCKET.IO REAL-TIME EVENTS
 // ======================================================================
@@ -247,7 +261,10 @@ io.on('connection', (socket) => {
       teamKey: null,
       isLeader: false,
       score: 0,
-      currentQIndex: 0
+      currentQIndex: 0,
+      questionQueue: [],
+      lastQuestionId: null,
+      answeredCount: 0
     };
 
     // If game is ALREADY PLAYING, assign immediately to smaller team
@@ -265,7 +282,9 @@ io.on('connection', (socket) => {
           name: gameState[teamKey].name,
           title: gameState[teamKey].title,
           icon: gameState[teamKey].icon,
-          color: gameState[teamKey].color
+          color: gameState[teamKey].color,
+          leaderName: gameState[teamKey].leaderName,
+          leaderId: gameState[teamKey].leaderId
         }
       });
     }
@@ -368,22 +387,60 @@ io.on('connection', (socket) => {
   // Host resets game
   socket.on('host_reset_game', () => {
     resetGameState();
+    // Reset players' question queues and current serving
+    io.sockets.sockets.forEach(s => {
+      if (s.player) {
+        s.player.questionQueue = [];
+        s.player.lastQuestionId = null;
+        s.player.answeredCount = 0;
+        s.currentServing = null;
+      }
+    });
     io.emit('game_reset');
     broadcastRoomUpdate();
   });
 
-  // Member requests a question
-  socket.on('get_question', ({ index }) => {
+  // Member requests a question (100% RANDOMIZED per player)
+  socket.on('get_question', () => {
     if (!socket.player) return;
-    const questions = questionsData.memberQuestions;
-    const qIndex = (typeof index === 'number' ? index : socket.player.currentQIndex) % questions.length;
-    const q = questions[qIndex];
+    const player = socket.player;
+    const allQuestions = questionsData.memberQuestions;
+
+    // Refill or initialize this player's personal randomized queue
+    if (!player.questionQueue || player.questionQueue.length === 0) {
+      player.questionQueue = generateShuffledQueue(allQuestions, player.lastQuestionId);
+    }
+
+    const nextQId = player.questionQueue.shift();
+    player.lastQuestionId = nextQId;
+    player.answeredCount = (player.answeredCount || 0) + 1;
+
+    const q = allQuestions.find(item => item.id === nextQId);
+    if (!q) return;
+
+    // Shuffle the 4 options A, B, C, D so order is completely dynamic for this player
+    const optionIndices = q.options.map((_, idx) => idx);
+    for (let i = optionIndices.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [optionIndices[i], optionIndices[j]] = [optionIndices[j], optionIndices[i]];
+    }
+
+    const shuffledOptions = optionIndices.map(idx => q.options[idx]);
+    const newCorrectOptionIndex = optionIndices.indexOf(q.answer);
+
+    // Cache current serving on socket for tamper-proof evaluation
+    socket.currentServing = {
+      questionId: q.id,
+      correctOptionIndex: newCorrectOptionIndex,
+      explanation: q.explanation
+    };
+
     socket.emit('question_payload', {
       id: q.id,
-      index: qIndex,
-      total: questions.length,
+      userQuestionNumber: player.answeredCount,
+      total: allQuestions.length,
       question: q.question,
-      options: q.options
+      options: shuffledOptions
     });
   });
 
@@ -394,11 +451,24 @@ io.on('connection', (socket) => {
     const player = socket.player;
     if (!player.teamKey) return;
     const team = gameState[player.teamKey];
-    const q = questionsData.memberQuestions.find(item => item.id === questionId);
-    if (!q) return;
+
+    let isCorrect = false;
+    let explanation = '';
+    let correctOptionIndex = 0;
+
+    if (socket.currentServing && socket.currentServing.questionId === questionId) {
+      isCorrect = (chosenOption === socket.currentServing.correctOptionIndex);
+      correctOptionIndex = socket.currentServing.correctOptionIndex;
+      explanation = socket.currentServing.explanation;
+    } else {
+      const q = questionsData.memberQuestions.find(item => item.id === questionId);
+      if (!q) return;
+      isCorrect = (chosenOption === q.answer);
+      correctOptionIndex = q.answer;
+      explanation = q.explanation;
+    }
 
     team.totalAnswered += 1;
-    const isCorrect = (q.answer === chosenOption);
 
     if (isCorrect) {
       player.score += 1;
@@ -443,8 +513,8 @@ io.on('connection', (socket) => {
 
       socket.emit('answer_feedback', {
         isCorrect: true,
-        correctAnswer: q.answer,
-        explanation: q.explanation,
+        correctAnswer: correctOptionIndex,
+        explanation: explanation,
         playerScore: player.score,
         teamScore: team.score,
         teamStreak: team.streak
@@ -453,15 +523,14 @@ io.on('connection', (socket) => {
       team.totalWrong += 1;
       socket.emit('answer_feedback', {
         isCorrect: false,
-        correctAnswer: q.answer,
-        explanation: q.explanation,
+        correctAnswer: correctOptionIndex,
+        explanation: explanation,
         playerScore: player.score,
         teamScore: team.score,
         teamStreak: team.streak
       });
     }
 
-    player.currentQIndex = (player.currentQIndex + 1) % questionsData.memberQuestions.length;
     broadcastRoomUpdate();
   });
 

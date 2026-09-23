@@ -125,6 +125,132 @@
       "options": ["Neo tàu và Gió đẩy cánh buồm", "Lửa và Nước", "Mặt trời và Mặt trăng", "Núi cao và Biển sâu"],
       "answer": 0,
       "explanation": "Lợi ích dân tộc là neo tàu; Hợp tác quốc tế là gió đẩy. Gió to không neo sẽ trôi dạt; neo chặt không buồm sẽ đứng im."
+    },
+    {
+      "id": 19,
+      "question": "Năm 1919, dưới tên Nguyễn Ái Quốc, Người đã gửi văn bản lịch sử nào tới Hội nghị Versailles?",
+      "options": ["Bản án chế độ thực dân Pháp", "Yêu sách của nhân dân An Nam", "Tuyên ngôn Độc lập", "Đường Kách mệnh"],
+      "answer": 1,
+      "explanation": "Bản 'Yêu sách của nhân dân An Nam' gồm 8 điểm đòi các quyền tự do, dân chủ cho nhân dân Việt Nam."
+    },
+    {
+      "id": 20,
+      "question": "Tác phẩm lý luận cách mạng nổi tiếng nào của Nguyễn Ái Quốc được xuất bản năm 1927 tại Quảng Châu?",
+      "options": ["Đường Kách mệnh", "Bản án chế độ thực dân Pháp", "Nhật ký trong tù", "Lời kêu gọi toàn quốc kháng chiến"],
+      "answer": 0,
+      "explanation": "'Đường Kách mệnh' (1927) chuẩn bị về mặt tư tưởng, chính trị và tổ chức cho sự ra đời của Đảng Cộng sản Việt Nam."
+    },
+    {
+      "id": 21,
+      "question": "Trong Tuyên ngôn Độc lập (2/9/1945), Chủ tịch Hồ Chí Minh đã mở đầu bằng việc trích dẫn hai bản Tuyên ngôn của những quốc gia nào?",
+      "options": ["Mỹ và Pháp", "Liên Xô và Trung Quốc", "Anh và Nga", "Ấn Độ và Cu-ba"],
+      "answer": 0,
+      "explanation": "Bác trích Tuyên ngôn Độc lập của nước Mỹ (1776) và Tuyên ngôn Nhân quyền và Dân quyền của Cách mạng Pháp (1789)."
+    },
+    {
+      "id": 22,
+      "question": "Chủ tịch Hồ Chí Minh đã ví von mối quan hệ giữa thực lực đất nước và hoạt động ngoại giao như thế nào?",
+      "options": ["Thực lực là cái chiêng, ngoại giao là cái tiếng", "Thực lực là ngọn hải đăng, ngoại giao là con tàu", "Thực lực là rễ cây, ngoại giao là bông hoa", "Thực lực là thanh gươm, ngoại giao là chiếc khiên"],
+      "answer": 0,
+      "explanation": "Chủ tịch Hồ Chí Minh: 'Thực lực là cái chiêng mà ngoại giao là cái tiếng. Chiêng có to tiếng mới lớn' (1945)."
+    },
+    {
+      "id": 23,
+      "question": "Hiệp định nào ký năm 1954 đã chấm dứt ách thống trị của thực dân Pháp và lập lại hòa bình ở Đông Dương?",
+      "options": ["Hiệp định Sơ bộ", "Hiệp định Giơ-ne-vơ", "Hiệp định Paris", "Hiệp ước Patenôtre"],
+      "answer": 1,
+      "explanation": "Hiệp định Giơ-ne-vơ (1954) công nhận độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ của Việt Nam, Lào, Campuchia."
+    },
+    {
+      "id": 24,
+      "question": "Hiệp định Paris về chấm dứt chiến tranh, lập lại hòa bình ở Việt Nam được ký kết vào năm nào?",
+      "options": ["1968", "1972", "1973", "1975"],
+      "answer": 2,
+      "explanation": "Hiệp định Paris ký ngày 27/1/1973 sau gần 5 năm đàm phán kiên cường trên mặt trận ngoại giao."
+    },
+    {
+      "id": 25,
+      "question": "Nghệ thuật ngoại giao đánh vào lòng người, vận động nhân dân tiến bộ trên thế giới ủng hộ Việt Nam được gọi là gì?",
+      "options": ["Ngoại giao pháo hạm", "Ngoại giao tâm công", "Ngoại giao cưỡng chế", "Ngoại giao biệt lập"],
+      "answer": 1,
+      "explanation": "'Ngoại giao tâm công' (đánh vào lòng người) phát huy sức mạnh chính nghĩa, thức tỉnh lương tri nhân loại."
+    },
+    {
+      "id": 26,
+      "question": "Việt Nam chính thức trở thành thành viên của Liên Hợp Quốc (LHQ) vào năm nào?",
+      "options": ["1975", "1977", "1986", "1995"],
+      "answer": 1,
+      "explanation": "Ngày 20/9/1977, Việt Nam chính thức gia nhập Liên Hợp Quốc và là thành viên thứ 149."
+    },
+    {
+      "id": 27,
+      "question": "Việt Nam chính thức gia nhập Hiệp hội các quốc gia Đông Nam Á (ASEAN) vào năm nào?",
+      "options": ["1990", "1995", "1998", "2000"],
+      "answer": 1,
+      "explanation": "Ngày 28/7/1995, Việt Nam chính thức trở thành thành viên thứ 7 của ASEAN tại Brunei."
+    },
+    {
+      "id": 28,
+      "question": "Phương châm ngoại giao nhất quán của Đảng ta được khẳng định từ Đại hội VII và phát triển đến nay là gì?",
+      "options": ["Chọn một bên cường quốc duy nhất", "Việt Nam sẵn sàng là bạn, là đối tác tin cậy và thành viên có trách nhiệm của cộng đồng quốc tế", "Đóng cửa biên giới để tự cung tự cấp", "Chỉ quan hệ với các nước láng giềng"],
+      "answer": 1,
+      "explanation": "Phương châm: Đa phương hóa, đa dạng hóa; Việt Nam là bạn, là đối tác tin cậy và thành viên có trách nhiệm của cộng đồng quốc tế."
+    },
+    {
+      "id": 29,
+      "question": "Chính sách quốc phòng '4 Không' của Việt Nam KHÔNG bao gồm điều nào sau đây?",
+      "options": ["Không tham gia liên minh quân sự", "Không liên kết với nước này để chống nước kia", "Không cho nước ngoài đặt căn cứ quân sự trên lãnh thổ Việt Nam", "Không giao lưu kinh tế với các nước tư bản"],
+      "answer": 3,
+      "explanation": "'4 Không': Không liên minh quân sự, không liên kết chống nước khác, không cho đặt căn cứ quân sự, không sử dụng hoặc đe dọa vũ lực."
+    },
+    {
+      "id": 30,
+      "question": "Ba trụ cột cấu thành nền ngoại giao Việt Nam toàn diện, hiện đại ngày nay gồm những gì?",
+      "options": ["Ngoại giao Đảng, Ngoại giao Nhà nước và Đối ngoại Nhân dân", "Ngoại giao Quân sự, Ngoại giao Kinh tế và Ngoại giao Thể thao", "Ngoại giao Song phương, Đa phương và Bí mật", "Ngoại giao Cây tre, Cây đa và Cây lúa"],
+      "answer": 0,
+      "explanation": "Ba trụ cột: Đối ngoại Đảng, Ngoại giao Nhà nước và Đối ngoại Nhân dân phối hợp chặt chẽ, nhịp nhàng."
+    },
+    {
+      "id": 31,
+      "question": "Việt Nam bắt đầu cử lực lượng tham gia hoạt động Gìn giữ Hòa bình Liên Hợp Quốc (UN Peacekeeping) từ năm nào?",
+      "options": ["2000", "2010", "2014", "2020"],
+      "answer": 2,
+      "explanation": "Từ năm 2014, Việt Nam cử sĩ quan và sau đó là các Bệnh viện Dã chiến cấp 2, Đội Công binh tham gia phái bộ gìn giữ hòa bình LHQ."
+    },
+    {
+      "id": 32,
+      "question": "Tư tưởng Hồ Chí Minh xác định ngoại giao kinh tế giữ vai trò gì trong sự nghiệp phát triển đất nước?",
+      "options": ["Là gánh nặng cho ngân sách", "Là động lực then chốt, phục vụ đắc lực cho công nghiệp hóa - hiện đại hóa", "Chỉ phục vụ mục đích từ thiện", "Không quan trọng bằng ngoại giao chính trị"],
+      "answer": 1,
+      "explanation": "Ngoại giao kinh tế đóng vai trò động lực phục vụ đắc lực cho phát triển kinh tế - xã hội và nâng cao tiềm lực quốc gia."
+    },
+    {
+      "id": 33,
+      "question": "Đoàn kết quốc tế theo Bác Hồ phải dựa trên cơ sở nào để giữ vững bản sắc và uy tín dân tộc?",
+      "options": ["Hiệp ước bí mật", "Nguyên tắc tự lực cánh sinh, độc lập tự chủ và tôn trọng luật pháp quốc tế", "Sự nhượng bộ lãnh thổ", "Sự bảo hộ của siêu cường"],
+      "answer": 1,
+      "explanation": "Tự lực cánh sinh làm gốc; dựa trên sự bình đẳng, độc lập tự chủ và tôn trọng luật pháp quốc tế."
+    },
+    {
+      "id": 34,
+      "question": "Chủ tịch Hồ Chí Minh đã khẳng định: 'Nước Việt Nam là một, dân tộc Việt Nam là một. Sông có thể cạn, núi có thể mòn, song chân lý ấy không bao giờ ...'?",
+      "options": ["thay đổi", "lung lay", "bất biến", "đổi thay"],
+      "answer": 0,
+      "explanation": "Bác khẳng định chân lý thiêng liêng: 'Sông có thể cạn, núi có thể mòn, song chân lý ấy không bao giờ thay đổi' (1946)."
+    },
+    {
+      "id": 35,
+      "question": "Theo Tổng Bí thư Nguyễn Phú Trọng, Ngoại giao Cây tre Việt Nam mang đặc tính gì?",
+      "options": ["Gốc vững, thân chắc, cành uyển chuyển", "Lá to, cành mềm, hoa thơm", "Cứng nhắc, bất biến, đơn phương", "Nhẹ nhàng, trôi dạt, không định hướng"],
+      "answer": 0,
+      "explanation": "Bản sắc Ngoại giao Cây tre Việt Nam: 'Gốc vững, thân chắc, cành uyển chuyển'."
+    },
+    {
+      "id": 36,
+      "question": "Khái niệm 'Thế trận lòng dân' trong Tư tưởng Hồ Chí Minh về bảo vệ Tổ quốc có ý nghĩa gì?",
+      "options": ["Xây dựng thật nhiều thành lũy kiên cố", "Sự đồng lòng, tin tưởng và ủng hộ tuyệt đối của nhân dân đối với sự nghiệp cách mạng", "Dựa hoàn toàn vào công nghệ vũ khí hiện đại", "Chỉ kêu gọi nhân dân đóng góp tài chính"],
+      "answer": 1,
+      "explanation": "'Thế trận lòng dân' là nền tảng vững chắc nhất; khi lòng dân thuận, sức mạnh dân tộc trở nên vô địch."
     }
   ],
   "leaderQuestions": [
