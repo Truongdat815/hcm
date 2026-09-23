@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/presentation-web/index.html" },
+    { "source": "/game", "destination": "/presentation-web/public/game-host.html" },
+    { "source": "/play", "destination": "/presentation-web/public/play.html" },
+    { "source": "/(.*)", "destination": "/presentation-web/$1" }
+  ]
+}
