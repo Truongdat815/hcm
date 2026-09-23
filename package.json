@@ -1,0 +1,16 @@
+{
+  "name": "hcm-ideology-presentation",
+  "version": "1.0.0",
+  "description": "Báo cáo chuyên đề Tư Tưởng Hồ Chí Minh & Đấu trí Ai Là Triệu Phú Online",
+  "main": "presentation-web/server.js",
+  "scripts": {
+    "start": "node presentation-web/server.js",
+    "dev": "node presentation-web/server.js",
+    "postinstall": "cd presentation-web && npm install"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "qrcode": "^1.5.4",
+    "socket.io": "^4.8.3"
+  }
+}

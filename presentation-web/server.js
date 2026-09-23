@@ -59,8 +59,21 @@ app.get('/admin', (req, res) => {
 
 app.get('/api/server-info', async (req, res) => {
   const ip = getLocalIp();
-  const customUrl = req.query.customUrl;
-  const playUrl = customUrl ? `${customUrl}/play` : `http://${ip}:${PORT}/play`;
+  const hostHeader = req.headers['x-forwarded-host'] || req.headers.host || '';
+  const proto = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
+  const isLocal = hostHeader.includes('localhost') || hostHeader.includes('127.0.0.1');
+
+  let playUrl;
+  if (process.env.PUBLIC_PLAY_URL) {
+    playUrl = process.env.PUBLIC_PLAY_URL.endsWith('/play') ? process.env.PUBLIC_PLAY_URL : `${process.env.PUBLIC_PLAY_URL}/play`;
+  } else if (req.query.customUrl) {
+    playUrl = req.query.customUrl.endsWith('/play') ? req.query.customUrl : `${req.query.customUrl}/play`;
+  } else if (!isLocal && hostHeader) {
+    playUrl = `${proto}://${hostHeader}/play`;
+  } else {
+    playUrl = `http://${ip}:${PORT}/play`;
+  }
+
   try {
     const qrDataUrl = await QRCode.toDataURL(playUrl, {
       margin: 2,
