@@ -1438,16 +1438,84 @@
       }
     });
 
+    // Game Stopped by Host (Return to Lobby)
+    socket.on("game_stopped", ({ message } = {}) => {
+      if (myPlayer) {
+        myPlayer.teamKey = null;
+        myPlayer.isLeader = false;
+        myPlayer.score = 0;
+      }
+      isAnswerLocked = false;
+      showCustomModal({
+        icon: '🛑',
+        title: 'TRẬN ĐẤU TẠM DỪNG',
+        subtitle: 'Thông báo từ Quản trò',
+        content: message || 'Quản trò đã tạm dừng trận đấu. Bạn đang ở phòng chờ!',
+        btnText: 'VỀ PHÒNG CHỜ ➔',
+        onConfirm: () => {
+          const teamBadge = document.getElementById("lobby-team-badge");
+          if (teamBadge) {
+            teamBadge.textContent = "⏳ PHÒNG CHỜ THI ĐẤU";
+            teamBadge.style.background = "#334155";
+          }
+          const roleBadge = document.getElementById("lobby-role-badge");
+          if (roleBadge) {
+            roleBadge.textContent = "★ Thành viên Lớp học";
+            roleBadge.className = "role-stamp-banner member";
+          }
+          showScreen(screenLobby);
+        }
+      });
+    });
+
+    // Kicked by Host
+    socket.on("kicked_by_host", ({ message } = {}) => {
+      myPlayer = null;
+      myTeam = null;
+      isAnswerLocked = false;
+      showCustomModal({
+        icon: '🚫',
+        title: 'BẠN ĐÃ RỜI PHÒNG',
+        subtitle: 'Thông báo từ Quản trò',
+        content: message || 'Bạn đã bị Quản trò mời ra khỏi phòng thi đấu.',
+        btnText: 'ĐÃ HIỂU',
+        onConfirm: () => {
+          inputName.value = '';
+          showScreen(screenJoin);
+        }
+      });
+    });
+
+    // Room Cleared Completely by Host
+    socket.on("room_cleared_by_host", ({ message } = {}) => {
+      myPlayer = null;
+      myTeam = null;
+      isAnswerLocked = false;
+      showCustomModal({
+        icon: '🔄',
+        title: 'PHÒNG ĐÃ LÀM MỚI',
+        subtitle: 'Thông báo từ Quản trò',
+        content: message || 'Quản trò đã làm mới toàn bộ phòng chơi. Vui lòng nhập lại họ tên để tham gia!',
+        btnText: 'NHẬP LẠI TÊN ➔',
+        onConfirm: () => {
+          showScreen(screenJoin);
+        }
+      });
+    });
+
     socket.on("game_reset", () => {
       if (myPlayer) {
         myPlayer.teamKey = null;
         myPlayer.isLeader = false;
         myPlayer.score = 0;
-        const teamBadge = document.getElementById("lobby-team-badge");
+      }
+      isAnswerLocked = false;
+      const teamBadge = document.getElementById("lobby-team-badge");
+      if (teamBadge) {
         teamBadge.textContent = "⏳ PHÒNG CHỜ THI ĐẤU";
         teamBadge.style.background = "#334155";
-        showScreen(screenLobby);
       }
+      showScreen(screenLobby);
     });
 
     // Receive Question Payload from Server

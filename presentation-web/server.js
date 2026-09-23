@@ -397,19 +397,116 @@ io.on('connection', (socket) => {
     broadcastRoomUpdate();
   });
 
-  // Host resets game
-  socket.on('host_reset_game', () => {
+  // Host stops game (returns everyone to lobby waiting screen without deleting their names)
+  socket.on('host_stop_game', () => {
+    gameState.status = 'LOBBY';
+    gameState.lobbyPlayers.forEach(p => {
+      p.teamKey = null;
+      p.isLeader = false;
+      p.score = 0;
+      p.currentQIndex = 0;
+      p.questionQueue = [];
+      p.lastQuestionId = null;
+      p.answeredCount = 0;
+    });
+
+    gameState.team1.score = 0;
+    gameState.team1.streak = 0;
+    gameState.team1.totalAnswered = 0;
+    gameState.team1.totalCorrect = 0;
+    gameState.team1.totalWrong = 0;
+    gameState.team1.leaderId = null;
+    gameState.team1.leaderName = '';
+    gameState.team1.members = [];
+
+    gameState.team2.score = 0;
+    gameState.team2.streak = 0;
+    gameState.team2.totalAnswered = 0;
+    gameState.team2.totalCorrect = 0;
+    gameState.team2.totalWrong = 0;
+    gameState.team2.leaderId = null;
+    gameState.team2.leaderName = '';
+    gameState.team2.members = [];
+
+    gameState.activeLeaderChallenge = null;
+    gameState.shuffledPots = [];
+
+    addLog('🛑 Quản trò đã DỪNG TRẬN ĐẤU. Toàn bộ người chơi trở về sảnh chờ!', 'warn');
+
+    io.emit('game_stopped', {
+      message: 'Quản trò đã tạm dừng trận đấu. Bạn đang ở phòng chờ để chuẩn bị xuất kích lại!'
+    });
+    broadcastRoomUpdate();
+  });
+
+  // Host resets game (can optionally clear all players from room)
+  socket.on('host_reset_game', (payload) => {
+    const clearAll = payload && payload.clearAll === true;
+
+    if (clearAll) {
+      addLog('🔄 Quản trò đã xóa toàn bộ phòng chờ. Người chơi cần nhập lại tên!', 'warn');
+      io.emit('room_cleared_by_host', {
+        message: 'Quản trò đã làm mới toàn bộ phòng chơi. Vui lòng nhập lại tên để tham gia!'
+      });
+      gameState.lobbyPlayers = [];
+    } else {
+      addLog('🔄 Quản trò đã làm mới trận đấu về phòng chờ ban đầu.', 'info');
+      io.emit('game_stopped', {
+        message: 'Quản trò đã đặt lại trận đấu về phòng chờ!'
+      });
+    }
+
     resetGameState();
-    // Reset players' question queues and current serving
     io.sockets.sockets.forEach(s => {
       if (s.player) {
-        s.player.questionQueue = [];
-        s.player.lastQuestionId = null;
-        s.player.answeredCount = 0;
+        if (clearAll) {
+          s.player = null;
+        } else {
+          s.player.teamKey = null;
+          s.player.isLeader = false;
+          s.player.score = 0;
+          s.player.questionQueue = [];
+          s.player.lastQuestionId = null;
+          s.player.answeredCount = 0;
+        }
         s.currentServing = null;
       }
     });
-    io.emit('game_reset');
+
+    broadcastRoomUpdate();
+  });
+
+  // Host kicks a specific player from room or team
+  socket.on('host_kick_player', ({ playerId }) => {
+    if (!playerId) return;
+    const targetPlayer = gameState.lobbyPlayers.find(p => p.id === playerId);
+    const targetName = targetPlayer ? targetPlayer.name : 'Người chơi';
+
+    // Remove from lobbyPlayers
+    gameState.lobbyPlayers = gameState.lobbyPlayers.filter(p => p.id !== playerId);
+
+    // If was assigned to a team
+    if (targetPlayer && targetPlayer.teamKey) {
+      const team = gameState[targetPlayer.teamKey];
+      if (team) {
+        team.members = team.members.filter(m => m.id !== playerId);
+        // If kicked player was leader, assign new leader if members remain
+        if (team.leaderId === playerId && team.members.length > 0) {
+          team.members[0].isLeader = true;
+          team.leaderId = team.members[0].id;
+          team.leaderName = team.members[0].name;
+          addLog(`Leader ${team.name} (${targetName}) đã bị loại. ${team.leaderName} được chỉ định làm Leader mới!`, 'warn');
+          io.to(team.leaderId).emit('became_leader');
+        }
+      }
+    }
+
+    // Notify the target socket
+    io.to(playerId).emit('kicked_by_host', {
+      message: `Bạn đã bị Quản trò mời ra khỏi phòng thi đấu.`
+    });
+
+    addLog(`🚫 Quản trò đã kick "${targetName}" ra khỏi phòng!`, 'warn');
     broadcastRoomUpdate();
   });
 
