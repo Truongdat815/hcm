@@ -246,7 +246,7 @@ io.on('connection', (socket) => {
       socket.emit('admin_auth_success');
       broadcastRoomUpdate();
     } else {
-      socket.emit('admin_auth_failed', { message: 'Mật khẩu quản trò không chính xác (gợi ý: 2026)!' });
+      socket.emit('admin_auth_failed', { message: 'Mật khẩu quản trò không chính xác! Vui lòng thử lại.' });
     }
   });
 
