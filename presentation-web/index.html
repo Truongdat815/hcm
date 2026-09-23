@@ -998,16 +998,28 @@
     document.addEventListener("DOMContentLoaded", () => {
       window.deckApp = new HorizontalMorphDeck();
 
-      // Fetch QR Code for Slide 12
+      // Setup QR Code for Slide 12 (Instantly works on Vercel, Netlify, and Localhost)
+      const currentOrigin = window.location.origin;
+      const defaultPlayUrl = currentOrigin + '/play';
+      const qrImg = document.getElementById('slide12-qr-img');
+      const qrUrl = document.getElementById('slide12-qr-url');
+
+      if (qrUrl) qrUrl.textContent = defaultPlayUrl;
+      if (qrImg) qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(defaultPlayUrl)}`;
+
+      // If running with local Node backend server, get the LAN Wi-Fi IP address
       fetch('/api/server-info')
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error('Not local server');
+          return res.json();
+        })
         .then(data => {
-          const qrImg = document.getElementById('slide12-qr-img');
-          const qrUrl = document.getElementById('slide12-qr-url');
           if (qrImg && data.qrDataUrl) qrImg.src = data.qrDataUrl;
           if (qrUrl && data.playUrl) qrUrl.textContent = data.playUrl;
         })
-        .catch(() => {});
+        .catch(() => {
+          // Keep currentOrigin QR code on Vercel
+        });
     });
   </script>
 

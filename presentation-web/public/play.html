@@ -53,7 +53,7 @@
       z-index: 0;
     }
 
-    /* Header Bar */
+    /* Top Bar */
     .mobile-header {
       position: relative;
       z-index: 10;
@@ -114,8 +114,8 @@
       box-shadow: 0 0 8px #10B981;
     }
     .connection-dot.offline {
-      background: #EF4444;
-      box-shadow: 0 0 8px #EF4444;
+      background: #F59E0B;
+      box-shadow: 0 0 8px #F59E0B;
     }
     .status-text {
       font-size: 10px;
@@ -124,7 +124,7 @@
       letter-spacing: 0.05em;
     }
 
-    /* Screen Container */
+    /* Screen Panels */
     .screen-panel {
       position: relative;
       z-index: 1;
@@ -153,16 +153,6 @@
       margin-bottom: auto;
       position: relative;
       overflow: hidden;
-    }
-    .join-card::before {
-      content: "";
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at 50% 30%, rgba(255, 222, 0, 0.08) 0%, transparent 60%);
-      pointer-events: none;
     }
     .join-flag-large {
       width: 76px;
@@ -315,7 +305,7 @@
       100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(255, 222, 0, 0); }
     }
 
-    /* SCREEN 3: MEMBER PLAYING — AI LÀ TRIỆU PHÚ STYLE */
+    /* SCREEN 3: MEMBER PLAYING — AI LÀ TRIỆU PHÚ */
     .gameplay-header-hud {
       background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(10, 15, 29, 0.95));
       border: 2px solid var(--gold-metallic);
@@ -387,7 +377,7 @@
       text-shadow: 0 0 10px rgba(255, 222, 0, 0.4);
     }
 
-    /* Streak Progress Meter */
+    /* Streak Progress */
     .streak-container {
       display: flex;
       flex-direction: column;
@@ -420,7 +410,7 @@
       transition: width 0.3s ease;
     }
 
-    /* QUESTION BOX */
+    /* Question Box */
     .millionaire-question-wrapper {
       position: relative;
       margin: 10px 0 14px;
@@ -468,7 +458,7 @@
       text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
     }
 
-    /* ANSWER BUTTONS */
+    /* 4 Option Buttons */
     .options-buttons-stack {
       display: flex;
       flex-direction: column;
@@ -906,7 +896,7 @@
     </div>
     <div class="header-status-badge">
       <div class="connection-dot" id="socket-status" title="Trạng thái kết nối"></div>
-      <span class="status-text" id="socket-text">ONLINE</span>
+      <span class="status-text" id="socket-text">SẴN SÀNG</span>
     </div>
   </header>
 
@@ -1093,9 +1083,51 @@
     </div>
   </div>
 
-  <!-- Socket.io Client -->
-  <script src="/socket.io/socket.io.js"></script>
+  <!-- Load Socket.io from CDN so it works 100% reliably on Vercel & Localhost -->
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
   <script>
+    // ======================================================================
+    // EMBEDDED QUESTION BANK (Ensures 100% offline & Vercel Solo Play)
+    // ======================================================================
+    const EMBEDDED_QUESTIONS = [
+      { id: 1, question: "Chủ tịch Hồ Chí Minh ra đi tìm đường cứu nước vào năm nào và từ bến cảng nào?", options: ["1911 — Bến cảng Nhà Rồng", "1920 — Bến cảng Hải Phòng", "1930 — Bến cảng Ba Son", "1945 — Bến cảng Đà Nẵng"], answer: 0, explanation: "Ngày 5/6/1911, người thanh niên Nguyễn Tất Thành rời bến cảng Nhà Rồng trên con tàu Amiral Latouche-Tréville." },
+      { id: 2, question: "Nguyên lý bất hủ nào được Chủ tịch Hồ Chí Minh dặn dò cụ Huỳnh Thúc Kháng trước khi sang Pháp năm 1946?", options: ["Dĩ thực vi tiên", "Dĩ bất biến, ứng vạn biến", "Tiên hạ thủ vi cường", "Bất biến ứng bất biến"], answer: 1, explanation: "Lấy cái bất biến (độc lập, chủ quyền, lợi ích dân tộc) để ứng phó với muôn ngàn biến chuyển của thời cuộc." },
+      { id: 3, question: "Điền vào chỗ trống câu nói bất hủ của Bác Hồ: « Đoàn kết, đoàn kết, đại đoàn kết. ..., ..., đại thành công! »", options: ["Quyết tâm, quyết tâm", "Đấu tranh, đấu tranh", "Thành công, thành công", "Vững vàng, vững vàng"], answer: 2, explanation: "« Đoàn kết, đoàn kết, đại đoàn kết. Thành công, thành công, đại thành công! »" },
+      { id: 4, question: "Trường phái đối ngoại của Việt Nam mang đậm bản sắc văn hóa dân tộc có tên gọi là gì?", options: ["Ngoại giao Cây lúa", "Ngoại giao Cây tre", "Ngoại giao Hoa sen", "Ngoại giao Cây đa"], answer: 1, explanation: "Ngoại giao Cây tre: « Gốc vững, thân chắc, cành uyển chuyển »." },
+      { id: 5, question: "Trong hình tượng Ngoại giao Cây tre, yếu tố nào biểu trưng cho « GỐC VỮNG »?", options: ["Sự linh hoạt mềm dẻo trong thỏa hiệp", "Lợi ích quốc gia - dân tộc, độc lập, tự chủ", "Các hiệp định thương mại tự do quốc tế", "Nguồn viện trợ kinh tế từ bên ngoài"], answer: 1, explanation: "Gốc vững là độc lập, tự chủ, kiên định lợi ích tối thượng của Tổ quốc và nhân dân." },
+      { id: 6, question: "Câu trích dẫn nổi tiếng nào của Bác khẳng định mối quan hệ biện chứng trong đoàn kết quốc tế?", options: ["Đóng cửa để giữ vững độc lập", "Giúp bạn là tự giúp mình", "Nước xa không cứu được lửa gần", "Chỉ dựa vào sự viện trợ của đồng minh"], answer: 1, explanation: "Hồ Chí Minh Toàn tập: « Giúp bạn là tự giúp mình » (xây dựng biên độ an ninh và hòa bình vững chắc)." },
+      { id: 7, question: "Trong chiến dịch « Ngoại giao vắc-xin COVID-19 », Việt Nam đã tiếp cận được khoảng bao nhiêu liều vắc-xin?", options: ["Hơn 50 triệu liều", "Hơn 100 triệu liều", "Hơn 210 triệu liều", "Khoảng 10 triệu liều"], answer: 2, explanation: "Chiến dịch lịch sử đưa về hơn 210 triệu liều vắc-xin, giúp tiêm phủ diện rộng thần tốc và mở cửa kinh tế an toàn." },
+      { id: 8, question: "Tính đến nay, Việt Nam đã thiết lập quan hệ Đối tác Chiến lược Toàn diện / Đối tác Chiến lược với bao nhiêu nước Thường trực HĐBA LHQ (P5)?", options: ["3 trên 5 nước", "4 trên 5 nước", "Toàn bộ 5 trên 5 nước", "Chưa nước nào"], answer: 2, explanation: "Việt Nam có quan hệ đối tác chiến lược / toàn diện với cả 5 nước thường trực P5 (Mỹ, Trung Quốc, Nga, Anh, Pháp)." },
+      { id: 9, question: "Theo Tư tưởng Hồ Chí Minh, trong mối quan hệ giữa Nội lực và Ngoại lực, yếu tố nào giữ vai trò QUYẾT ĐỊNH?", options: ["Ngoại lực là quyết định", "Nội lực là quyết định", "Cả hai bình đẳng như nhau", "Phụ thuộc vào viện trợ quốc tế"], answer: 1, explanation: "Nội lực giữ vai trò quyết định hàng đầu; ngoại lực là nhân tố quan trọng, đột phá." },
+      { id: 10, question: "Tổng kim ngạch xuất nhập khẩu của Việt Nam hiện nay đã vượt mốc ấn tượng nào?", options: ["200 tỷ USD", "400 tỷ USD", "750 - 800+ tỷ USD", "1.500 tỷ USD"], answer: 2, explanation: "Kim ngạch thương mại của Việt Nam đã vượt ngưỡng 750 - 800+ tỷ USD, thuộc top đầu thế giới so với quy mô kinh tế." },
+      { id: 11, question: "Khẩu hiệu hành động của thế hệ trẻ Việt Nam trong thời kỳ hội nhập sâu rộng là gì?", options: ["Hòa tan vào văn hóa thế giới", "Hòa nhập nhưng không hòa tan", "Khép kín để bảo vệ bản sắc", "Từ chối tiếp thu tri thức toàn cầu"], answer: 1, explanation: "Hòa nhập để học hỏi và vươn mình, nhưng không bao giờ hòa tan mất bản sắc dân tộc." },
+      { id: 12, question: "Việt Nam hiện là thành viên của bao nhiêu Hiệp định Thương mại Tự do (FTA) song phương và đa phương?", options: ["Chỉ 3 hiệp định", "Hơn 16 hiệp định FTA thế hệ mới", "Hơn 50 hiệp định", "Không tham gia FTA nào"], answer: 1, explanation: "Việt Nam tham gia hơn 16 FTA thế hệ mới như CPTPP, EVFTA, RCEP..." },
+      { id: 13, question: "Trước khi thực dân Pháp nổ súng xâm lược năm 1858, chính sách đối ngoại sai lầm nào của triều Nguyễn đã khiến đất nước tụt hậu?", options: ["Mở cửa tự do buôn bán", "Bế quan tỏa cảng", "Ngoại giao đa phương", "Liên minh với các nước phương Tây"], answer: 1, explanation: "Chính sách « Bế quan tỏa cảng » đã cô lập đất nước, dẫn đến tụt hậu và mất cảnh giác phòng thủ." },
+      { id: 14, question: "Trong hình tượng Ngoại giao Cây tre, « CÀNH UYỂN CHUYỂN » thể hiện điều gì?", options: ["Lập trường dao động, thay đổi liên tục", "Sách lược linh hoạt, khôn khéo, đa phương hóa vì hòa bình", "Nhượng bộ chủ quyền vô điều kiện", "Chỉ chọn chơi với một phe duy nhất"], answer: 1, explanation: "Cành mềm mại, uyển chuyển biểu hiện sự linh hoạt, mềm mỏng trong sách lược ngoại giao." },
+      { id: 15, question: "Tư tưởng Hồ Chí Minh coi độc lập tự chủ và đoàn kết quốc tế có mối quan hệ như thế nào?", options: ["Loại trừ lẫn nhau", "Độc lập tự chủ là cơ sở, đoàn kết quốc tế là đòn bẩy nhân bội sức mạnh", "Chỉ chọn một trong hai", "Không có bất kỳ liên quan nào"], answer: 1, explanation: "Hai mặt gắn kết hữu cơ: Nội lực tự cường là nền tảng; đoàn kết quốc tế là nhân tố nhân bội sức mạnh." },
+      { id: 16, question: "Một trong 3 nguyên tắc đoàn kết quốc tế của Chủ tịch Hồ Chí Minh là gì?", options: ["Can thiệp vào nội bộ nước bạn", "Đôi bên cùng có lợi (Win - Win) và tôn trọng chủ quyền", "Dựa dẫm hoàn toàn vào viện trợ", "Đặt lợi ích phe phái lên trên hết"], answer: 1, explanation: "Nguyên tắc: Bình đẳng, tôn trọng chủ quyền và cùng có lợi (Win - Win)." },
+      { id: 17, question: "Năng lực then chốt của sinh viên Gen Z để tự tin hội nhập trong kỷ nguyên số là gì?", options: ["Tẩy chay công nghệ mới", "Làm chủ AI, ngoại ngữ, tư duy thích ứng và giữ vững bản sắc dân tộc", "Chờ đợi cơ hội được cấp phát", "Chỉ học thuộc lòng lý thuyết"], answer: 1, explanation: "Làm chủ công cụ số, AI, ngoại ngữ, tư duy thích ứng toàn cầu và giữ vững hồn cốt dân tộc." },
+      { id: 18, question: "Hình tượng ẩn dụ nào được nhóm tác giả dùng để so sánh giữa Lợi ích dân tộc và Hợp tác quốc tế?", options: ["Neo tàu và Gió đẩy cánh buồm", "Lửa và Nước", "Mặt trời và Mặt trăng", "Núi cao và Biển sâu"], answer: 0, explanation: "Lợi ích dân tộc là neo tàu; Hợp tác quốc tế là gió đẩy. Gió to không neo sẽ trôi dạt; neo chặt không buồm sẽ đứng im." },
+      { id: 19, question: "Năm 1919, dưới tên Nguyễn Ái Quốc, Người đã gửi văn bản lịch sử nào tới Hội nghị Versailles?", options: ["Bản án chế độ thực dân Pháp", "Yêu sách của nhân dân An Nam", "Tuyên ngôn Độc lập", "Đường Kách mệnh"], answer: 1, explanation: "Bản 'Yêu sách của nhân dân An Nam' gồm 8 điểm đòi các quyền tự do, dân chủ cho nhân dân Việt Nam." },
+      { id: 20, question: "Tác phẩm lý luận cách mạng nổi tiếng nào của Nguyễn Ái Quốc được xuất bản năm 1927 tại Quảng Châu?", options: ["Đường Kách mệnh", "Bản án chế độ thực dân Pháp", "Nhật ký trong tù", "Lời kêu gọi toàn quốc kháng chiến"], answer: 0, explanation: "'Đường Kách mệnh' (1927) chuẩn bị về mặt tư tưởng, chính trị và tổ chức cho sự ra đời của Đảng Cộng sản Việt Nam." },
+      { id: 21, question: "Trong Tuyên ngôn Độc lập (2/9/1945), Chủ tịch Hồ Chí Minh đã mở đầu bằng việc trích dẫn hai bản Tuyên ngôn của những quốc gia nào?", options: ["Mỹ và Pháp", "Liên Xô và Trung Quốc", "Anh và Nga", "Ấn Độ và Cu-ba"], answer: 0, explanation: "Bác trích Tuyên ngôn Độc lập của nước Mỹ (1776) và Tuyên ngôn Nhân quyền và Dân quyền của Cách mạng Pháp (1789)." },
+      { id: 22, question: "Chủ tịch Hồ Chí Minh đã ví von mối quan hệ giữa thực lực đất nước và hoạt động ngoại giao như thế nào?", options: ["Thực lực là cái chiêng, ngoại giao là cái tiếng", "Thực lực là ngọn hải đăng, ngoại giao là con tàu", "Thực lực là rễ cây, ngoại giao là bông hoa", "Thực lực là thanh gươm, ngoại giao là chiếc khiên"], answer: 0, explanation: "Chủ tịch Hồ Chí Minh: 'Thực lực là cái chiêng mà ngoại giao là cái tiếng. Chiêng có to tiếng mới lớn' (1945)." },
+      { id: 23, question: "Hiệp định nào ký năm 1954 đã chấm dứt ách thống trị của thực dân Pháp và lập lại hòa bình ở Đông Dương?", options: ["Hiệp định Sơ bộ", "Hiệp định Giơ-ne-vơ", "Hiệp định Paris", "Hiệp ước Patenôtre"], answer: 1, explanation: "Hiệp định Giơ-ne-vơ (1954) công nhận độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ của Việt Nam, Lào, Campuchia." },
+      { id: 24, question: "Hiệp định Paris về chấm dứt chiến tranh, lập lại hòa bình ở Việt Nam được ký kết vào năm nào?", options: ["1968", "1972", "1973", "1975"], answer: 2, explanation: "Hiệp định Paris ký ngày 27/1/1973 sau gần 5 năm đàm phán kiên cường trên mặt trận ngoại giao." },
+      { id: 25, question: "Nghệ thuật ngoại giao đánh vào lòng người, vận động nhân dân tiến bộ trên thế giới ủng hộ Việt Nam được gọi là gì?", options: ["Ngoại giao pháo hạm", "Ngoại giao tâm công", "Ngoại giao cưỡng chế", "Ngoại giao biệt lập"], answer: 1, explanation: "'Ngoại giao tâm công' (đánh vào lòng người) phát huy sức mạnh chính nghĩa, thức tỉnh lương tri nhân loại." },
+      { id: 26, question: "Việt Nam chính thức trở thành thành viên của Liên Hợp Quốc (LHQ) vào năm nào?", options: ["1975", "1977", "1986", "1995"], answer: 1, explanation: "Ngày 20/9/1977, Việt Nam chính thức gia nhập Liên Hợp Quốc và là thành viên thứ 149." },
+      { id: 27, question: "Việt Nam chính thức gia nhập Hiệp hội các quốc gia Đông Nam Á (ASEAN) vào năm nào?", options: ["1990", "1995", "1998", "2000"], answer: 1, explanation: "Ngày 28/7/1995, Việt Nam chính thức trở thành thành viên thứ 7 của ASEAN tại Brunei." },
+      { id: 28, question: "Phương châm ngoại giao nhất quán của Đảng ta được khẳng định từ Đại hội VII và phát triển đến nay là gì?", options: ["Chọn một bên cường quốc duy nhất", "Việt Nam sẵn sàng là bạn, là đối tác tin cậy và thành viên có trách nhiệm của cộng đồng quốc tế", "Đóng cửa biên giới để tự cung tự cấp", "Chỉ quan hệ với các nước láng giềng"], answer: 1, explanation: "Phương châm: Đa phương hóa, đa dạng hóa; Việt Nam là bạn, là đối tác tin cậy và thành viên có trách nhiệm của cộng đồng quốc tế." },
+      { id: 29, question: "Chính sách quốc phòng '4 Không' của Việt Nam KHÔNG bao gồm điều nào sau đây?", options: ["Không tham gia liên minh quân sự", "Không liên kết với nước này để chống nước kia", "Không cho nước ngoài đặt căn cứ quân sự trên lãnh thổ Việt Nam", "Không giao lưu kinh tế với các nước tư bản"], answer: 3, explanation: "'4 Không': Không liên minh quân sự, không liên kết chống nước khác, không cho đặt căn cứ quân sự, không sử dụng hoặc đe dọa vũ lực." },
+      { id: 30, question: "Ba trụ cột cấu thành nền ngoại giao Việt Nam toàn diện, hiện đại ngày nay gồm những gì?", options: ["Ngoại giao Đảng, Ngoại giao Nhà nước và Đối ngoại Nhân dân", "Ngoại giao Quân sự, Ngoại giao Kinh tế và Ngoại giao Thể thao", "Ngoại giao Song phương, Đa phương và Bí mật", "Ngoại giao Cây tre, Cây đa và Cây lúa"], answer: 0, explanation: "Ba trụ cột: Đối ngoại Đảng, Ngoại giao Nhà nước và Đối ngoại Nhân dân phối hợp chặt chẽ, nhịp nhàng." },
+      { id: 31, question: "Việt Nam bắt đầu cử lực lượng tham gia hoạt động Gìn giữ Hòa bình Liên Hợp Quốc (UN Peacekeeping) từ năm nào?", options: ["2000", "2010", "2014", "2020"], answer: 2, explanation: "Từ năm 2014, Việt Nam cử sĩ quan và sau đó là các Bệnh viện Dã chiến cấp 2, Đội Công binh tham gia phái bộ gìn giữ hòa bình LHQ." },
+      { id: 32, question: "Tư tưởng Hồ Chí Minh xác định ngoại giao kinh tế giữ vai trò gì trong sự nghiệp phát triển đất nước?", options: ["Là gánh nặng cho ngân sách", "Là động lực then chốt, phục vụ đắc lực cho công nghiệp hóa - hiện đại hóa", "Chỉ phục vụ mục đích từ thiện", "Không quan trọng bằng ngoại giao chính trị"], answer: 1, explanation: "Ngoại giao kinh tế đóng vai trò động lực phục vụ đắc lực cho phát triển kinh tế - xã hội và nâng cao tiềm lực quốc gia." },
+      { id: 33, question: "Đoàn kết quốc tế theo Bác Hồ phải dựa trên cơ sở nào để giữ vững bản sắc và uy tín dân tộc?", options: ["Hiệp ước bí mật", "Nguyên tắc tự lực cánh sinh, độc lập tự chủ và tôn trọng luật pháp quốc tế", "Sự nhượng bộ lãnh thổ", "Sự bảo hộ của siêu cường"], answer: 1, explanation: "Tự lực cánh sinh làm gốc; dựa trên sự bình đẳng, độc lập tự chủ và tôn trọng luật pháp quốc tế." },
+      { id: 34, question: "Chủ tịch Hồ Chí Minh đã khẳng định: 'Nước Việt Nam là một, dân tộc Việt Nam là một. Sông có thể cạn, núi có thể mòn, song chân lý ấy không bao giờ ...'?", options: ["thay đổi", "lung lay", "bất biến", "đổi thay"], answer: 0, explanation: "Bác khẳng định chân lý thiêng liêng: 'Sông có thể cạn, núi có thể mòn, song chân lý ấy không bao giờ thay đổi' (1946)." },
+      { id: 35, question: "Theo Tổng Bí thư Nguyễn Phú Trọng, Ngoại giao Cây tre Việt Nam mang đặc tính gì?", options: ["Gốc vững, thân chắc, cành uyển chuyển", "Lá to, cành mềm, hoa thơm", "Cứng nhắc, bất biến, đơn phương", "Nhẹ nhàng, trôi dạt, không định hướng"], answer: 0, explanation: "Bản sắc Ngoại giao Cây tre Việt Nam: 'Gốc vững, thân chắc, cành uyển chuyển'." },
+      { id: 36, question: "Khái niệm 'Thế trận lòng dân' trong Tư tưởng Hồ Chí Minh về bảo vệ Tổ quốc có ý nghĩa gì?", options: ["Xây dựng thật nhiều thành lũy kiên cố", "Sự đồng lòng, tin tưởng và ủng hộ tuyệt đối của nhân dân đối với sự nghiệp cách mạng", "Dựa hoàn toàn vào công nghệ vũ khí hiện đại", "Chỉ kêu gọi nhân dân đóng góp tài chính"], answer: 1, explanation: "'Thế trận lòng dân' là nền tảng vững chắc nhất; khi lòng dân thuận, sức mạnh dân tộc trở nên vô địch." }
+    ];
+
     // Audio Context Synthesizer
     let audioCtx = null;
     function initAudio() {
@@ -1276,9 +1308,7 @@
       }
     });
 
-    // Socket Initialization
-    const socket = io();
-
+    // DOM References
     const socketDot = document.getElementById("socket-status");
     const socketText = document.getElementById("socket-text");
     const screenJoin = document.getElementById("screen-join");
@@ -1294,25 +1324,75 @@
     let myPlayer = null;
     let myTeam = null;
     let currentQuestion = null;
-    let currentLeaderQuestion = null;
     let isAnswerLocked = false;
+    let isSocketConnected = false;
+    let isSoloMode = false;
+
+    // Solo Mode Player State
+    let soloQueue = [];
+    let soloAnsweredCount = 0;
+    let soloStreak = 0;
+    let soloScore = 0;
+    let soloServing = null;
 
     function showScreen(panel) {
       [screenJoin, screenLobby, screenPlayMember, screenPlayLeader, screenLeaderQ, screenPots].forEach(s => s.classList.remove("active"));
       panel.classList.add("active");
     }
 
-    socket.on("connect", () => {
-      socketDot.classList.remove("offline");
-      socketText.textContent = "ONLINE";
-      socketText.style.color = "#10B981";
-    });
-    socket.on("disconnect", () => {
-      socketDot.classList.add("offline");
-      socketText.textContent = "MẤT KẾT NỐI";
-      socketText.style.color = "#EF4444";
-    });
+    // ======================================================================
+    // SOCKET INITIALIZATION (With Fallback for Vercel / Offline)
+    // ======================================================================
+    let socket = null;
+    try {
+      if (typeof io !== 'undefined') {
+        socket = io({
+          timeout: 2500,
+          reconnectionAttempts: 3
+        });
 
+        socket.on("connect", () => {
+          isSocketConnected = true;
+          isSoloMode = false;
+          socketDot.classList.remove("offline");
+          socketText.textContent = "ONLINE (PHÒNG)";
+          socketText.style.color = "#10B981";
+        });
+
+        socket.on("disconnect", () => {
+          isSocketConnected = false;
+          socketDot.classList.add("offline");
+          socketText.textContent = "TỰ LUYỆN (OFFLINE)";
+          socketText.style.color = "#F59E0B";
+        });
+
+        socket.on("connect_error", () => {
+          isSocketConnected = false;
+          isSoloMode = true;
+          socketDot.classList.add("offline");
+          socketText.textContent = "TỰ LUYỆN (SOLO)";
+          socketText.style.color = "#F59E0B";
+        });
+      } else {
+        isSoloMode = true;
+      }
+    } catch (e) {
+      isSoloMode = true;
+    }
+
+    // Default status text if socket doesn't connect in 1.5s
+    setTimeout(() => {
+      if (!isSocketConnected) {
+        isSoloMode = true;
+        socketDot.classList.add("offline");
+        socketText.textContent = "TỰ LUYỆN (SOLO)";
+        socketText.style.color = "#F59E0B";
+      }
+    }, 1500);
+
+    // ======================================================================
+    // JOIN GAME (ONLINE OR SOLO)
+    // ======================================================================
     btnJoin.addEventListener("click", () => {
       initAudio();
       playSound('tap');
@@ -1327,103 +1407,109 @@
         });
         return;
       }
-      socket.emit("player_join", { name });
+
+      if (isSocketConnected && socket) {
+        // Emit to real multiplayer server
+        socket.emit("player_join", { name });
+      } else {
+        // Run in Solo / Practice Mode (Vercel & Offline)
+        startSoloMode(name);
+      }
     });
 
     inputName.addEventListener("keydown", (e) => {
       if (e.key === "Enter") btnJoin.click();
     });
 
-    socket.on("player_in_lobby", ({ player, status }) => {
-      myPlayer = player;
-      document.getElementById("lobby-player-name").textContent = player.name;
-      
-      const teamBadge = document.getElementById("lobby-team-badge");
-      teamBadge.textContent = "⏳ CHỜ BỐC THĂM CHIA ĐỘI";
-      teamBadge.style.background = "#334155";
+    // ======================================================================
+    // SOLO / PRACTICE MODE ENGINE (100% Client-side on Vercel)
+    // ======================================================================
+    function startSoloMode(playerName) {
+      isSoloMode = true;
+      const isTeam1 = Math.random() < 0.5;
+      myTeam = isTeam1 ? {
+        key: 'team1',
+        name: 'Khối Nội Lực',
+        icon: '🇻🇳',
+        leaderName: 'Đ/c Nguyễn Văn B'
+      } : {
+        key: 'team2',
+        name: 'Khối Ngoại Lực',
+        icon: '🌐',
+        leaderName: 'Đ/c Trần Thị C'
+      };
 
-      const roleBadge = document.getElementById("lobby-role-badge");
-      roleBadge.textContent = "★ Thành viên Lớp học";
-      roleBadge.className = "role-stamp-banner member";
+      myPlayer = {
+        name: playerName,
+        teamKey: myTeam.key,
+        isLeader: false,
+        score: 0
+      };
 
-      showScreen(screenLobby);
-    });
-
-    socket.on("assigned_team_and_role", ({ player, team }) => {
-      myPlayer = player;
-      myTeam = team;
-
-      const leaderNameEl = document.getElementById("member-view-leader-name");
-      if (leaderNameEl) {
-        leaderNameEl.textContent = team.leaderName || "Đang bốc thăm...";
+      // Shuffle full question pool
+      soloQueue = EMBEDDED_QUESTIONS.map(q => q.id);
+      for (let i = soloQueue.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [soloQueue[i], soloQueue[j]] = [soloQueue[j], soloQueue[i]];
       }
 
-      const hudPlayerTag = document.getElementById("hud-player-name");
-      if (hudPlayerTag) {
-        hudPlayerTag.textContent = `${player.name} (${player.isLeader ? "👑 Leader" : "Thành viên"})`;
+      // Update HUD
+      document.getElementById("play-team-name").textContent = `${myTeam.icon} ${myTeam.name}`;
+      document.getElementById("hud-player-name").textContent = `${playerName} (Thành viên)`;
+      document.getElementById("member-view-leader-name").textContent = myTeam.leaderName;
+
+      showCustomModal({
+        icon: myTeam.icon,
+        title: 'BẠN ĐÃ ĐƯỢC CHIA ĐỘI!',
+        subtitle: `${myTeam.icon} ${myTeam.name}`,
+        content: `Họ và tên: <strong>${playerName}</strong><br>Khối: <strong>${myTeam.name}</strong><br>👑 Leader của bạn là: <strong style="color:var(--gold-star); font-size:15px;">${myTeam.leaderName}</strong><br><br>Hệ thống bắt đầu phát các câu hỏi trắc nghiệm <em>Ai Là Triệu Phú</em> ngẫu nhiên!`,
+        btnText: 'BẮT ĐẦU ĐẤU TRÍ ➔',
+        onConfirm: () => {
+          showScreen(screenPlayMember);
+          serveNextSoloQuestion();
+        }
+      });
+    }
+
+    function serveNextSoloQuestion() {
+      if (soloQueue.length === 0) {
+        soloQueue = EMBEDDED_QUESTIONS.map(q => q.id);
+        for (let i = soloQueue.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [soloQueue[i], soloQueue[j]] = [soloQueue[j], soloQueue[i]];
+        }
       }
 
-      if (player.isLeader) {
-        document.getElementById("leader-team-title").textContent = `${team.icon} ${team.name}`;
-        showCustomModal({
-          icon: '👑',
-          title: 'BẠN LÀ TRƯỞNG ĐOÀN!',
-          subtitle: `${team.icon} ${team.name}`,
-          content: `Xin chúc mừng <strong>${player.name}</strong>!<br>Bạn đã được hệ thống tín nhiệm chọn làm <strong>Trưởng Đoàn (Leader)</strong> của <strong>${team.name}</strong>.<br><br>Hãy chỉ huy và theo dõi các thành viên cày chuỗi 50 câu đúng để kích hoạt quyền chọn <strong>Bảo Bình Thời Cuộc</strong>!`,
-          btnText: 'VÀO BÀN CHỈ HUY ➔',
-          onConfirm: () => {
-            showScreen(screenPlayLeader);
-          }
-        });
-      } else {
-        document.getElementById("play-team-name").textContent = `${team.icon} ${team.name}`;
-        showCustomModal({
-          icon: team.icon || '🇻🇳',
-          title: 'BẠN ĐÃ ĐƯỢC CHIA ĐỘI!',
-          subtitle: `${team.icon} ${team.name}`,
-          content: `Họ và tên: <strong>${player.name}</strong><br>Khối: <strong>${team.name}</strong><br>👑 Leader của bạn là: <strong style="color:var(--gold-star); font-size:15px;">${team.leaderName || "Đang chỉ định"}</strong><br><br>Hệ thống sẽ phát <strong>câu hỏi ngẫu nhiên</strong> cho bạn để tích lũy chuỗi 50 câu đúng cho đội!`,
-          btnText: 'BẮT ĐẦU ĐẤU TRÍ ➔',
-          onConfirm: () => {
-            showScreen(screenPlayMember);
-            socket.emit("get_question");
-          }
-        });
-      }
-    });
+      const nextId = soloQueue.shift();
+      const q = EMBEDDED_QUESTIONS.find(item => item.id === nextId) || EMBEDDED_QUESTIONS[0];
+      soloAnsweredCount++;
 
-    socket.on("became_leader", () => {
-      if (myPlayer) {
-        myPlayer.isLeader = true;
-        showCustomModal({
-          icon: '👑',
-          title: 'CHỈ ĐỊNH LEADER MỚI',
-          subtitle: 'Kế nhiệm vị trí Trưởng Đoàn',
-          content: 'Trưởng đoàn trước đã rời trận đấu. Bạn được toàn đoàn tín nhiệm chỉ định làm <strong>Trưởng Đoàn (Leader)</strong> mới!',
-          btnText: 'NHẬN NHIỆM VỤ ➔',
-          onConfirm: () => {
-            if (myTeam) {
-              document.getElementById("leader-team-title").textContent = `${myTeam.icon} ${myTeam.name}`;
-            }
-            showScreen(screenPlayLeader);
-          }
-        });
+      // Shuffle 4 options
+      const optIdxs = q.options.map((_, idx) => idx);
+      for (let i = optIdxs.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [optIdxs[i], optIdxs[j]] = [optIdxs[j], optIdxs[i]];
       }
-    });
 
-    socket.on("game_reset", () => {
-      if (myPlayer) {
-        myPlayer.teamKey = null;
-        myPlayer.isLeader = false;
-        myPlayer.score = 0;
-        const teamBadge = document.getElementById("lobby-team-badge");
-        teamBadge.textContent = "⏳ CHỜ BỐC THĂM CHIA ĐỘI";
-        teamBadge.style.background = "#334155";
-        showScreen(screenLobby);
-      }
-    });
+      const shuffledOpts = optIdxs.map(idx => q.options[idx]);
+      const correctIdx = optIdxs.indexOf(q.answer);
 
-    // Receive Randomized Question Payload
-    socket.on("question_payload", (q) => {
+      soloServing = {
+        id: q.id,
+        userQuestionNumber: soloAnsweredCount,
+        question: q.question,
+        options: shuffledOpts,
+        correctOptionIndex: correctIdx,
+        explanation: q.explanation
+      };
+
+      renderQuestion(soloServing);
+    }
+
+    // ======================================================================
+    // RENDER QUESTION UI
+    // ======================================================================
+    function renderQuestion(q) {
       currentQuestion = q;
       isAnswerLocked = false;
 
@@ -1445,9 +1531,11 @@
         btn.addEventListener("click", () => submitAnswer(idx, btn));
         container.appendChild(btn);
       });
-    });
+    }
 
-    // Submit Answer
+    // ======================================================================
+    // SUBMIT ANSWER
+    // ======================================================================
     function submitAnswer(chosenOption, clickedBtn) {
       if (!currentQuestion || isAnswerLocked) return;
       isAnswerLocked = true;
@@ -1462,20 +1550,69 @@
       clickedBtn.classList.add("selected");
 
       setTimeout(() => {
-        socket.emit("submit_answer", {
-          questionId: currentQuestion.id,
-          chosenOption: chosenOption
-        });
+        if (!isSoloMode && isSocketConnected && socket) {
+          // Send to Server
+          socket.emit("submit_answer", {
+            questionId: currentQuestion.id,
+            chosenOption: chosenOption
+          });
+
+          // Safety fallback: If server doesn't respond in 3 seconds, evaluate locally so UI never hangs!
+          setTimeout(() => {
+            if (isAnswerLocked) {
+              evaluateAnswerClientSide(chosenOption);
+            }
+          }, 2500);
+        } else {
+          // Evaluate Client-Side (Solo / Practice mode)
+          evaluateAnswerClientSide(chosenOption);
+        }
       }, 350);
     }
 
-    // Answer Feedback Handling
+    function evaluateAnswerClientSide(chosenOption) {
+      if (!soloServing && currentQuestion) {
+        const qOriginal = EMBEDDED_QUESTIONS.find(item => item.id === currentQuestion.id);
+        const correctIdx = qOriginal ? qOriginal.answer : 0;
+        const explanation = qOriginal ? qOriginal.explanation : '';
+        handleAnswerFeedback({
+          isCorrect: (chosenOption === correctIdx),
+          correctAnswer: correctIdx,
+          explanation: explanation,
+          playerScore: ++soloScore,
+          teamScore: soloScore,
+          teamStreak: ++soloStreak
+        });
+        return;
+      }
+
+      const isCorrect = (chosenOption === soloServing.correctOptionIndex);
+      if (isCorrect) {
+        soloScore++;
+        soloStreak++;
+      } else {
+        soloStreak = Math.max(0, soloStreak - 1);
+      }
+
+      handleAnswerFeedback({
+        isCorrect: isCorrect,
+        correctAnswer: soloServing.correctOptionIndex,
+        explanation: soloServing.explanation,
+        playerScore: soloScore,
+        teamScore: soloScore,
+        teamStreak: soloStreak
+      });
+    }
+
+    // ======================================================================
+    // ANSWER FEEDBACK & 3-SECOND PENALTY COOLDOWN
+    // ======================================================================
     const penaltyOverlay = document.getElementById("penalty-cooldown-overlay");
     const penaltyCountdownNum = document.getElementById("penalty-countdown-num");
     const penaltyBarFill = document.getElementById("penalty-bar-fill");
     const penaltyExplanation = document.getElementById("penalty-explanation");
 
-    socket.on("answer_feedback", ({ isCorrect, correctAnswer, explanation, playerScore, teamScore, teamStreak }) => {
+    function handleAnswerFeedback({ isCorrect, correctAnswer, explanation, playerScore, teamScore, teamStreak }) {
       const allBtns = document.querySelectorAll(".option-btn-millionaire");
       const selectedBtn = document.querySelector(".option-btn-millionaire.selected");
       const toast = document.getElementById("answer-toast");
@@ -1502,7 +1639,11 @@
 
         setTimeout(() => {
           toast.className = "result-toast-banner";
-          socket.emit("get_question");
+          if (isSoloMode || !isSocketConnected || !socket) {
+            serveNextSoloQuestion();
+          } else {
+            socket.emit("get_question");
+          }
         }, 1300);
 
       } else {
@@ -1525,9 +1666,8 @@
           startPenaltyCooldown(explanation);
         }, 600);
       }
-    });
+    }
 
-    // 3-Second Penalty Cooldown Logic
     function startPenaltyCooldown(explanationText) {
       penaltyExplanation.innerHTML = `<strong>💡 Kiến thức chuẩn:</strong> ${explanationText || "Hãy ghi nhớ để trả lời đúng ở các câu tiếp theo!"}`;
       penaltyOverlay.classList.add("show");
@@ -1549,99 +1689,202 @@
         if (remainingMs <= 0) {
           clearInterval(interval);
           penaltyOverlay.classList.remove("show");
-          socket.emit("get_question");
+          if (isSoloMode || !isSocketConnected || !socket) {
+            serveNextSoloQuestion();
+          } else {
+            socket.emit("get_question");
+          }
         }
       }, stepMs);
     }
 
-    socket.on("room_state", (state) => {
-      if (!myPlayer || !myPlayer.teamKey) return;
-      const myTeamState = state[myPlayer.teamKey];
-      if (myTeamState) {
-        const gauge = document.getElementById("leader-streak-gauge");
-        if (gauge) gauge.textContent = myTeamState.streak;
+    // ======================================================================
+    // SOCKET EVENT LISTENERS (MULTIPLAYER ROOM MODE)
+    // ======================================================================
+    if (socket) {
+      socket.on("player_in_lobby", ({ player, status }) => {
+        myPlayer = player;
+        document.getElementById("lobby-player-name").textContent = player.name;
+        
+        const teamBadge = document.getElementById("lobby-team-badge");
+        teamBadge.textContent = "⏳ CHỜ BỐC THĂM CHIA ĐỘI";
+        teamBadge.style.background = "#334155";
 
-        const streakBadge = document.getElementById("play-streak-badge");
-        if (streakBadge) streakBadge.textContent = `${myTeamState.streak} / 50 🔥`;
-        const streakBar = document.getElementById("play-streak-bar");
-        if (streakBar) {
-          const pct = Math.min(100, (myTeamState.streak / 50) * 100);
-          streakBar.style.width = `${pct}%`;
-        }
+        const roleBadge = document.getElementById("lobby-role-badge");
+        roleBadge.textContent = "★ Thành viên Lớp học";
+        roleBadge.className = "role-stamp-banner member";
 
-        const leaderNameEl = document.getElementById("member-view-leader-name");
-        if (leaderNameEl && myTeamState.leaderName) {
-          leaderNameEl.textContent = myTeamState.leaderName;
-        }
-      }
-    });
-
-    socket.on("leader_challenge_start", (q) => {
-      currentLeaderQuestion = q;
-      document.getElementById("leader-q-text").textContent = q.question;
-
-      const letters = ["A", "B", "C", "D"];
-      const container = document.getElementById("leader-options-container");
-      container.innerHTML = "";
-
-      q.options.forEach((optText, idx) => {
-        const btn = document.createElement("button");
-        btn.className = "option-btn-millionaire";
-        btn.innerHTML = `
-          <span class="opt-letter-diamond">◆ ${letters[idx] || idx + 1}:</span>
-          <span class="opt-text-label">${optText}</span>
-        `;
-        btn.addEventListener("click", () => {
-          playSound('lock');
-          btn.classList.add("selected");
-          socket.emit("leader_submit_answer", {
-            questionId: q.id,
-            chosenOption: idx
-          });
-        });
-        container.appendChild(btn);
+        showScreen(screenLobby);
       });
 
-      showScreen(screenLeaderQ);
-      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-    });
+      socket.on("assigned_team_and_role", ({ player, team }) => {
+        myPlayer = player;
+        myTeam = team;
 
-    socket.on("leader_challenge_result", ({ success, message }) => {
-      showCustomModal({
-        icon: success ? '🌟' : '⚠️',
-        title: success ? 'THÀNH CÔNG!' : 'CHƯA CHÍNH XÁC',
-        content: message,
-        btnText: 'TIẾP TỤC ➔',
-        onConfirm: () => {
-          if (!success) {
-            showScreen(screenPlayLeader);
+        const leaderNameEl = document.getElementById("member-view-leader-name");
+        if (leaderNameEl) {
+          leaderNameEl.textContent = team.leaderName || "Đang bốc thăm...";
+        }
+
+        const hudPlayerTag = document.getElementById("hud-player-name");
+        if (hudPlayerTag) {
+          hudPlayerTag.textContent = `${player.name} (${player.isLeader ? "👑 Leader" : "Thành viên"})`;
+        }
+
+        if (player.isLeader) {
+          document.getElementById("leader-team-title").textContent = `${team.icon} ${team.name}`;
+          showCustomModal({
+            icon: '👑',
+            title: 'BẠN LÀ TRƯỞNG ĐOÀN!',
+            subtitle: `${team.icon} ${team.name}`,
+            content: `Xin chúc mừng <strong>${player.name}</strong>!<br>Bạn đã được hệ thống tín nhiệm chọn làm <strong>Trưởng Đoàn (Leader)</strong> của <strong>${team.name}</strong>.<br><br>Hãy chỉ huy và theo dõi các thành viên cày chuỗi 50 câu đúng để kích hoạt quyền chọn <strong>Bảo Bình Thời Cuộc</strong>!`,
+            btnText: 'VÀO BÀN CHỈ HUY ➔',
+            onConfirm: () => {
+              showScreen(screenPlayLeader);
+            }
+          });
+        } else {
+          document.getElementById("play-team-name").textContent = `${team.icon} ${team.name}`;
+          showCustomModal({
+            icon: team.icon || '🇻🇳',
+            title: 'BẠN ĐÃ ĐƯỢC CHIA ĐỘI!',
+            subtitle: `${team.icon} ${team.name}`,
+            content: `Họ và tên: <strong>${player.name}</strong><br>Khối: <strong>${team.name}</strong><br>👑 Leader của bạn là: <strong style="color:var(--gold-star); font-size:15px;">${team.leaderName || "Đang chỉ định"}</strong><br><br>Hệ thống bắt đầu phát các câu hỏi trắc nghiệm <em>Ai Là Triệu Phú</em> ngẫu nhiên!`,
+            btnText: 'BẮT ĐẦU ĐẤU TRÍ ➔',
+            onConfirm: () => {
+              showScreen(screenPlayMember);
+              socket.emit("get_question");
+            }
+          });
+        }
+      });
+
+      socket.on("became_leader", () => {
+        if (myPlayer) {
+          myPlayer.isLeader = true;
+          showCustomModal({
+            icon: '👑',
+            title: 'CHỈ ĐỊNH LEADER MỚI',
+            subtitle: 'Kế nhiệm vị trí Trưởng Đoàn',
+            content: 'Trưởng đoàn trước đã rời trận đấu. Bạn được toàn đoàn tín nhiệm chỉ định làm <strong>Trưởng Đoàn (Leader)</strong> mới!',
+            btnText: 'NHẬN NHIỆM VỤ ➔',
+            onConfirm: () => {
+              if (myTeam) {
+                document.getElementById("leader-team-title").textContent = `${myTeam.icon} ${myTeam.name}`;
+              }
+              showScreen(screenPlayLeader);
+            }
+          });
+        }
+      });
+
+      socket.on("game_reset", () => {
+        if (myPlayer) {
+          myPlayer.teamKey = null;
+          myPlayer.isLeader = false;
+          myPlayer.score = 0;
+          const teamBadge = document.getElementById("lobby-team-badge");
+          teamBadge.textContent = "⏳ CHỜ BỐC THĂM CHIA ĐỘI";
+          teamBadge.style.background = "#334155";
+          showScreen(screenLobby);
+        }
+      });
+
+      socket.on("question_payload", (q) => {
+        renderQuestion(q);
+      });
+
+      socket.on("answer_feedback", (data) => {
+        handleAnswerFeedback(data);
+      });
+
+      socket.on("room_state", (state) => {
+        if (!myPlayer || !myPlayer.teamKey) return;
+        const myTeamState = state[myPlayer.teamKey];
+        if (myTeamState) {
+          const gauge = document.getElementById("leader-streak-gauge");
+          if (gauge) gauge.textContent = myTeamState.streak;
+
+          const streakBadge = document.getElementById("play-streak-badge");
+          if (streakBadge) streakBadge.textContent = `${myTeamState.streak} / 50 🔥`;
+          const streakBar = document.getElementById("play-streak-bar");
+          if (streakBar) {
+            const pct = Math.min(100, (myTeamState.streak / 50) * 100);
+            streakBar.style.width = `${pct}%`;
+          }
+
+          const leaderNameEl = document.getElementById("member-view-leader-name");
+          if (leaderNameEl && myTeamState.leaderName) {
+            leaderNameEl.textContent = myTeamState.leaderName;
           }
         }
       });
-    });
 
-    socket.on("leader_unlocked_pots", () => {
-      showScreen(screenPots);
-      playSound('correct');
-      triggerConfetti();
-      if (navigator.vibrate) navigator.vibrate([300, 150, 300]);
-    });
+      socket.on("leader_challenge_start", (q) => {
+        document.getElementById("leader-q-text").textContent = q.question;
+        const letters = ["A", "B", "C", "D"];
+        const container = document.getElementById("leader-options-container");
+        container.innerHTML = "";
 
-    document.querySelectorAll(".pot-card-touch").forEach(card => {
-      card.addEventListener("click", () => {
-        playSound('lock');
-        const potIdx = card.getAttribute("data-pot");
-        socket.emit("leader_pick_pot", { potIndex: potIdx });
-        card.style.opacity = "0.5";
-        card.style.pointerEvents = "none";
+        q.options.forEach((optText, idx) => {
+          const btn = document.createElement("button");
+          btn.className = "option-btn-millionaire";
+          btn.innerHTML = `
+            <span class="opt-letter-diamond">◆ ${letters[idx] || idx + 1}:</span>
+            <span class="opt-text-label">${optText}</span>
+          `;
+          btn.addEventListener("click", () => {
+            playSound('lock');
+            btn.classList.add("selected");
+            socket.emit("leader_submit_answer", {
+              questionId: q.id,
+              chosenOption: idx
+            });
+          });
+          container.appendChild(btn);
+        });
+
+        showScreen(screenLeaderQ);
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
       });
-    });
 
-    socket.on("pot_revealed", (data) => {
-      if (myPlayer && myPlayer.isLeader) {
-        showScreen(screenPlayLeader);
-      }
-    });
+      socket.on("leader_challenge_result", ({ success, message }) => {
+        showCustomModal({
+          icon: success ? '🌟' : '⚠️',
+          title: success ? 'THÀNH CÔNG!' : 'CHƯA CHÍNH XÁC',
+          content: message,
+          btnText: 'TIẾP TỤC ➔',
+          onConfirm: () => {
+            if (!success) {
+              showScreen(screenPlayLeader);
+            }
+          }
+        });
+      });
+
+      socket.on("leader_unlocked_pots", () => {
+        showScreen(screenPots);
+        playSound('correct');
+        triggerConfetti();
+        if (navigator.vibrate) navigator.vibrate([300, 150, 300]);
+      });
+
+      document.querySelectorAll(".pot-card-touch").forEach(card => {
+        card.addEventListener("click", () => {
+          playSound('lock');
+          const potIdx = card.getAttribute("data-pot");
+          socket.emit("leader_pick_pot", { potIndex: potIdx });
+          card.style.opacity = "0.5";
+          card.style.pointerEvents = "none";
+        });
+      });
+
+      socket.on("pot_revealed", () => {
+        if (myPlayer && myPlayer.isLeader) {
+          showScreen(screenPlayLeader);
+        }
+      });
+    }
   </script>
 </body>
 </html>

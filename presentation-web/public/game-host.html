@@ -1043,12 +1043,23 @@
     // Check on load
     checkAuth();
 
-    // Load QR Code & URL
+    // Load QR Code & URL (Instantly works on Vercel & Localhost)
+    const hostOrigin = window.location.origin;
+    const defaultHostPlayUrl = hostOrigin + '/play';
+    const qrImgHost = document.getElementById('qr-img');
+    const qrLinkTextHost = document.getElementById('qr-link-text');
+
+    if (qrLinkTextHost) qrLinkTextHost.textContent = defaultHostPlayUrl;
+    if (qrImgHost) qrImgHost.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(defaultHostPlayUrl)}`;
+
     fetch('/api/server-info')
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error('Not local server');
+        return res.json();
+      })
       .then(data => {
-        document.getElementById('qr-img').src = data.qrDataUrl;
-        document.getElementById('qr-link-text').textContent = data.playUrl;
+        if (qrImgHost && data.qrDataUrl) qrImgHost.src = data.qrDataUrl;
+        if (qrLinkTextHost && data.playUrl) qrLinkTextHost.textContent = data.playUrl;
       })
       .catch(() => {});
 

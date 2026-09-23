@@ -446,11 +446,10 @@ io.on('connection', (socket) => {
 
   // Member submits answer
   socket.on('submit_answer', ({ questionId, chosenOption }) => {
-    if (!socket.player || gameState.status !== 'PLAYING') return;
+    if (!socket.player) return;
 
     const player = socket.player;
-    if (!player.teamKey) return;
-    const team = gameState[player.teamKey];
+    const team = player.teamKey ? gameState[player.teamKey] : null;
 
     let isCorrect = false;
     let explanation = '';
@@ -468,68 +467,65 @@ io.on('connection', (socket) => {
       explanation = q.explanation;
     }
 
-    team.totalAnswered += 1;
+    if (team && gameState.status === 'PLAYING') {
+      team.totalAnswered += 1;
 
-    if (isCorrect) {
-      player.score += 1;
-      team.score += 1;
-      team.streak += 1;
-      team.totalCorrect += 1;
+      if (isCorrect) {
+        player.score += 1;
+        team.score += 1;
+        team.streak += 1;
+        team.totalCorrect += 1;
 
-      // Check if streak reaches 50
-      if (team.streak >= team.targetStreak && !gameState.activeLeaderChallenge) {
-        team.streak = team.targetStreak;
-        
-        // Pick a strategic leader question
-        const leaderQuestions = questionsData.leaderQuestions;
-        const selectedLeaderQ = leaderQuestions[Math.floor(Math.random() * leaderQuestions.length)];
+        // Check if streak reaches 50
+        if (team.streak >= team.targetStreak && !gameState.activeLeaderChallenge) {
+          team.streak = team.targetStreak;
+          
+          // Pick a strategic leader question
+          const leaderQuestions = questionsData.leaderQuestions;
+          const selectedLeaderQ = leaderQuestions[Math.floor(Math.random() * leaderQuestions.length)];
 
-        gameState.activeLeaderChallenge = {
-          teamKey: team.key,
-          teamName: team.name,
-          leaderId: team.leaderId,
-          leaderName: team.leaderName,
-          question: selectedLeaderQ
-        };
+          gameState.activeLeaderChallenge = {
+            teamKey: team.key,
+            teamName: team.name,
+            leaderId: team.leaderId,
+            leaderName: team.leaderName,
+            question: selectedLeaderQ
+          };
 
-        addLog(`🚨 ${team.name} đạt chuỗi 50 câu đúng! Kích hoạt câu hỏi thử thách cho Leader ${team.leaderName}!`, 'warn');
+          addLog(`🚨 ${team.name} đạt chuỗi 50 câu đúng! Kích hoạt câu hỏi thử thách cho Leader ${team.leaderName}!`, 'warn');
 
-        // Notify Host
-        io.emit('streak_50_reached', {
-          teamKey: team.key,
-          teamName: team.name,
-          leaderName: team.leaderName
-        });
-
-        // Notify the specific Leader
-        if (team.leaderId) {
-          io.to(team.leaderId).emit('leader_challenge_start', {
-            question: selectedLeaderQ.question,
-            options: selectedLeaderQ.options,
-            id: selectedLeaderQ.id
+          // Notify Host
+          io.emit('streak_50_reached', {
+            teamKey: team.key,
+            teamName: team.name,
+            leaderName: team.leaderName
           });
-        }
-      }
 
-      socket.emit('answer_feedback', {
-        isCorrect: true,
-        correctAnswer: correctOptionIndex,
-        explanation: explanation,
-        playerScore: player.score,
-        teamScore: team.score,
-        teamStreak: team.streak
-      });
+          // Notify the specific Leader
+          if (team.leaderId) {
+            io.to(team.leaderId).emit('leader_challenge_start', {
+              question: selectedLeaderQ.question,
+              options: selectedLeaderQ.options,
+              id: selectedLeaderQ.id
+            });
+          }
+        }
+      } else {
+        team.totalWrong += 1;
+      }
+      broadcastRoomUpdate();
     } else {
-      team.totalWrong += 1;
-      socket.emit('answer_feedback', {
-        isCorrect: false,
-        correctAnswer: correctOptionIndex,
-        explanation: explanation,
-        playerScore: player.score,
-        teamScore: team.score,
-        teamStreak: team.streak
-      });
+      if (isCorrect) player.score += 1;
     }
+
+    socket.emit('answer_feedback', {
+      isCorrect: isCorrect,
+      correctAnswer: correctOptionIndex,
+      explanation: explanation,
+      playerScore: player.score,
+      teamScore: team ? team.score : player.score,
+      teamStreak: team ? team.streak : (isCorrect ? 1 : 0)
+    });
 
     broadcastRoomUpdate();
   });
