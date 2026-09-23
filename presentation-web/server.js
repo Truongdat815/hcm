@@ -339,7 +339,9 @@ io.on('connection', (socket) => {
           name: gameState.team1.name,
           title: gameState.team1.title,
           icon: gameState.team1.icon,
-          color: gameState.team1.color
+          color: gameState.team1.color,
+          leaderName: gameState.team1.leaderName,
+          leaderId: gameState.team1.leaderId
         }
       });
     });
@@ -352,7 +354,9 @@ io.on('connection', (socket) => {
           name: gameState.team2.name,
           title: gameState.team2.title,
           icon: gameState.team2.icon,
-          color: gameState.team2.color
+          color: gameState.team2.color,
+          leaderName: gameState.team2.leaderName,
+          leaderId: gameState.team2.leaderId
         }
       });
     });
@@ -439,6 +443,7 @@ io.on('connection', (socket) => {
 
       socket.emit('answer_feedback', {
         isCorrect: true,
+        correctAnswer: q.answer,
         explanation: q.explanation,
         playerScore: player.score,
         teamScore: team.score,
@@ -448,6 +453,7 @@ io.on('connection', (socket) => {
       team.totalWrong += 1;
       socket.emit('answer_feedback', {
         isCorrect: false,
+        correctAnswer: q.answer,
         explanation: q.explanation,
         playerScore: player.score,
         teamScore: team.score,

@@ -3,27 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Đấu Trí Ngoại Giao — Người Chơi</title>
+  <title>Đấu Trí Ngoại Giao — Ai Là Triệu Phú Mobile</title>
   <link rel="icon" type="image/svg+xml" href="/assets/camind_logo.svg">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700;800;900&family=Playfair+Display:wght@700;800&family=Merriweather:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Playfair+Display:wght@700;800;900&family=Chakra+Petch:wght@600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap">
   <style>
     :root {
       --red-flag: #C02018;
-      --red-darkest: #4E0804;
+      --red-darkest: #3A0503;
       --gold-star: #FFDE00;
       --gold-metallic: #E8B936;
+      --gold-glow: rgba(255, 222, 0, 0.45);
       --cream-parchment: #FDF9EE;
       --bamboo-green: #185B33;
-      --charcoal-ink: #1B1714;
+      --studio-bg-dark: #070B16;
+      --studio-blue-card: #0F172A;
+      --studio-blue-light: #1E293B;
+      --millionaire-cyan: #38BDF8;
+      --millionaire-orange: #F59E0B;
+      --millionaire-green: #10B981;
+      --millionaire-red: #EF4444;
     }
+
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       -webkit-tap-highlight-color: transparent;
     }
+
     body {
-      background: radial-gradient(circle at 50% 30%, #5E0B06 0%, #300503 100%);
+      background: radial-gradient(ellipse at 50% 15%, #18233C 0%, #090E1A 60%, #03050A 100%);
       font-family: 'Montserrat', sans-serif;
       color: #FFF;
       min-height: 100vh;
@@ -31,55 +40,100 @@
       flex-direction: column;
       overflow-x: hidden;
       user-select: none;
+      position: relative;
     }
+
+    /* Ambient Spotlight Background Layer */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.12) 0%, transparent 60%),
+                  radial-gradient(circle at 50% 100%, rgba(232, 185, 54, 0.08) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
     /* Header Bar */
     .mobile-header {
-      background: rgba(30, 4, 3, 0.95);
+      position: relative;
+      z-index: 10;
+      background: rgba(10, 14, 26, 0.95);
+      backdrop-filter: blur(8px);
       border-bottom: 2px solid var(--gold-metallic);
       padding: 10px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
     }
     .header-brand {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
     .header-flag {
       width: 28px;
       height: 19px;
-      border-radius: 2px;
+      border-radius: 3px;
       overflow: hidden;
       border: 1px solid var(--gold-metallic);
+      box-shadow: 0 0 8px rgba(255, 222, 0, 0.3);
+    }
+    .header-title-wrap {
+      display: flex;
+      flex-direction: column;
     }
     .header-title {
       font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.05em;
+      font-weight: 900;
+      letter-spacing: 0.08em;
       color: var(--gold-star);
       text-transform: uppercase;
+      line-height: 1.1;
+    }
+    .header-subtitle {
+      font-size: 9px;
+      font-weight: 600;
+      color: var(--millionaire-cyan);
+      letter-spacing: 0.05em;
+    }
+    .header-status-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .connection-dot {
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
-      background: #2ECC71;
-      box-shadow: 0 0 8px #2ECC71;
+      background: #10B981;
+      box-shadow: 0 0 8px #10B981;
     }
     .connection-dot.offline {
-      background: #E74C3C;
-      box-shadow: 0 0 8px #E74C3C;
+      background: #EF4444;
+      box-shadow: 0 0 8px #EF4444;
+    }
+    .status-text {
+      font-size: 10px;
+      font-weight: 700;
+      color: #94A3B8;
+      letter-spacing: 0.05em;
     }
 
     /* Screen Container */
     .screen-panel {
+      position: relative;
+      z-index: 1;
       flex: 1;
       display: none;
       flex-direction: column;
-      padding: 16px;
-      max-width: 500px;
+      padding: 14px 16px;
+      max-width: 520px;
       width: 100%;
       margin: 0 auto;
     }
@@ -87,314 +141,730 @@
       display: flex;
     }
 
-    /* SCREEN 1: LOGIN / JOIN */
+    /* ======================================================================
+       SCREEN 1: LOGIN / JOIN
+       ====================================================================== */
     .join-card {
-      background: var(--cream-parchment);
-      color: var(--charcoal-ink);
-      border-radius: 8px;
+      background: linear-gradient(145deg, #111827 0%, #0A0F1D 100%);
+      color: #FFF;
+      border-radius: 16px;
       border: 2px solid var(--gold-metallic);
-      padding: 24px 20px;
+      padding: 26px 20px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.8), 0 0 24px rgba(232, 185, 54, 0.15);
       margin-top: auto;
       margin-bottom: auto;
+      position: relative;
+      overflow: hidden;
+    }
+    .join-card::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 50% 30%, rgba(255, 222, 0, 0.08) 0%, transparent 60%);
+      pointer-events: none;
     }
     .join-flag-large {
-      width: 80px;
-      height: 53px;
-      margin: 0 auto 12px;
-      border-radius: 4px;
+      width: 76px;
+      height: 50px;
+      margin: 0 auto 14px;
+      border-radius: 6px;
       overflow: hidden;
       border: 2px solid var(--gold-metallic);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), 0 0 14px var(--gold-glow);
     }
     .join-title {
-      font-size: 18px;
+      font-family: 'Playfair Display', serif;
+      font-size: 21px;
       font-weight: 900;
-      color: var(--red-darkest);
+      color: var(--gold-star);
       text-transform: uppercase;
+      letter-spacing: 0.04em;
       margin-bottom: 6px;
+      text-shadow: 0 2px 10px rgba(255, 222, 0, 0.3);
     }
     .join-subtitle {
       font-size: 12px;
-      color: #666;
-      margin-bottom: 20px;
+      color: #94A3B8;
+      line-height: 1.45;
+      margin-bottom: 22px;
+      font-weight: 500;
     }
     .input-player-name {
       width: 100%;
-      height: 50px;
-      border: 2px solid rgba(142, 17, 10, 0.3);
-      border-radius: 6px;
+      height: 52px;
+      border: 2px solid #334155;
+      border-radius: 10px;
       padding: 0 16px;
       font-family: 'Montserrat', sans-serif;
       font-size: 16px;
       font-weight: 700;
       text-align: center;
-      color: var(--red-darkest);
+      color: #FFF;
       margin-bottom: 16px;
       outline: none;
-      background: #FFF;
+      background: rgba(15, 23, 42, 0.9);
+      transition: all 0.2s ease;
     }
     .input-player-name:focus {
-      border-color: var(--red-flag);
-      box-shadow: 0 0 12px rgba(192, 32, 24, 0.25);
+      border-color: var(--gold-star);
+      box-shadow: 0 0 16px var(--gold-glow);
+      background: #0F172A;
     }
     .btn-submit-join {
       width: 100%;
-      height: 50px;
-      background: linear-gradient(135deg, var(--red-flag), #8E110A);
+      height: 52px;
+      background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
       color: var(--gold-star);
-      border: 2px solid var(--gold-star);
-      border-radius: 6px;
+      border: 2px solid var(--gold-metallic);
+      border-radius: 10px;
       font-family: 'Montserrat', sans-serif;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 900;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.08em;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(192, 32, 24, 0.4);
-      transition: transform 0.15s ease;
+      box-shadow: 0 6px 20px rgba(185, 28, 28, 0.5), 0 0 12px rgba(232, 185, 54, 0.25);
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
     }
     .btn-submit-join:active {
       transform: scale(0.97);
     }
 
-    /* SCREEN 2: LOBBY WAITING */
+    /* ======================================================================
+       SCREEN 2: LOBBY WAITING
+       ====================================================================== */
     .player-badge-card {
-      background: var(--cream-parchment);
-      color: var(--charcoal-ink);
-      border-radius: 8px;
-      border: 3px solid var(--gold-metallic);
-      padding: 20px;
+      background: linear-gradient(145deg, #111827 0%, #0A0F1D 100%);
+      color: #FFF;
+      border-radius: 14px;
+      border: 2px solid var(--gold-metallic);
+      padding: 22px 18px;
       text-align: center;
-      margin-bottom: 16px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      margin-bottom: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      position: relative;
     }
     .badge-assigned-team {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 16px;
+      padding: 6px 18px;
       border-radius: 20px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 900;
       color: #FFF;
       text-transform: uppercase;
       margin-bottom: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.2);
     }
-    .badge-assigned-team.team1 { background: var(--red-flag); }
-    .badge-assigned-team.team2 { background: var(--bamboo-green); }
-
     .player-assigned-name {
-      font-size: 22px;
+      font-size: 23px;
       font-weight: 900;
-      color: var(--red-darkest);
+      color: var(--gold-star);
       margin-bottom: 6px;
+      letter-spacing: 0.03em;
     }
     .role-stamp-banner {
-      display: inline-block;
-      padding: 4px 14px;
-      border-radius: 4px;
-      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 16px;
+      border-radius: 6px;
+      font-size: 11px;
       font-weight: 800;
       letter-spacing: 0.06em;
       text-transform: uppercase;
       border: 1px dashed;
       margin-top: 6px;
     }
+    .role-stamp-banner.member {
+      background: rgba(56, 189, 248, 0.1);
+      border-color: var(--millionaire-cyan);
+      color: var(--millionaire-cyan);
+    }
     .role-stamp-banner.leader {
       background: rgba(255, 222, 0, 0.15);
-      border-color: var(--gold-metallic);
-      color: #B8860B;
+      border-color: var(--gold-star);
+      color: var(--gold-star);
     }
-    .role-stamp-banner.member {
-      background: rgba(0,0,0,0.05);
-      border-color: #888;
-      color: #444;
-    }
-
     .lobby-wait-status {
       text-align: center;
       padding: 30px 16px;
-      color: var(--gold-light);
+      color: #CBD5E1;
     }
     .pulse-radar {
-      width: 60px;
-      height: 60px;
+      width: 68px;
+      height: 68px;
       border-radius: 50%;
-      background: rgba(255, 222, 0, 0.2);
+      background: rgba(255, 222, 0, 0.15);
       border: 2px solid var(--gold-star);
-      margin: 0 auto 16px;
-      animation: pulseAnim 1.8s infinite ease-out;
+      margin: 0 auto 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      animation: pulseRadar 1.8s infinite ease-out;
     }
-    @keyframes pulseAnim {
-      0% { transform: scale(0.8); opacity: 0.8; }
-      100% { transform: scale(1.4); opacity: 0; }
+    @keyframes pulseRadar {
+      0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(255, 222, 0, 0.5); }
+      70% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(255, 222, 0, 0); }
+      100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(255, 222, 0, 0); }
     }
 
-    /* SCREEN 3: MEMBER PLAYING (QUESTION & 4 ABCD BUTTONS) */
-    .gameplay-team-bar {
+    /* ======================================================================
+       SCREEN 3: MEMBER PLAYING — AI LÀ TRIỆU PHÚ STYLE
+       ====================================================================== */
+    
+    /* Top Team & Leader Bar */
+    .gameplay-header-hud {
+      background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(10, 15, 29, 0.95));
+      border: 2px solid var(--gold-metallic);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .hud-top-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(0,0,0,0.4);
-      padding: 8px 14px;
-      border-radius: 6px;
-      border: 1px solid var(--gold-metallic);
-      margin-bottom: 12px;
-      font-size: 12.5px;
-      font-weight: 800;
     }
-    .streak-meter-box {
+    .hud-team-tag {
+      font-size: 13px;
+      font-weight: 900;
       color: var(--gold-star);
+      text-transform: uppercase;
       display: flex;
       align-items: center;
       gap: 6px;
     }
-    .streak-fire-badge {
-      background: var(--red-flag);
-      padding: 2px 8px;
-      border-radius: 12px;
+    .hud-player-tag {
       font-size: 11px;
+      font-weight: 700;
+      color: #94A3B8;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 3px 10px;
+      border-radius: 10px;
     }
 
-    .question-card-mobile {
-      background: var(--cream-parchment);
-      color: var(--charcoal-ink);
-      border: 2px solid var(--gold-metallic);
+    /* Prominent Leader Showcase Card */
+    .hud-leader-showcase {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(90deg, rgba(232, 185, 54, 0.15) 0%, rgba(255, 222, 0, 0.05) 100%);
+      border: 1px solid var(--gold-metallic);
       border-radius: 8px;
-      padding: 16px 14px;
-      margin-bottom: 14px;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
-      position: relative;
+      padding: 6px 12px;
     }
-    .q-number-pill {
-      font-size: 10px;
+    .leader-crown-badge {
+      font-size: 20px;
+      animation: crownBounce 2s infinite ease-in-out;
+    }
+    @keyframes crownBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+    .leader-text-group {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .leader-label {
+      font-size: 9.5px;
       font-weight: 800;
-      color: var(--red-flag);
-      letter-spacing: 0.05em;
+      color: var(--gold-metallic);
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      margin-bottom: 4px;
+    }
+    .leader-name-value {
+      font-size: 13px;
+      font-weight: 900;
+      color: #FFF;
+      text-shadow: 0 0 10px rgba(255, 222, 0, 0.4);
+    }
+
+    /* Streak Progress Meter */
+    .streak-container {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .streak-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10.5px;
+      font-weight: 800;
+      color: #CBD5E1;
+    }
+    .streak-fire-text {
+      color: #F59E0B;
+      font-weight: 900;
+    }
+    .streak-bar-track {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .streak-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #F59E0B 0%, #EF4444 100%);
+      border-radius: 4px;
+      box-shadow: 0 0 8px #F59E0B;
+      transition: width 0.3s ease;
+    }
+
+    /* ======================================================================
+       AI LÀ TRIỆU PHÚ QUESTION BOX (KHUNG CÂU HỎI LỤC GIÁC ĐẶC TRƯNG)
+       ====================================================================== */
+    .millionaire-question-wrapper {
+      position: relative;
+      margin: 10px 0 14px;
+      padding: 0 6px;
+    }
+    .millionaire-question-box {
+      position: relative;
+      background: linear-gradient(180deg, #0F172A 0%, #060B16 100%);
+      border: 2px solid var(--gold-metallic);
+      border-radius: 12px;
+      padding: 16px 14px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(232, 185, 54, 0.25), inset 0 0 15px rgba(56, 189, 248, 0.1);
+    }
+    /* Horizontal Wing Connectors */
+    .millionaire-question-box::before,
+    .millionaire-question-box::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 10px;
+      height: 2px;
+      background: var(--gold-metallic);
+      box-shadow: 0 0 6px var(--gold-star);
+    }
+    .millionaire-question-box::before { left: -10px; }
+    .millionaire-question-box::after { right: -10px; }
+
+    .q-badge-header {
+      display: inline-block;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--millionaire-cyan);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
     }
     .q-text-body {
       font-family: 'Merriweather', serif;
-      font-size: 14px;
+      font-size: 14.5px;
       font-weight: 700;
-      line-height: 1.45;
-      color: var(--red-darkest);
+      line-height: 1.5;
+      color: #FFFFFF;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
     }
 
+    /* ======================================================================
+       AI LÀ TRIỆU PHÚ ANSWER BUTTONS (4 PHƯƠNG ÁN A, B, C, D)
+       ====================================================================== */
     .options-buttons-stack {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 11px;
       flex: 1;
     }
-    .option-btn-mobile {
-      background: #FFF;
-      color: var(--charcoal-ink);
-      border: 2px solid #E0D6C8;
-      border-radius: 6px;
-      padding: 14px;
+    .option-btn-millionaire {
+      position: relative;
+      background: linear-gradient(90deg, #0F172A 0%, #151F38 50%, #0F172A 100%);
+      color: #F8FAFC;
+      border: 2px solid #334155;
+      border-radius: 10px;
+      padding: 13px 14px;
       font-family: 'Montserrat', sans-serif;
       font-size: 13.5px;
       font-weight: 700;
       text-align: left;
       line-height: 1.35;
       display: flex;
-      align-items: flex-start;
-      gap: 10px;
+      align-items: center;
+      gap: 12px;
       cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      transition: all 0.15s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: all 0.18s ease;
+      outline: none;
     }
-    .option-btn-mobile:active {
+    .option-btn-millionaire:active:not(:disabled) {
       transform: scale(0.98);
-      background: #F5E8CB;
+      border-color: var(--millionaire-orange);
+      background: #1E293B;
     }
-    .opt-letter {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: var(--red-flag);
+    
+    /* Diamond Letter Badge: ◆ A: */
+    .opt-letter-diamond {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 14px;
+      font-weight: 900;
       color: var(--gold-star);
+      letter-spacing: 0.05em;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 900;
-      flex-shrink: 0;
+      gap: 4px;
+      text-shadow: 0 0 8px rgba(255, 222, 0, 0.6);
     }
-    .option-btn-mobile.correct {
-      background: #E8F8F0 !important;
-      border-color: #2ECC71 !important;
-      color: #145A32 !important;
-    }
-    .option-btn-mobile.wrong {
-      background: #FCECEE !important;
-      border-color: #E74C3C !important;
-      color: #78281F !important;
+    .opt-text-label {
+      flex: 1;
+      font-weight: 600;
     }
 
-    /* SCREEN 4: LEADER WAITING / DASHBOARD */
-    .leader-cockpit-card {
-      background: linear-gradient(135deg, #7F1009 0%, #3E0603 100%);
-      border: 2px solid var(--gold-star);
+    /* State: Selected (Đang chốt phương án - Cam rực rỡ) */
+    .option-btn-millionaire.selected {
+      background: linear-gradient(90deg, #D97706 0%, #F59E0B 50%, #D97706 100%) !important;
+      border-color: #FDE047 !important;
+      color: #000 !important;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.8) !important;
+      animation: pulseSelected 0.4s infinite alternate;
+    }
+    .option-btn-millionaire.selected .opt-letter-diamond {
+      color: #000 !important;
+      text-shadow: none !important;
+    }
+    @keyframes pulseSelected {
+      0% { transform: scale(0.99); }
+      100% { transform: scale(1.01); }
+    }
+
+    /* State: Correct (Đúng - Xanh ngọc lục bảo rực rỡ) */
+    .option-btn-millionaire.correct {
+      background: linear-gradient(90deg, #059669 0%, #10B981 50%, #059669 100%) !important;
+      border-color: #6EE7B7 !important;
+      color: #FFF !important;
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.9), inset 0 0 10px rgba(255, 255, 255, 0.4) !important;
+      animation: pulseCorrect 0.3s infinite alternate;
+    }
+    .option-btn-millionaire.correct .opt-letter-diamond {
+      color: #FFF !important;
+      text-shadow: 0 0 8px #FFF !important;
+    }
+    @keyframes pulseCorrect {
+      0% { transform: scale(1.0); }
+      100% { transform: scale(1.02); }
+    }
+
+    /* State: Wrong (Sai - Đỏ rực rung lắc) */
+    .option-btn-millionaire.wrong {
+      background: linear-gradient(90deg, #DC2626 0%, #EF4444 50%, #DC2626 100%) !important;
+      border-color: #FCA5A5 !important;
+      color: #FFF !important;
+      box-shadow: 0 0 24px rgba(239, 68, 68, 0.9) !important;
+      animation: shakeHard 0.5s ease-in-out;
+    }
+    @keyframes shakeHard {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px); }
+      40%, 80% { transform: translateX(8px); }
+    }
+
+    /* State: Correct Answer Highlighted when user chose wrong */
+    .option-btn-millionaire.reveal-correct {
+      border-color: #10B981 !important;
+      background: rgba(16, 185, 129, 0.2) !important;
+      color: #6EE7B7 !important;
+    }
+
+    /* Feedback Banner */
+    .result-toast-banner {
+      padding: 10px 14px;
       border-radius: 8px;
-      padding: 20px;
+      font-size: 13px;
+      font-weight: 800;
       text-align: center;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      margin-top: 10px;
+      display: none;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    }
+    .result-toast-banner.show { display: block; }
+    .result-toast-banner.success {
+      background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+      color: #FFF;
+      border: 1px solid #6EE7B7;
+    }
+    .result-toast-banner.fail {
+      background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+      color: #FFF;
+      border: 1px solid #FCA5A5;
+    }
+
+    /* ======================================================================
+       3-SECOND PENALTY COOLDOWN OVERLAY (PHẠT CHỜ KHI TRẢ LỜI SAI)
+       ====================================================================== */
+    .penalty-cooldown-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(6, 10, 20, 0.88);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .penalty-cooldown-overlay.show {
+      display: flex;
+    }
+    .penalty-card {
+      background: linear-gradient(145deg, #180908 0%, #2A0907 100%);
+      border: 2px solid #EF4444;
+      border-radius: 16px;
+      padding: 26px 20px;
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 0 35px rgba(239, 68, 68, 0.4), 0 20px 40px rgba(0, 0, 0, 0.8);
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .penalty-badge-icon {
+      font-size: 42px;
+      margin-bottom: 8px;
+      animation: shakeHard 1.5s infinite;
+    }
+    .penalty-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 17px;
+      font-weight: 900;
+      color: #F87171;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+    .penalty-subtitle {
+      font-size: 12px;
+      color: #CBD5E1;
       margin-bottom: 16px;
     }
-    .leader-badge-gold {
-      font-size: 28px;
-      margin-bottom: 6px;
-    }
-    .streak-gauge-circle {
-      width: 110px;
-      height: 110px;
+    .penalty-timer-dial {
+      width: 86px;
+      height: 86px;
       border-radius: 50%;
-      border: 6px solid var(--gold-metallic);
-      margin: 16px auto;
+      border: 4px solid #EF4444;
+      margin: 0 auto 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: rgba(0,0,0,0.3);
-      box-shadow: 0 0 16px var(--gold-glow);
+      background: rgba(0, 0, 0, 0.4);
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+    }
+    .penalty-seconds-num {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 38px;
+      font-weight: 900;
+      color: #FFF;
+      line-height: 1;
+    }
+    .penalty-seconds-unit {
+      font-size: 9px;
+      color: #FCA5A5;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .penalty-bar-track {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+    .penalty-bar-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #F59E0B, #EF4444);
+      transition: width 0.1s linear;
+    }
+    .penalty-explanation-box {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      color: #E2E8F0;
+      line-height: 1.45;
+      text-align: left;
+    }
+
+    /* ======================================================================
+       CUSTOM POPUP DIALOG COMPONENT (THAY THẾ ALERT MẶC ĐỊNH)
+       ====================================================================== */
+    .custom-modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(4, 7, 15, 0.85);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .custom-modal-overlay.show {
+      display: flex;
+    }
+    .custom-modal-box {
+      background: linear-gradient(145deg, #111827 0%, #080D1A 100%);
+      border: 2px solid var(--gold-metallic);
+      border-radius: 18px;
+      padding: 28px 22px;
+      text-align: center;
+      max-width: 440px;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px var(--gold-glow);
+      position: relative;
+      animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.85); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .modal-icon-badge {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(232, 185, 54, 0.2), rgba(255, 222, 0, 0.05));
+      border: 2px solid var(--gold-metallic);
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      box-shadow: 0 0 18px var(--gold-glow);
+    }
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--gold-star);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+    .modal-subtitle {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--millionaire-cyan);
+      margin-bottom: 14px;
+      letter-spacing: 0.03em;
+    }
+    .modal-content-body {
+      font-size: 13.5px;
+      color: #E2E8F0;
+      line-height: 1.55;
+      margin-bottom: 22px;
+    }
+    .modal-content-body strong {
+      color: var(--gold-star);
+    }
+    .modal-confirm-btn {
+      width: 100%;
+      height: 48px;
+      background: linear-gradient(135deg, var(--red-flag) 0%, #8E110A 100%);
+      color: var(--gold-star);
+      border: 2px solid var(--gold-metallic);
+      border-radius: 10px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(192, 32, 24, 0.5), 0 0 12px rgba(232, 185, 54, 0.2);
+      transition: transform 0.15s ease;
+    }
+    .modal-confirm-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* ======================================================================
+       SCREEN 4: LEADER COCKPIT
+       ====================================================================== */
+    .leader-cockpit-card {
+      background: linear-gradient(145deg, #1F1508 0%, #100C04 100%);
+      border: 2px solid var(--gold-metallic);
+      border-radius: 16px;
+      padding: 24px 20px;
+      text-align: center;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 25px var(--gold-glow);
+      margin-bottom: 16px;
+    }
+    .leader-badge-gold {
+      font-size: 40px;
+      margin-bottom: 8px;
+      animation: crownBounce 2s infinite ease-in-out;
+    }
+    .streak-gauge-circle {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      border: 6px solid var(--gold-metallic);
+      margin: 18px auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.5);
+      box-shadow: 0 0 25px var(--gold-glow), inset 0 0 15px rgba(232, 185, 54, 0.2);
     }
     .streak-gauge-circle .num {
-      font-size: 32px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 42px;
       font-weight: 900;
       color: var(--gold-star);
       line-height: 1;
+      text-shadow: 0 0 12px rgba(255, 222, 0, 0.6);
     }
     .streak-gauge-circle .unit {
-      font-size: 10px;
-      color: #FFF;
+      font-size: 11px;
+      color: #CBD5E1;
       text-transform: uppercase;
-      font-weight: 700;
+      font-weight: 800;
+      letter-spacing: 0.05em;
     }
 
     /* SCREEN 5: LEADER SPECIAL CHALLENGE */
     .leader-special-modal {
-      background: var(--cream-parchment);
-      color: var(--charcoal-ink);
-      border: 3px solid var(--gold-star);
-      border-radius: 8px;
-      padding: 18px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.6);
+      background: linear-gradient(145deg, #111827 0%, #0A0F1D 100%);
+      color: #FFF;
+      border: 2px solid var(--gold-star);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.8), 0 0 30px rgba(255, 222, 0, 0.3);
     }
     .modal-flame-tag {
-      background: var(--red-flag);
+      background: linear-gradient(90deg, #DC2626, #EF4444);
       color: var(--gold-star);
       font-size: 11px;
       font-weight: 900;
-      padding: 4px 10px;
-      border-radius: 3px;
+      padding: 5px 12px;
+      border-radius: 6px;
       display: inline-block;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      border: 1px solid var(--gold-star);
     }
 
     /* SCREEN 6: LEADER 4 MYSTERY POTS */
@@ -408,46 +878,45 @@
       background: radial-gradient(circle at center, #FFF4BE 0%, #D49B00 100%);
       color: var(--red-darkest);
       border: 2px solid #FFF;
-      border-radius: 8px;
-      padding: 18px 10px;
+      border-radius: 12px;
+      padding: 22px 10px;
       text-align: center;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 15px rgba(255, 222, 0, 0.4);
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: transform 0.18s ease;
     }
     .pot-card-touch:active {
-      transform: scale(0.94);
-      background: var(--gold-star);
+      transform: scale(0.93);
     }
     .pot-icon-mega {
-      font-size: 40px;
+      font-size: 46px;
       margin-bottom: 6px;
     }
     .pot-label-gold {
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 900;
       text-transform: uppercase;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.05em;
     }
 
-    /* Result Toast */
-    .result-toast-banner {
-      padding: 8px 12px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: 800;
-      text-align: center;
-      margin-top: 8px;
-      display: none;
+    /* Confetti Canvas */
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 998;
     }
-    .result-toast-banner.show { display: block; }
-    .result-toast-banner.success { background: #2ECC71; color: #FFF; }
-    .result-toast-banner.fail { background: #E74C3C; color: #FFF; }
   </style>
 </head>
 <body>
 
-  <!-- Top Bar -->
+  <!-- Confetti Canvas -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <!-- Top Mobile Header -->
   <header class="mobile-header">
     <div class="header-brand">
       <div class="header-flag">
@@ -456,12 +925,20 @@
           <polygon points="150,40 163.47,81.46 207.06,81.46 171.80,107.08 185.23,148.54 150,122.92 114.77,148.54 128.20,107.08 92.94,81.46 136.53,81.46" fill="#FFFF00"/>
         </svg>
       </div>
-      <span class="header-title">Đấu Trí Ngoại Giao</span>
+      <div class="header-title-wrap">
+        <span class="header-title">ĐẤU TRÍ NGOẠI GIAO</span>
+        <span class="header-subtitle">AI LÀ TRIỆU PHÚ • HỒ CHÍ MINH</span>
+      </div>
     </div>
-    <div class="connection-dot" id="socket-status" title="Trạng thái kết nối"></div>
+    <div class="header-status-badge">
+      <div class="connection-dot" id="socket-status" title="Trạng thái kết nối"></div>
+      <span class="status-text" id="socket-text">ONLINE</span>
+    </div>
   </header>
 
-  <!-- SCREEN 1: LOGIN -->
+  <!-- ======================================================================
+       SCREEN 1: LOGIN
+       ====================================================================== -->
   <main class="screen-panel active" id="screen-join">
     <div class="join-card">
       <div class="join-flag-large">
@@ -471,43 +948,76 @@
         </svg>
       </div>
       <h2 class="join-title">Tư Tưởng Hồ Chí Minh</h2>
-      <p class="join-subtitle">Nhập họ và tên để hệ thống chia vào 2 Khối Đấu Trí</p>
+      <p class="join-subtitle">Nhập họ và tên để hệ thống xếp vào 2 Khối Đấu Trí &amp; chỉ định Trưởng Đoàn</p>
       
-      <input type="text" id="input-name" class="input-player-name" placeholder="Họ và tên của bạn..." maxlength="24" autocomplete="off" autocorrect="off">
-      <button id="btn-join" class="btn-submit-join">Vào Thi Đấu ➔</button>
+      <input type="text" id="input-name" class="input-player-name" placeholder="Nhập họ và tên của bạn..." maxlength="24" autocomplete="off" autocorrect="off">
+      <button id="btn-join" class="btn-submit-join">
+        <span>Vào Thi Đấu</span>
+        <span>➔</span>
+      </button>
     </div>
   </main>
 
-  <!-- SCREEN 2: LOBBY WAITING -->
+  <!-- ======================================================================
+       SCREEN 2: LOBBY WAITING
+       ====================================================================== -->
   <main class="screen-panel" id="screen-lobby">
     <div class="player-badge-card">
-      <div class="badge-assigned-team" id="lobby-team-badge">Khối Nội Lực</div>
+      <div class="badge-assigned-team" id="lobby-team-badge">⏳ CHỜ PHÂN ĐỘI</div>
       <div class="player-assigned-name" id="lobby-player-name">Nguyễn Văn A</div>
-      <div class="role-stamp-banner member" id="lobby-role-badge">★ Thành viên Ngoại giao</div>
+      <div class="role-stamp-banner member" id="lobby-role-badge">★ Thành viên Lớp học</div>
     </div>
 
     <div class="lobby-wait-status">
-      <div class="pulse-radar"></div>
-      <h3 style="font-size:16px; margin-bottom:6px; color:var(--gold-star);">ĐÃ VÀO PHÒNG CHỜ</h3>
-      <p style="font-size:13px; opacity:0.85;">Đang đợi quản trò phát tín hiệu xuất kích trên màn hình máy chiếu...</p>
+      <div class="pulse-radar">📡</div>
+      <h3 style="font-size:17px; margin-bottom:6px; color:var(--gold-star); font-weight:800;">ĐÃ KẾT NỐI PHÒNG CHỜ</h3>
+      <p style="font-size:13px; opacity:0.85; line-height:1.5;">
+        Quản trò chuẩn bị bốc thăm chia 2 Khối và phát lệnh xuất kích trên màn hình máy chiếu!
+      </p>
     </div>
   </main>
 
-  <!-- SCREEN 3: MEMBER PLAYING (QUESTION & ABCD) -->
+  <!-- ======================================================================
+       SCREEN 3: MEMBER PLAYING — AI LÀ TRIỆU PHÚ
+       ====================================================================== -->
   <main class="screen-panel" id="screen-play-member">
-    <div class="gameplay-team-bar">
-      <span id="play-team-name">🇻🇳 Khối Nội Lực</span>
-      <div class="streak-meter-box">
-        <span>Chuỗi nhóm:</span>
-        <span class="streak-fire-badge" id="play-streak-badge">0 / 50 🔥</span>
+    <!-- Top HUD: Team & Leader info -->
+    <div class="gameplay-header-hud">
+      <div class="hud-top-row">
+        <span class="hud-team-tag" id="play-team-name">🇻🇳 Khối Nội Lực</span>
+        <span class="hud-player-tag" id="hud-player-name">Bạn: Thành viên</span>
+      </div>
+
+      <!-- Leader Showcase Banner -->
+      <div class="hud-leader-showcase">
+        <div class="leader-crown-badge">👑</div>
+        <div class="leader-text-group">
+          <span class="leader-label">TRƯỞNG ĐOÀN (LEADER) CỦA BẠN:</span>
+          <span class="leader-name-value" id="member-view-leader-name">Đang xác định...</span>
+        </div>
+      </div>
+
+      <!-- Streak Progress -->
+      <div class="streak-container">
+        <div class="streak-labels">
+          <span>Chuỗi đúng nhóm (Mốc mở Bảo Bình):</span>
+          <span class="streak-fire-text" id="play-streak-badge">0 / 50 🔥</span>
+        </div>
+        <div class="streak-bar-track">
+          <div class="streak-bar-fill" id="play-streak-bar"></div>
+        </div>
       </div>
     </div>
 
-    <div class="question-card-mobile">
-      <div class="q-number-pill" id="q-counter">CÂU HỎI 1</div>
-      <div class="q-text-body" id="q-text">Đang tải câu hỏi...</div>
+    <!-- Millionaire Hexagonal Question Box -->
+    <div class="millionaire-question-wrapper">
+      <div class="millionaire-question-box">
+        <div class="q-badge-header" id="q-counter">◆ CÂU HỎI SỐ 01 ◆</div>
+        <div class="q-text-body" id="q-text">Đang tải câu hỏi từ ngân hàng đề...</div>
+      </div>
     </div>
 
+    <!-- 4 Millionaire Option Buttons -->
     <div class="options-buttons-stack" id="options-container">
       <!-- Injected via JS -->
     </div>
@@ -515,30 +1025,38 @@
     <div class="result-toast-banner" id="answer-toast"></div>
   </main>
 
-  <!-- SCREEN 4: LEADER DASHBOARD -->
+  <!-- ======================================================================
+       SCREEN 4: LEADER COCKPIT
+       ====================================================================== -->
   <main class="screen-panel" id="screen-play-leader">
     <div class="leader-cockpit-card">
       <div class="leader-badge-gold">👑</div>
-      <h2 style="font-size:18px; color:var(--gold-star); text-transform:uppercase;">TRƯỞNG ĐOÀN NGOẠI GIAO</h2>
-      <p style="font-size:12px; color:var(--gold-light); margin-top:3px;" id="leader-team-title">Khối Nội Lực</p>
+      <h2 style="font-size:19px; color:var(--gold-star); text-transform:uppercase; font-weight:900; letter-spacing:0.04em;">
+        TRƯỞNG ĐOÀN NGOẠI GIAO
+      </h2>
+      <p style="font-size:13px; color:var(--millionaire-cyan); margin-top:4px; font-weight:700;" id="leader-team-title">
+        Khối Nội Lực
+      </p>
 
       <div class="streak-gauge-circle">
         <span class="num" id="leader-streak-gauge">0</span>
         <span class="unit">/ 50 Câu Đúng</span>
       </div>
 
-      <p style="font-size:12.5px; line-height:1.4; color:#FFF;">
-        Các thành viên đang cày chuỗi câu đúng! Khi đạt <strong>mốc 50 câu</strong>, bạn sẽ kích hoạt <strong>4 Bảo Bình Thời Cuộc</strong>!
+      <p style="font-size:13px; line-height:1.55; color:#E2E8F0; padding:0 10px;">
+        Các thành viên đang cày chuỗi câu đúng trắc nghiệm! Khi đạt <strong>mốc 50 câu</strong>, bạn sẽ trực tiếp trả lời <strong>Câu Hỏi Tình Huống Chiến Lược</strong> để mở <strong>4 Bảo Bình Thời Cuộc</strong>!
       </p>
     </div>
   </main>
 
-  <!-- SCREEN 5: LEADER SPECIAL CHALLENGE QUESTION -->
+  <!-- ======================================================================
+       SCREEN 5: LEADER SPECIAL CHALLENGE QUESTION
+       ====================================================================== -->
   <main class="screen-panel" id="screen-leader-question">
     <div class="leader-special-modal">
       <span class="modal-flame-tag">🔥 THỜI KHẮC LÃNH ĐẠO (MỐC 50)</span>
-      <h3 style="font-size:15px; margin-bottom:12px; line-height:1.45; color:var(--red-darkest);" id="leader-q-text">
-        Tình huống chiến lược...
+      <h3 style="font-size:15px; margin-bottom:14px; line-height:1.5; color:#FFF; font-weight:700;" id="leader-q-text">
+        Tình huống chiến lược ngoại giao...
       </h3>
 
       <div class="options-buttons-stack" id="leader-options-container">
@@ -547,15 +1065,17 @@
     </div>
   </main>
 
-  <!-- SCREEN 6: LEADER 4 MYSTERY POTS -->
+  <!-- ======================================================================
+       SCREEN 6: LEADER 4 MYSTERY POTS
+       ====================================================================== -->
   <main class="screen-panel" id="screen-pots">
-    <div style="text-align:center; padding:10px 0;">
-      <span style="font-size:26px;">🏺 🏺 🏺 🏺</span>
-      <h2 style="font-size:18px; color:var(--gold-star); text-transform:uppercase; margin:6px 0;">
+    <div style="text-align:center; padding:12px 0;">
+      <span style="font-size:32px;">🏺 🏺 🏺 🏺</span>
+      <h2 style="font-size:19px; color:var(--gold-star); text-transform:uppercase; margin:8px 0; font-weight:900;">
         CHỌN 1 TRONG 4 BẢO BÌNH
       </h2>
-      <p style="font-size:12.5px; opacity:0.85;">
-        Hãy chạm vào 1 chiếc bình để định đoạt vận mệnh điểm số của nhóm!
+      <p style="font-size:13px; color:#CBD5E1; line-height:1.45;">
+        Chạm vào 1 chiếc bình để định đoạt hệ số điểm số của đoàn ngoại giao!
       </p>
     </div>
 
@@ -579,13 +1099,235 @@
     </div>
   </main>
 
+  <!-- ======================================================================
+       3-SECOND PENALTY COOLDOWN OVERLAY (PHẠT CHỜ TRẢ LỜI SAI)
+       ====================================================================== -->
+  <div id="penalty-cooldown-overlay" class="penalty-cooldown-overlay">
+    <div class="penalty-card">
+      <div class="penalty-badge-icon">⏳</div>
+      <h3 class="penalty-title">TRẢ LỜI SAI! BỊ PHẠT CHỜ</h3>
+      <p class="penalty-subtitle">Hệ thống tạm khóa để đọc kỹ kiến thức</p>
+      
+      <div class="penalty-timer-dial">
+        <span class="penalty-seconds-num" id="penalty-countdown-num">3</span>
+        <span class="penalty-seconds-unit">GIÂY</span>
+      </div>
+
+      <div class="penalty-bar-track">
+        <div class="penalty-bar-fill" id="penalty-bar-fill"></div>
+      </div>
+
+      <div class="penalty-explanation-box" id="penalty-explanation">
+        <!-- Injected via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       CUSTOM POPUP MODAL (THAY THẾ ALERT MẶC ĐỊNH)
+       ====================================================================== -->
+  <div id="custom-modal-overlay" class="custom-modal-overlay">
+    <div class="custom-modal-box">
+      <div class="modal-icon-badge" id="modal-icon">🏆</div>
+      <h3 class="modal-title" id="modal-title">THÔNG BÁO</h3>
+      <div class="modal-subtitle" id="modal-subtitle"></div>
+      <div class="modal-content-body" id="modal-content"></div>
+      <button class="modal-confirm-btn" id="modal-confirm-btn">ĐÃ HIỂU ➔</button>
+    </div>
+  </div>
+
   <!-- Socket.io Client -->
   <script src="/socket.io/socket.io.js"></script>
   <script>
+    // Audio Context Synthesizer for 100% offline, zero-asset sound effects
+    let audioCtx = null;
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playSound(type) {
+      try {
+        initAudio();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+
+        if (type === 'tap') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600, now);
+          osc.frequency.exponentialRampToValueAtTime(300, now + 0.08);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'lock') {
+          // Millionaire answer lock sound (Amber suspense tone)
+          const osc1 = audioCtx.createOscillator();
+          const osc2 = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc1.type = 'triangle';
+          osc2.type = 'sine';
+          osc1.frequency.setValueAtTime(440, now);
+          osc2.frequency.setValueAtTime(554.37, now);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+          osc1.connect(gain);
+          osc2.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc1.start(now);
+          osc2.start(now);
+          osc1.stop(now + 0.35);
+          osc2.stop(now + 0.35);
+        } else if (type === 'correct') {
+          // Triumphant chord (C5 -> E5 -> G5 -> C6 arpeggio)
+          const notes = [523.25, 659.25, 783.99, 1046.50];
+          notes.forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+            gain.gain.setValueAtTime(0.3, now + idx * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.35);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start(now + idx * 0.08);
+            osc.stop(now + idx * 0.08 + 0.35);
+          });
+        } else if (type === 'wrong') {
+          // Deep Buzzer sound
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(140, now);
+          osc.frequency.linearRampToValueAtTime(90, now + 0.4);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.4);
+        } else if (type === 'popup') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(350, now);
+          osc.frequency.exponentialRampToValueAtTime(700, now + 0.15);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.15);
+        }
+      } catch (e) {
+        console.warn("AudioContext error:", e);
+      }
+    }
+
+    // High-performance Confetti Particle System
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    let confettiParticles = [];
+    let confettiAnimId = null;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function triggerConfetti() {
+      const colors = ['#FFDE00', '#FF3E3E', '#10B981', '#38BDF8', '#F59E0B', '#FFF'];
+      for (let i = 0; i < 75; i++) {
+        confettiParticles.push({
+          x: canvas.width / 2 + (Math.random() - 0.5) * 80,
+          y: canvas.height * 0.45,
+          vx: (Math.random() - 0.5) * 12,
+          vy: -(Math.random() * 12 + 6),
+          size: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360,
+          vRot: (Math.random() - 0.5) * 10,
+          alpha: 1
+        });
+      }
+      if (!confettiAnimId) renderConfetti();
+    }
+
+    function renderConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confettiParticles.forEach((p, index) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.35; // gravity
+        p.vx *= 0.98;
+        p.rotation += p.vRot;
+        p.alpha -= 0.012;
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.globalAlpha = Math.max(0, p.alpha);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+        ctx.restore();
+
+        if (p.alpha <= 0 || p.y > canvas.height) {
+          confettiParticles.splice(index, 1);
+        }
+      });
+
+      if (confettiParticles.length > 0) {
+        confettiAnimId = requestAnimationFrame(renderConfetti);
+      } else {
+        cancelAnimationFrame(confettiAnimId);
+        confettiAnimId = null;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    }
+
+    // Custom Modal System (Thay thế alert)
+    const modalOverlay = document.getElementById("custom-modal-overlay");
+    const modalIcon = document.getElementById("modal-icon");
+    const modalTitle = document.getElementById("modal-title");
+    const modalSubtitle = document.getElementById("modal-subtitle");
+    const modalContent = document.getElementById("modal-content");
+    const modalConfirmBtn = document.getElementById("modal-confirm-btn");
+    let modalCallback = null;
+
+    function showCustomModal({ icon = '🏆', title = 'THÔNG BÁO', subtitle = '', content = '', btnText = 'TIẾP TỤC ➔', onConfirm = null }) {
+      playSound('popup');
+      modalIcon.textContent = icon;
+      modalTitle.textContent = title;
+      modalSubtitle.textContent = subtitle;
+      modalSubtitle.style.display = subtitle ? 'block' : 'none';
+      modalContent.innerHTML = content;
+      modalConfirmBtn.textContent = btnText;
+      modalCallback = onConfirm;
+      modalOverlay.classList.add("show");
+    }
+
+    modalConfirmBtn.addEventListener("click", () => {
+      playSound('tap');
+      modalOverlay.classList.remove("show");
+      if (typeof modalCallback === "function") {
+        modalCallback();
+        modalCallback = null;
+      }
+    });
+
+    // Socket Initialization
     const socket = io();
 
-    // DOM Elements
+    // DOM References
     const socketDot = document.getElementById("socket-status");
+    const socketText = document.getElementById("socket-text");
     const screenJoin = document.getElementById("screen-join");
     const screenLobby = document.getElementById("screen-lobby");
     const screenPlayMember = document.getElementById("screen-play-member");
@@ -600,6 +1342,7 @@
     let myTeam = null;
     let currentQuestion = null;
     let currentLeaderQuestion = null;
+    let isAnswerLocked = false;
 
     // Switch Screen Helper
     function showScreen(panel) {
@@ -607,19 +1350,31 @@
       panel.classList.add("active");
     }
 
-    // Socket Connection Status
+    // Connection Events
     socket.on("connect", () => {
       socketDot.classList.remove("offline");
+      socketText.textContent = "ONLINE";
+      socketText.style.color = "#10B981";
     });
     socket.on("disconnect", () => {
       socketDot.classList.add("offline");
+      socketText.textContent = "MẤT KẾT NỐI";
+      socketText.style.color = "#EF4444";
     });
 
-    // Player Joins Room
+    // Join Game
     btnJoin.addEventListener("click", () => {
+      initAudio();
+      playSound('tap');
       const name = inputName.value.trim();
       if (!name) {
-        alert("Vui lòng nhập họ và tên của bạn!");
+        showCustomModal({
+          icon: '⚠️',
+          title: 'CHƯA NHẬP TÊN',
+          subtitle: 'Yêu cầu định danh',
+          content: 'Vui lòng nhập họ và tên của bạn để hệ thống xếp vào 2 Khối Đấu Trí!',
+          btnText: 'NHẬP LẠI'
+        });
         return;
       }
       socket.emit("player_join", { name });
@@ -629,15 +1384,14 @@
       if (e.key === "Enter") btnJoin.click();
     });
 
-    // Player in Lobby waiting for host to split teams
+    // In Lobby
     socket.on("player_in_lobby", ({ player, status }) => {
       myPlayer = player;
       document.getElementById("lobby-player-name").textContent = player.name;
       
       const teamBadge = document.getElementById("lobby-team-badge");
       teamBadge.textContent = "⏳ CHỜ BỐC THĂM CHIA ĐỘI";
-      teamBadge.className = "badge-assigned-team";
-      teamBadge.style.background = "#666";
+      teamBadge.style.background = "#334155";
 
       const roleBadge = document.getElementById("lobby-role-badge");
       roleBadge.textContent = "★ Thành viên Lớp học";
@@ -646,35 +1400,71 @@
       showScreen(screenLobby);
     });
 
-    // Host starts game: Receive randomly assigned Team & Role!
+    // Team & Role Assigned
     socket.on("assigned_team_and_role", ({ player, team }) => {
       myPlayer = player;
       myTeam = team;
 
+      // Update Member Screen Leader Name
+      const leaderNameEl = document.getElementById("member-view-leader-name");
+      if (leaderNameEl) {
+        leaderNameEl.textContent = team.leaderName || "Đang bốc thăm...";
+      }
+
+      // Update HUD player tag
+      const hudPlayerTag = document.getElementById("hud-player-name");
+      if (hudPlayerTag) {
+        hudPlayerTag.textContent = `${player.name} (${player.isLeader ? "👑 Leader" : "Thành viên"})`;
+      }
+
       if (player.isLeader) {
-        alert(`👑 BẠN ĐÃ ĐƯỢC CHỌN LÀM TRƯỞNG ĐOÀN (LEADER)!\n\nĐội của bạn: ${team.icon} ${team.name}`);
         document.getElementById("leader-team-title").textContent = `${team.icon} ${team.name}`;
-        showScreen(screenPlayLeader);
+        showCustomModal({
+          icon: '👑',
+          title: 'BẠN LÀ TRƯỞNG ĐOÀN!',
+          subtitle: `${team.icon} ${team.name}`,
+          content: `Xin chúc mừng <strong>${player.name}</strong>!<br>Bạn đã được hệ thống tín nhiệm chọn làm <strong>Trưởng Đoàn (Leader)</strong> của <strong>${team.name}</strong>.<br><br>Hãy chỉ huy và theo dõi các thành viên cày chuỗi 50 câu đúng để kích hoạt quyền chọn <strong>Bảo Bình Thời Cuộc</strong>!`,
+          btnText: 'VÀO BÀN CHỈ HUY ➔',
+          onConfirm: () => {
+            showScreen(screenPlayLeader);
+          }
+        });
       } else {
-        alert(`★ BẠN ĐÃ ĐƯỢC CHIA VÀO:\n${team.icon} ${team.name}\n\nHãy trả lời nhanh các câu hỏi trắc nghiệm để tích lũy chuỗi 50 câu đúng cho nhóm!`);
         document.getElementById("play-team-name").textContent = `${team.icon} ${team.name}`;
-        showScreen(screenPlayMember);
-        socket.emit("get_question", { index: 0 });
+        showCustomModal({
+          icon: team.icon || '🇻🇳',
+          title: 'BẠN ĐÃ ĐƯỢC CHIA ĐỘI!',
+          subtitle: `${team.icon} ${team.name}`,
+          content: `Họ và tên: <strong>${player.name}</strong><br>Khối: <strong>${team.name}</strong><br>👑 Leader của bạn là: <strong style="color:var(--gold-star); font-size:15px;">${team.leaderName || "Đang chỉ định"}</strong><br><br>Hãy trả lời nhanh các câu hỏi trắc nghiệm kiểu <em>Ai Là Triệu Phú</em> để cày chuỗi 50 câu đúng cho đội!`,
+          btnText: 'BẮT ĐẦU ĐẤU TRÍ ➔',
+          onConfirm: () => {
+            showScreen(screenPlayMember);
+            socket.emit("get_question", { index: 0 });
+          }
+        });
       }
     });
 
     socket.on("became_leader", () => {
       if (myPlayer) {
         myPlayer.isLeader = true;
-        alert("👑 Bạn đã được bổ nhiệm làm Trưởng Đoàn (Leader) mới của nhóm!");
-        if (myTeam) {
-          document.getElementById("leader-team-title").textContent = `${myTeam.icon} ${myTeam.name}`;
-          showScreen(screenPlayLeader);
-        }
+        showCustomModal({
+          icon: '👑',
+          title: 'CHỈ ĐỊNH LEADER MỚI',
+          subtitle: 'Kế nhiệm vị trí Trưởng Đoàn',
+          content: 'Trưởng đoàn trước đã rời trận đấu. Bạn được toàn đoàn tín nhiệm chỉ định làm <strong>Trưởng Đoàn (Leader)</strong> mới!',
+          btnText: 'NHẬN NHIỆM VỤ ➔',
+          onConfirm: () => {
+            if (myTeam) {
+              document.getElementById("leader-team-title").textContent = `${myTeam.icon} ${myTeam.name}`;
+            }
+            showScreen(screenPlayLeader);
+          }
+        });
       }
     });
 
-    // Game Reset
+    // Reset Game
     socket.on("game_reset", () => {
       if (myPlayer) {
         myPlayer.teamKey = null;
@@ -682,16 +1472,17 @@
         myPlayer.score = 0;
         const teamBadge = document.getElementById("lobby-team-badge");
         teamBadge.textContent = "⏳ CHỜ BỐC THĂM CHIA ĐỘI";
-        teamBadge.style.background = "#666";
+        teamBadge.style.background = "#334155";
         showScreen(screenLobby);
       }
     });
 
-
-    // Receive Question Payload (Member)
+    // Question Payload (Ai Là Triệu Phú UI)
     socket.on("question_payload", (q) => {
       currentQuestion = q;
-      document.getElementById("q-counter").textContent = `CÂU HỎI #${q.id}`;
+      isAnswerLocked = false;
+
+      document.getElementById("q-counter").textContent = `◆ CÂU HỎI SỐ ${String(q.id).padStart(2, '0')} ◆`;
       document.getElementById("q-text").textContent = q.question;
 
       const letters = ["A", "B", "C", "D"];
@@ -700,55 +1491,159 @@
 
       q.options.forEach((optText, idx) => {
         const btn = document.createElement("button");
-        btn.className = "option-btn-mobile";
-        btn.innerHTML = `<span class="opt-letter">${letters[idx]}</span><span>${optText}</span>`;
+        btn.className = "option-btn-millionaire";
+        btn.innerHTML = `
+          <span class="opt-letter-diamond">◆ ${letters[idx]}:</span>
+          <span class="opt-text-label">${optText}</span>
+        `;
         btn.addEventListener("click", () => submitAnswer(idx, btn));
         container.appendChild(btn);
       });
     });
 
-    // Submit Answer (Member)
+    // Submit Answer
     function submitAnswer(chosenOption, clickedBtn) {
-      if (!currentQuestion) return;
+      if (!currentQuestion || isAnswerLocked) return;
+      isAnswerLocked = true;
 
-      // Disable buttons
-      const allBtns = document.querySelectorAll(".option-btn-mobile");
-      allBtns.forEach(b => b.disabled = true);
+      // Play lock tone
+      playSound('lock');
 
-      socket.emit("submit_answer", {
-        questionId: currentQuestion.id,
-        chosenOption: chosenOption
+      // Highlight selected button with pulsating amber (Ai Là Triệu Phú style)
+      const allBtns = document.querySelectorAll(".option-btn-millionaire");
+      allBtns.forEach(b => {
+        b.disabled = true;
+        b.classList.remove("selected");
       });
+      clickedBtn.classList.add("selected");
+
+      // Give brief 350ms suspense delay like TV show before server evaluates
+      setTimeout(() => {
+        socket.emit("submit_answer", {
+          questionId: currentQuestion.id,
+          chosenOption: chosenOption
+        });
+      }, 350);
     }
 
-    // Answer Feedback
-    socket.on("answer_feedback", ({ isCorrect, explanation, playerScore, teamScore, teamStreak }) => {
+    // Answer Feedback Handling (Correct / Wrong + 3s Cooldown Penalty)
+    const penaltyOverlay = document.getElementById("penalty-cooldown-overlay");
+    const penaltyCountdownNum = document.getElementById("penalty-countdown-num");
+    const penaltyBarFill = document.getElementById("penalty-bar-fill");
+    const penaltyExplanation = document.getElementById("penalty-explanation");
+
+    socket.on("answer_feedback", ({ isCorrect, correctAnswer, explanation, playerScore, teamScore, teamStreak }) => {
+      const allBtns = document.querySelectorAll(".option-btn-millionaire");
+      const selectedBtn = document.querySelector(".option-btn-millionaire.selected");
       const toast = document.getElementById("answer-toast");
-      toast.className = `result-toast-banner show ${isCorrect ? "success" : "fail"}`;
-      toast.textContent = isCorrect ? "✓ CHÍNH XÁC! +1 Điểm & Tăng Chuỗi!" : "✗ Chưa đúng! Tiếp tục cố gắng!";
 
-      // Update streak badge
-      document.getElementById("play-streak-badge").textContent = `${teamStreak} / 50 🔥`;
+      // Update Streak HUD
+      const streakBadge = document.getElementById("play-streak-badge");
+      if (streakBadge) streakBadge.textContent = `${teamStreak} / 50 🔥`;
+      const streakBar = document.getElementById("play-streak-bar");
+      if (streakBar) {
+        const pct = Math.min(100, (teamStreak / 50) * 100);
+        streakBar.style.width = `${pct}%`;
+      }
 
-      setTimeout(() => {
-        toast.className = "result-toast-banner";
-        // Next question
-        socket.emit("get_question", {});
-      }, 1200);
+      if (isCorrect) {
+        // ==========================================
+        // TRẢ LỜI ĐÚNG: HIỆU ỨNG RỰC RỠ + CONFETTI
+        // ==========================================
+        playSound('correct');
+        triggerConfetti();
+
+        if (selectedBtn) {
+          selectedBtn.classList.remove("selected");
+          selectedBtn.classList.add("correct");
+        }
+
+        toast.className = "result-toast-banner show success";
+        toast.textContent = "🎉 CHÍNH XÁC! +1 Điểm Cho Đoàn!";
+
+        setTimeout(() => {
+          toast.className = "result-toast-banner";
+          socket.emit("get_question", {});
+        }, 1300);
+
+      } else {
+        // ==========================================
+        // TRẢ LỜI SAI: ĐỔI ĐỎ + BỊ PHẠT CHỜ 3 GIÂY
+        // ==========================================
+        playSound('wrong');
+
+        if (selectedBtn) {
+          selectedBtn.classList.remove("selected");
+          selectedBtn.classList.add("wrong");
+        }
+
+        // Highlight correct answer in green
+        if (typeof correctAnswer === "number" && allBtns[correctAnswer]) {
+          allBtns[correctAnswer].classList.add("reveal-correct");
+        }
+
+        toast.className = "result-toast-banner show fail";
+        toast.textContent = "✗ CHƯA CHÍNH XÁC! BỊ PHẠT CHỜ 3 GIÂY!";
+
+        // Wait 500ms then open 3s Penalty Cooldown Screen
+        setTimeout(() => {
+          toast.className = "result-toast-banner";
+          startPenaltyCooldown(explanation);
+        }, 600);
+      }
     });
+
+    // 3-Second Penalty Cooldown Logic
+    function startPenaltyCooldown(explanationText) {
+      penaltyExplanation.innerHTML = `<strong>💡 Kiến thức chuẩn:</strong> ${explanationText || "Hãy ghi nhớ để trả lời đúng ở các câu tiếp theo!"}`;
+      penaltyOverlay.classList.add("show");
+
+      let remainingMs = 3000;
+      const stepMs = 50;
+
+      penaltyBarFill.style.width = "100%";
+      penaltyCountdownNum.textContent = "3";
+
+      const interval = setInterval(() => {
+        remainingMs -= stepMs;
+        const currentSec = Math.ceil(remainingMs / 1000);
+        penaltyCountdownNum.textContent = Math.max(1, currentSec);
+        
+        const pct = Math.max(0, (remainingMs / 3000) * 100);
+        penaltyBarFill.style.width = `${pct}%`;
+
+        if (remainingMs <= 0) {
+          clearInterval(interval);
+          penaltyOverlay.classList.remove("show");
+          // Proceed to next question after penalty served!
+          socket.emit("get_question", {});
+        }
+      }, stepMs);
+    }
 
     // Room State Update
     socket.on("room_state", (state) => {
-      if (!myPlayer) return;
+      if (!myPlayer || !myPlayer.teamKey) return;
       const myTeamState = state[myPlayer.teamKey];
       if (myTeamState) {
-        // Update Leader gauge if on leader screen
+        // Update Leader gauge on leader screen
         const gauge = document.getElementById("leader-streak-gauge");
         if (gauge) gauge.textContent = myTeamState.streak;
 
-        // Update member badge
+        // Update member HUD streak badge & bar
         const streakBadge = document.getElementById("play-streak-badge");
         if (streakBadge) streakBadge.textContent = `${myTeamState.streak} / 50 🔥`;
+        const streakBar = document.getElementById("play-streak-bar");
+        if (streakBar) {
+          const pct = Math.min(100, (myTeamState.streak / 50) * 100);
+          streakBar.style.width = `${pct}%`;
+        }
+
+        // Dynamically update leader name if changed or reassigned
+        const leaderNameEl = document.getElementById("member-view-leader-name");
+        if (leaderNameEl && myTeamState.leaderName) {
+          leaderNameEl.textContent = myTeamState.leaderName;
+        }
       }
     });
 
@@ -757,14 +1652,20 @@
       currentLeaderQuestion = q;
       document.getElementById("leader-q-text").textContent = q.question;
 
+      const letters = ["A", "B", "C", "D"];
       const container = document.getElementById("leader-options-container");
       container.innerHTML = "";
 
       q.options.forEach((optText, idx) => {
         const btn = document.createElement("button");
-        btn.className = "option-btn-mobile";
-        btn.innerHTML = `<span class="opt-letter">${idx + 1}</span><span>${optText}</span>`;
+        btn.className = "option-btn-millionaire";
+        btn.innerHTML = `
+          <span class="opt-letter-diamond">◆ ${letters[idx] || idx + 1}:</span>
+          <span class="opt-text-label">${optText}</span>
+        `;
         btn.addEventListener("click", () => {
+          playSound('lock');
+          btn.classList.add("selected");
           socket.emit("leader_submit_answer", {
             questionId: q.id,
             chosenOption: idx
@@ -774,27 +1675,36 @@
       });
 
       showScreen(screenLeaderQ);
-      // Play alert vibration on mobile if supported
       if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
     });
 
     // Leader Answer Result
     socket.on("leader_challenge_result", ({ success, message }) => {
-      alert(message);
-      if (!success) {
-        showScreen(screenPlayLeader);
-      }
+      showCustomModal({
+        icon: success ? '🌟' : '⚠️',
+        title: success ? 'THÀNH CÔNG!' : 'CHƯA CHÍNH XÁC',
+        content: message,
+        btnText: 'TIẾP TỤC ➔',
+        onConfirm: () => {
+          if (!success) {
+            showScreen(screenPlayLeader);
+          }
+        }
+      });
     });
 
-    // Leader Unlocked 4 Pots!
+    // Leader Unlocked 4 Pots
     socket.on("leader_unlocked_pots", () => {
       showScreen(screenPots);
+      playSound('correct');
+      triggerConfetti();
       if (navigator.vibrate) navigator.vibrate([300, 150, 300]);
     });
 
-    // Leader Clicked 1 of 4 Pots
+    // Leader Clicked Pot
     document.querySelectorAll(".pot-card-touch").forEach(card => {
       card.addEventListener("click", () => {
+        playSound('lock');
         const potIdx = card.getAttribute("data-pot");
         socket.emit("leader_pick_pot", { potIndex: potIdx });
         card.style.opacity = "0.5";
@@ -802,7 +1712,7 @@
       });
     });
 
-    // Pot Revealed to Everyone
+    // Pot Revealed
     socket.on("pot_revealed", (data) => {
       if (myPlayer && myPlayer.isLeader) {
         showScreen(screenPlayLeader);
