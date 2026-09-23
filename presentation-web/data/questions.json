@@ -1,0 +1,168 @@
+{
+  "memberQuestions": [
+    {
+      "id": 1,
+      "question": "Chủ tịch Hồ Chí Minh ra đi tìm đường cứu nước vào năm nào và từ bến cảng nào?",
+      "options": ["1911 — Bến cảng Nhà Rồng", "1920 — Bến cảng Hải Phòng", "1930 — Bến cảng Ba Son", "1945 — Bến cảng Đà Nẵng"],
+      "answer": 0,
+      "explanation": "Ngày 5/6/1911, người thanh niên Nguyễn Tất Thành rời bến cảng Nhà Rồng trên con tàu Amiral Latouche-Tréville."
+    },
+    {
+      "id": 2,
+      "question": "Nguyên lý bất hủ nào được Chủ tịch Hồ Chí Minh dặn dò cụ Huỳnh Thúc Kháng trước khi sang Pháp năm 1946?",
+      "options": ["Dĩ thực vi tiên", "Dĩ bất biến, ứng vạn biến", "Tiên hạ thủ vi cường", "Bất biến ứng bất biến"],
+      "answer": 1,
+      "explanation": "Lấy cái bất biến (độc lập, chủ quyền, lợi ích dân tộc) để ứng phó với muôn ngàn biến chuyển của thời cuộc."
+    },
+    {
+      "id": 3,
+      "question": "Điền vào chỗ trống câu nói bất hủ của Bác Hồ: « Đoàn kết, đoàn kết, đại đoàn kết. ..., ..., đại thành công! »",
+      "options": ["Quyết tâm, quyết tâm", "Đấu tranh, đấu tranh", "Thành công, thành công", "Vững vàng, vững vàng"],
+      "answer": 2,
+      "explanation": "« Đoàn kết, đoàn kết, đại đoàn kết. Thành công, thành công, đại thành công! »"
+    },
+    {
+      "id": 4,
+      "question": "Trường phái đối ngoại của Việt Nam mang đậm bản sắc văn hóa dân tộc có tên gọi là gì?",
+      "options": ["Ngoại giao Cây lúa", "Ngoại giao Cây tre", "Ngoại giao Hoa sen", "Ngoại giao Cây đa"],
+      "answer": 1,
+      "explanation": "Ngoại giao Cây tre: « Gốc vững, thân chắc, cành uyển chuyển »."
+    },
+    {
+      "id": 5,
+      "question": "Trong hình tượng Ngoại giao Cây tre, yếu tố nào biểu trưng cho « GỐC VỮNG »?",
+      "options": ["Sự linh hoạt mềm dẻo trong thỏa hiệp", "Lợi ích quốc gia - dân tộc, độc lập, tự chủ", "Các hiệp định thương mại tự do quốc tế", "Nguồn viện trợ kinh tế từ bên ngoài"],
+      "answer": 1,
+      "explanation": "Gốc vững là độc lập, tự chủ, kiên định lợi ích tối thượng của Tổ quốc và nhân dân."
+    },
+    {
+      "id": 6,
+      "question": "Câu trích dẫn nổi tiếng nào của Bác khẳng định mối quan hệ biện chứng trong đoàn kết quốc tế?",
+      "options": ["Đóng cửa để giữ vững độc lập", "Giúp bạn là tự giúp mình", "Nước xa không cứu được lửa gần", "Chỉ dựa vào sự viện trợ của đồng minh"],
+      "answer": 1,
+      "explanation": "Hồ Chí Minh Toàn tập: « Giúp bạn là tự giúp mình » (xây dựng biên độ an ninh và hòa bình vững chắc)."
+    },
+    {
+      "id": 7,
+      "question": "Trong chiến dịch « Ngoại giao vắc-xin COVID-19 », Việt Nam đã tiếp cận được khoảng bao nhiêu liều vắc-xin?",
+      "options": ["Hơn 50 triệu liều", "Hơn 100 triệu liều", "Hơn 210 triệu liều", "Khoảng 10 triệu liều"],
+      "answer": 2,
+      "explanation": "Chiến dịch lịch sử đưa về hơn 210 triệu liều vắc-xin, giúp tiêm phủ diện rộng thần tốc và mở cửa kinh tế an toàn."
+    },
+    {
+      "id": 8,
+      "question": "Tính đến nay, Việt Nam đã thiết lập quan hệ Đối tác Chiến lược Toàn diện / Đối tác Chiến lược với bao nhiêu nước Thường trực HĐBA LHQ (P5)?",
+      "options": ["3 trên 5 nước", "4 trên 5 nước", "Toàn bộ 5 trên 5 nước", "Chưa nước nào"],
+      "answer": 2,
+      "explanation": "Việt Nam có quan hệ đối tác chiến lược / toàn diện với cả 5 nước thường trực P5 (Mỹ, Trung Quốc, Nga, Anh, Pháp)."
+    },
+    {
+      "id": 9,
+      "question": "Theo Tư tưởng Hồ Chí Minh, trong mối quan hệ giữa Nội lực và Ngoại lực, yếu tố nào giữ vai trò QUYẾT ĐỊNH?",
+      "options": ["Ngoại lực là quyết định", "Nội lực là quyết định", "Cả hai bình đẳng như nhau", "Phụ thuộc vào viện trợ quốc tế"],
+      "answer": 1,
+      "explanation": "Nội lực giữ vai trò quyết định hàng đầu; ngoại lực là nhân tố quan trọng, đột phá."
+    },
+    {
+      "id": 10,
+      "question": "Tổng kim ngạch xuất nhập khẩu của Việt Nam hiện nay đã vượt mốc ấn tượng nào?",
+      "options": ["200 tỷ USD", "400 tỷ USD", "750 - 800+ tỷ USD", "1.500 tỷ USD"],
+      "answer": 2,
+      "explanation": "Kim ngạch thương mại của Việt Nam đã vượt ngưỡng 750 - 800+ tỷ USD, thuộc top đầu thế giới so với quy mô kinh tế."
+    },
+    {
+      "id": 11,
+      "question": "Khẩu hiệu hành động của thế hệ trẻ Việt Nam trong thời kỳ hội nhập sâu rộng là gì?",
+      "options": ["Hòa tan vào văn hóa thế giới", "Hòa nhập nhưng không hòa tan", "Khép kín để bảo vệ bản sắc", "Từ chối tiếp thu tri thức toàn cầu"],
+      "answer": 1,
+      "explanation": "Hòa nhập để học hỏi và vươn mình, nhưng không bao giờ hòa tan mất bản sắc dân tộc."
+    },
+    {
+      "id": 12,
+      "question": "Việt Nam hiện là thành viên của bao nhiêu Hiệp định Thương mại Tự do (FTA) song phương và đa phương?",
+      "options": ["Chỉ 3 hiệp định", "Hơn 16 hiệp định FTA thế hệ mới", "Hơn 50 hiệp định", "Không tham gia FTA nào"],
+      "answer": 1,
+      "explanation": "Việt Nam tham gia hơn 16 FTA thế hệ mới như CPTPP, EVFTA, RCEP..."
+    },
+    {
+      "id": 13,
+      "question": "Trước khi thực dân Pháp nổ súng xâm lược năm 1858, chính sách đối ngoại sai lầm nào của triều Nguyễn đã khiến đất nước tụt hậu?",
+      "options": ["Mở cửa tự do buôn bán", "Bế quan tỏa cảng", "Ngoại giao đa phương", "Liên minh với các nước phương Tây"],
+      "answer": 1,
+      "explanation": "Chính sách « Bế quan tỏa cảng » đã cô lập đất nước, dẫn đến tụt hậu và mất cảnh giác phòng thủ."
+    },
+    {
+      "id": 14,
+      "question": "Trong hình tượng Ngoại giao Cây tre, « CÀNH UYỂN CHUYỂN » thể hiện điều gì?",
+      "options": ["Lập trường dao động, thay đổi liên tục", "Sách lược linh hoạt, khôn khéo, đa phương hóa vì hòa bình", "Nhượng bộ chủ quyền vô điều kiện", "Chỉ chọn chơi với một phe duy nhất"],
+      "answer": 1,
+      "explanation": "Cành mềm mại, uyển chuyển biểu hiện sự linh hoạt, mềm mỏng trong sách lược ngoại giao."
+    },
+    {
+      "id": 15,
+      "question": "Tư tưởng Hồ Chí Minh coi độc lập tự chủ và đoàn kết quốc tế có mối quan hệ như thế nào?",
+      "options": ["Loại trừ lẫn nhau", "Độc lập tự chủ là cơ sở, đoàn kết quốc tế là đòn bẩy nhân bội sức mạnh", "Chỉ chọn một trong hai", "Không có bất kỳ liên quan nào"],
+      "answer": 1,
+      "explanation": "Hai mặt gắn kết hữu cơ: Nội lực tự cường là nền tảng; đoàn kết quốc tế là nhân tố nhân bội sức mạnh."
+    },
+    {
+      "id": 16,
+      "question": "Một trong 3 nguyên tắc đoàn kết quốc tế của Chủ tịch Hồ Chí Minh là gì?",
+      "options": ["Can thiệp vào nội bộ nước bạn", "Đôi bên cùng có lợi (Win - Win) và tôn trọng chủ quyền", "Dựa dẫm hoàn toàn vào viện trợ", "Đặt lợi ích phe phái lên trên hết"],
+      "answer": 1,
+      "explanation": "Nguyên tắc: Bình đẳng, tôn trọng chủ quyền và cùng có lợi (Win - Win)."
+    },
+    {
+      "id": 17,
+      "question": "Năng lực then chốt của sinh viên Gen Z để tự tin hội nhập trong kỷ nguyên số là gì?",
+      "options": ["Tẩy chay công nghệ mới", "Làm chủ AI, ngoại ngữ, tư duy thích ứng và giữ vững bản sắc dân tộc", "Chờ đợi cơ hội được cấp phát", "Chỉ học thuộc lòng lý thuyết"],
+      "answer": 1,
+      "explanation": "Làm chủ công cụ số, AI, ngoại ngữ, tư duy thích ứng toàn cầu và giữ vững hồn cốt dân tộc."
+    },
+    {
+      "id": 18,
+      "question": "Hình tượng ẩn dụ nào được nhóm tác giả dùng để so sánh giữa Lợi ích dân tộc và Hợp tác quốc tế?",
+      "options": ["Neo tàu và Gió đẩy cánh buồm", "Lửa và Nước", "Mặt trời và Mặt trăng", "Núi cao và Biển sâu"],
+      "answer": 0,
+      "explanation": "Lợi ích dân tộc là neo tàu; Hợp tác quốc tế là gió đẩy. Gió to không neo sẽ trôi dạt; neo chặt không buồm sẽ đứng im."
+    }
+  ],
+  "leaderQuestions": [
+    {
+      "id": "L1",
+      "question": "★ TÌNH HUỐNG CHIẾN LƯỢC: Khi thế giới xuất hiện xung đột địa chính trị gay gắt giữa các cường quốc lớn, quốc gia theo trường phái Ngoại giao Cây tre nên hành xử thế nào?",
+      "options": [
+        "A. Chọn một bên đồng minh duy nhất và đối đầu trực diện với bên còn lại",
+        "B. Giữ vững độc lập tự chủ, không chọn bên mà chọn chính nghĩa, luật pháp quốc tế và lợi ích quốc gia",
+        "C. Tuyên bố đóng cửa biên giới, cắt đứt quan hệ ngoại giao với thế giới",
+        "D. Tùy cơ ứng biến theo bên nào trả giá kinh tế cao hơn"
+      ],
+      "answer": 1,
+      "explanation": "Đúng với tuyên bố đối ngoại của Việt Nam: Không chọn bên, mà chọn chính nghĩa, tôn trọng Hiến chương LHQ và luật pháp quốc tế."
+    },
+    {
+      "id": "L2",
+      "question": "★ TÌNH HUỐNG CHIẾN LƯỢC: Một tập đoàn công nghệ toàn cầu muốn đầu tư nhà máy bán dẫn lớn nhưng yêu cầu bỏ qua một số tiêu chuẩn bảo vệ môi trường và bản sắc văn hóa. Quyết sách đúng đắn là gì?",
+      "options": [
+        "A. Nhượng bộ mọi điều kiện để có dự án bằng mọi giá",
+        "B. Từ chối hoàn toàn và không tiếp xúc thêm bất kỳ tập đoàn nào",
+        "C. Kiên định 'Dĩ bất biến' (an ninh môi trường, bản sắc dân tộc) và đàm phán linh hoạt 'Ứng vạn biến' về ưu đãi thuế, hạ tầng",
+        "D. Kêu gọi biểu tình phản đối doanh nghiệp quốc tế"
+      ],
+      "answer": 2,
+      "explanation": "Phát triển kinh tế phải gắn liền với bảo vệ môi trường và chủ quyền; kiên định nguyên tắc cốt lõi nhưng linh hoạt cơ chế hỗ trợ."
+    },
+    {
+      "id": "L3",
+      "question": "★ TÌNH HUỐNG CHIẾN LƯỢC: Khi quốc gia đối mặt với khủng hoảng an ninh phi truyền thống (dịch bệnh, đứt gãy năng lượng), bài học quý giá nhất từ Tư tưởng Hồ Chí Minh là gì?",
+      "options": [
+        "A. Chờ đợi các cường quốc hỗ trợ rồi mới hành động",
+        "B. Tự lực cánh sinh kết hợp với ngoại giao chủ động, tận dụng uy tín quốc tế để huy động nguồn lực",
+        "C. Tích trữ tài nguyên và từ chối chia sẻ thông tin với cộng đồng quốc tế",
+        "D. Buông xuôi phó mặc cho thị trường tự điều tiết"
+      ],
+      "answer": 1,
+      "explanation": "Chủ động tự lực làm gốc, đồng thời phát huy cao độ mạng lưới đối tác ngoại giao đa phương để tạo sức mạnh tổng hợp."
+    }
+  ]
+}

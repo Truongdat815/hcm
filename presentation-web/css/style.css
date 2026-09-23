@@ -1,0 +1,1206 @@
+/* ==========================================================================
+   TƯ TƯỞNG HỒ CHÍ MINH — BẢN SẮC CÁCH MẠNG & HỘI NHẬP VIỆT NAM
+   Visual Identity: Sắc đỏ cờ Tổ quốc, Ánh sao vàng, Họa tiết Trống đồng Đông Sơn,
+   Phong cách Áp-phích Cổ động Lịch sử & Ngoại giao Hiện đại Hào hùng
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,400;1,700&family=Montserrat:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,700&display=swap');
+
+:root {
+  /* Quốc sắc Việt Nam */
+  --red-flag: #C02018;
+  --red-deep: #8E110A;
+  --red-darkest: #4E0804;
+  --red-glow: rgba(192, 32, 24, 0.4);
+  
+  --gold-star: #FFDE00;
+  --gold-metallic: #E8B936;
+  --gold-dark: #AA7E16;
+  --gold-light: #FFF4BE;
+  --gold-glow: rgba(255, 222, 0, 0.35);
+
+  --cream-parchment: #FDF9EE;
+  --cream-card: #F9F3DE;
+  --charcoal-ink: #1B1714;
+  --slate-dark: #1F242C;
+  --bamboo-green: #185B33;
+  --bamboo-emerald: #2E8B57;
+
+  /* Typography */
+  --font-poster: "Montserrat", sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-body: "Merriweather", Georgia, serif;
+
+  --nav-height: 64px;
+  --footer-height: 52px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: var(--red-darkest);
+  font-family: var(--font-body);
+  color: var(--charcoal-ink);
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   VIEWPORT & BACKGROUND KHÔNG GIAN CÁCH MẠNG
+   ========================================================================== */
+#presentation-viewport {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  background: radial-gradient(circle at 50% 35%, #7F1009 0%, #440704 65%, #250402 100%);
+  overflow: hidden;
+}
+
+/* Tia hào quang tỏa sáng cách mạng (Sunburst Ray Layer) */
+.sunburst-background-layer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 180vmax;
+  height: 180vmax;
+  transform: translate(-50%, -50%);
+  background: repeating-conic-gradient(
+    from 0deg,
+    rgba(255, 222, 0, 0.04) 0deg 7.5deg,
+    transparent 7.5deg 15deg
+  );
+  pointer-events: none;
+  z-index: 1;
+  animation: sunburstRotate 180s linear infinite;
+}
+
+@keyframes sunburstRotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Họa tiết Trống đồng Đông Sơn chìm */
+.dongson-watermark-layer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 900px;
+  height: 900px;
+  transform: translate(-50%, -50%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500' fill='none' stroke='%23FFDE00' stroke-width='1.5' opacity='0.08'%3E%3Ccircle cx='250' cy='250' r='240' stroke-width='3'/%3E%3Ccircle cx='250' cy='250' r='220' stroke-dasharray='4 6'/%3E%3Ccircle cx='250' cy='250' r='195'/%3E%3Ccircle cx='250' cy='250' r='165' stroke-dasharray='6 4'/%3E%3Ccircle cx='250' cy='250' r='130'/%3E%3Ccircle cx='250' cy='250' r='90'/%3E%3Ccircle cx='250' cy='250' r='45' fill='%23FFDE00' fill-opacity='0.1'/%3E%3Cpolygon points='250,50 260,110 320,80 280,130 340,140 285,170 335,210 275,215 300,270 250,235 200,270 225,215 165,210 215,170 160,140 220,130 180,80 240,110' fill='%23FFDE00' fill-opacity='0.15' stroke='none'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.8;
+}
+
+/* ==========================================================================
+   TOP REVOLUTIONARY NAVBAR
+   ========================================================================== */
+.revolutionary-navbar {
+  height: var(--nav-height);
+  width: 100%;
+  position: relative;
+  z-index: 100;
+  background: linear-gradient(180deg, rgba(30, 4, 3, 0.96) 0%, rgba(55, 7, 5, 0.92) 100%);
+  border-bottom: 2px solid var(--gold-metallic);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+}
+
+.navbar-inner {
+  max-width: 1720px;
+  margin: 0 auto;
+  height: 100%;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.emblem-star-gold, .emblem-flag-vn {
+  width: 44px;
+  height: 30px;
+  border-radius: 4px;
+  background: #DA251D; /* Đỏ cờ Tổ quốc */
+  color: #FFFF00; /* Sao vàng tươi */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 900;
+  box-shadow: 0 0 14px rgba(218, 37, 29, 0.5), 0 0 6px var(--gold-glow);
+  border: 1.5px solid var(--gold-metallic);
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.emblem-flag-vn:hover, .emblem-star-gold:hover {
+  transform: scale(1.08);
+}
+
+.emblem-flag-vn svg, .emblem-star-gold svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.brand-text-wrap h1 {
+  font-family: var(--font-poster);
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #FFF;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+.brand-text-wrap span {
+  font-family: var(--font-poster);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--gold-metallic);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* 4 Chapter Buttons */
+.nav-chapter-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+}
+
+.nav-chapter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(232, 185, 54, 0.25);
+  background: rgba(0, 0, 0, 0.3);
+  color: #E0D6C8;
+  font-family: var(--font-poster);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.nav-chapter-btn .badge-part {
+  background: var(--red-flag);
+  color: var(--gold-star);
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.nav-chapter-btn:hover {
+  background: rgba(192, 32, 24, 0.4);
+  border-color: var(--gold-metallic);
+  color: #FFF;
+  transform: translateY(-1px);
+}
+
+.nav-chapter-btn.active {
+  background: linear-gradient(135deg, var(--red-flag), #8E110A);
+  border-color: var(--gold-star);
+  color: #FFF;
+  box-shadow: 0 0 14px var(--red-glow), 0 0 6px var(--gold-glow);
+}
+
+.nav-chapter-btn.active .badge-part {
+  background: var(--gold-star);
+  color: var(--red-darkest);
+}
+
+/* Nav Actions Right */
+.nav-actions-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.action-pill-btn {
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 4px;
+  border: 1px solid var(--gold-metallic);
+  background: rgba(232, 185, 54, 0.12);
+  color: var(--gold-light);
+  font-family: var(--font-poster);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.action-pill-btn:hover {
+  background: var(--gold-metallic);
+  color: var(--red-darkest);
+}
+
+/* ==========================================================================
+   STAGE & MORPH SLIDES
+   ========================================================================== */
+.presentation-stage {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  height: calc(100vh - var(--nav-height) - var(--footer-height));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 36px;
+  z-index: 10;
+}
+
+/* Thẻ Slide Poster Tràn Màn Hình Hoành Tráng */
+.poster-slide {
+  position: absolute;
+  width: calc(100% - 72px);
+  max-width: 1580px;
+  height: calc(100% - 24px);
+  top: 12px;
+  background: var(--cream-parchment);
+  border: 3px solid var(--gold-metallic);
+  border-radius: 6px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 0 6px rgba(192, 32, 24, 0.7);
+  padding: 24px 36px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(70px) scale(0.96);
+  filter: blur(6px);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+              filter 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity, filter;
+}
+
+/* Viền hoa văn góc truyền thống */
+.poster-slide::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px dashed rgba(142, 17, 10, 0.4);
+  pointer-events: none;
+}
+
+/* Active Morph Slide */
+.poster-slide.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0) scale(1);
+  filter: blur(0);
+  z-index: 20;
+}
+
+.poster-slide.exited-left {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-70px) scale(0.96);
+  filter: blur(6px);
+}
+
+.poster-slide.exited-right {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(70px) scale(0.96);
+  filter: blur(6px);
+}
+
+/* ==========================================================================
+   SLIDE HEADER BAR (CỜ ĐỎ SAO VÀNG / PHÙ HIỆU BẢN SẮC)
+   ========================================================================== */
+.slide-dossier-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid rgba(142, 17, 10, 0.2);
+}
+
+.flag-ribbon-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(90deg, var(--red-flag), var(--red-deep));
+  color: var(--gold-star);
+  padding: 5px 16px;
+  border-radius: 3px;
+  font-family: var(--font-poster);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px var(--red-glow);
+}
+
+.flag-ribbon-tag .star-ico {
+  font-size: 14px;
+}
+
+.slide-subject-code {
+  font-family: var(--font-poster);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--red-deep);
+  letter-spacing: 0.06em;
+  background: var(--cream-card);
+  padding: 4px 12px;
+  border-radius: 3px;
+  border: 1px solid rgba(142, 17, 10, 0.2);
+}
+
+/* Tiêu đề Slide Đậm chất Áp phích Cổ động */
+.slide-headline-block {
+  margin-bottom: 18px;
+}
+
+.slide-main-title {
+  font-family: var(--font-poster);
+  font-size: clamp(24px, 2.3vw, 36px);
+  font-weight: 900;
+  color: var(--red-darkest);
+  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  text-shadow: 1px 1px 0 rgba(255, 222, 0, 0.4);
+}
+
+.slide-sub-title {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--bamboo-green);
+  font-style: italic;
+  margin-top: 3px;
+}
+
+/* ==========================================================================
+   SLIDE 0: SẮC LỆNH MỞ ĐẦU (POSTER CỔ ĐỘNG TOÀN CẢNH)
+   ========================================================================== */
+.cover-poster-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: radial-gradient(ellipse at center, #FFFDF7 0%, #F5E8CB 100%);
+  padding: 24px;
+  border-radius: 4px;
+  border: 2px solid var(--gold-metallic);
+  position: relative;
+}
+
+.cover-national-flag, .cover-star-burst {
+  width: 140px;
+  height: 94px;
+  border-radius: 4px;
+  background: #DA251D; /* Đỏ cờ chuẩn Quốc kỳ Việt Nam */
+  color: #FFFF00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), 0 0 0 3px var(--gold-metallic), 0 0 25px rgba(218, 37, 29, 0.45);
+  margin-bottom: 16px;
+  border: 2px solid #FFF;
+  overflow: hidden;
+  position: relative;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+}
+
+.cover-national-flag:hover, .cover-star-burst:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45), 0 0 0 3px var(--gold-star), 0 0 32px rgba(218, 37, 29, 0.65);
+}
+
+.cover-national-flag svg, .cover-star-burst svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.cover-nation-header {
+  font-family: var(--font-poster);
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  color: var(--red-flag);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.cover-nation-sub {
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--charcoal-ink);
+  margin-bottom: 18px;
+}
+
+.cover-divider-red-gold {
+  width: 180px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--red-flag), var(--gold-star), var(--red-flag), transparent);
+  margin: 0 auto 20px;
+}
+
+.cover-title-mega {
+  font-family: var(--font-poster);
+  font-size: clamp(32px, 3.8vw, 52px);
+  font-weight: 900;
+  color: var(--red-darkest);
+  line-height: 1.2;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 14px;
+  text-shadow: 2px 2px 0 rgba(255, 222, 0, 0.4);
+}
+
+.cover-slogan-gold {
+  font-family: var(--font-poster);
+  font-size: clamp(16px, 1.8vw, 22px);
+  font-weight: 800;
+  color: var(--red-flag);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 24px;
+  padding: 6px 20px;
+  background: rgba(192, 32, 24, 0.08);
+  border-radius: 4px;
+  border: 1px dashed var(--red-flag);
+}
+
+.cover-dossier-badges {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  font-family: var(--font-poster);
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--charcoal-ink);
+  padding-top: 14px;
+  border-top: 2px solid rgba(142, 17, 10, 0.15);
+}
+
+.badge-dossier-pill {
+  background: #FFF;
+  border: 1px solid rgba(142, 17, 10, 0.25);
+  padding: 6px 14px;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+/* ==========================================================================
+   CONTENT LAYOUTS (GRID, THẺ BÀI HỌC, BIỂU TƯỢNG)
+   ========================================================================== */
+.slide-grid-split {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1.18fr 0.82fr;
+  gap: 28px;
+  align-items: center;
+  min-height: 0;
+}
+
+.slide-grid-split.equal {
+  grid-template-columns: 1fr 1fr;
+}
+
+.slide-text-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+.slide-media-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Thẻ Luận Điểm Cách Mạng (Poster Argument Cards) */
+.argument-card-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.argument-card-item {
+  background: #FFF;
+  border: 1px solid rgba(142, 17, 10, 0.2);
+  border-left: 6px solid var(--red-flag);
+  padding: 12px 18px;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.argument-card-item h4 {
+  font-family: var(--font-poster);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--red-darkest);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.argument-card-item p {
+  font-size: 13.5px;
+  color: var(--charcoal-ink);
+  line-height: 1.5;
+}
+
+/* Khung trích dẫn Hoành phi / Biểu ngữ đỏ son */
+.proclamation-banner-quote {
+  background: linear-gradient(135deg, #FFFDF6 0%, #FAEDCD 100%);
+  border: 2px solid var(--gold-metallic);
+  border-left: 8px solid var(--red-flag);
+  padding: 14px 20px;
+  border-radius: 4px;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 700;
+  font-style: italic;
+  color: var(--red-darkest);
+  box-shadow: 0 4px 12px rgba(192, 32, 24, 0.08);
+}
+
+/* Khung Ảnh Nghệ Thuật Lịch Sử Tráng Gương Vàng */
+.propaganda-photo-frame {
+  position: relative;
+  border: 6px solid #FFF;
+  border-radius: 4px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25), 0 0 0 2px var(--gold-metallic);
+  background: #1B1714;
+  overflow: hidden;
+  width: 100%;
+}
+
+.propaganda-photo-frame img {
+  width: 100%;
+  height: 330px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.propaganda-photo-frame:hover img {
+  transform: scale(1.03);
+}
+
+.photo-caption-bar {
+  padding: 8px 14px;
+  background: var(--red-darkest);
+  color: var(--gold-light);
+  font-family: var(--font-poster);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.photo-top-stamp {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--red-flag);
+  color: var(--gold-star);
+  font-family: var(--font-poster);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
+  border-radius: 2px;
+  border: 1px solid var(--gold-star);
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   WIDGETS BIỆN CHỨNG & CÂY TRE & TRÍCH DẪN BÁC HỒ
+   ========================================================================== */
+
+/* 1.2 Widget Neo tàu vs Gió đẩy */
+.dialectic-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.dialectic-card-box {
+  background: #FFF;
+  border: 1px solid rgba(142, 17, 10, 0.2);
+  border-radius: 4px;
+  padding: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.dialectic-card-box.national {
+  border-top: 5px solid var(--red-flag);
+}
+
+.dialectic-card-box.global {
+  border-top: 5px solid var(--bamboo-green);
+}
+
+.dialectic-card-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed rgba(142, 17, 10, 0.2);
+}
+
+.dialectic-card-head .ico { font-size: 20px; }
+
+.dialectic-card-head h4 {
+  font-family: var(--font-poster);
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--red-darkest);
+}
+
+.dialectic-card-head span {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gold-dark);
+  text-transform: uppercase;
+}
+
+.dialectic-points {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dialectic-points li {
+  font-size: 12.5px;
+  line-height: 1.45;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.dialectic-points li::before {
+  content: "★";
+  color: var(--red-flag);
+  font-size: 10px;
+  line-height: 1.4;
+}
+
+.synthesis-flag-bar {
+  background: linear-gradient(90deg, var(--red-darkest), #8E110A);
+  color: #FFF;
+  padding: 10px 18px;
+  border-radius: 4px;
+  border-left: 6px solid var(--gold-star);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.synthesis-flag-bar .text {
+  font-family: var(--font-poster);
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--gold-star);
+}
+
+.synthesis-flag-bar .badge {
+  font-family: var(--font-poster);
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--red-darkest);
+  background: var(--gold-star);
+  padding: 3px 10px;
+  border-radius: 3px;
+}
+
+/* 2.1 Ba Nguyên tắc của Bác (3 Bảng Vàng) */
+.triad-principles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.principle-gold-tablet {
+  background: #FFF;
+  border: 2px solid var(--gold-metallic);
+  border-radius: 4px;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  position: relative;
+}
+
+.principle-gold-tablet::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: var(--red-flag);
+}
+
+.principle-gold-tablet .t-num {
+  font-family: var(--font-poster);
+  font-size: 28px;
+  font-weight: 900;
+  color: rgba(192, 32, 24, 0.2);
+  line-height: 1;
+}
+
+.principle-gold-tablet .t-badge {
+  font-family: var(--font-poster);
+  font-size: 10.5px;
+  font-weight: 800;
+  color: var(--red-flag);
+  text-transform: uppercase;
+}
+
+.principle-gold-tablet h4 {
+  font-family: var(--font-poster);
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--red-darkest);
+  margin: 4px 0 6px;
+}
+
+.principle-gold-tablet p {
+  font-size: 13px;
+  color: var(--charcoal-ink);
+  line-height: 1.5;
+}
+
+/* 2.2 Trích dẫn Hồ Chí Minh Toàn tập */
+.quotes-scroll-deck {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.quote-red-plaque {
+  background: linear-gradient(135deg, #8E110A 0%, #5C0A05 100%);
+  color: #FFF;
+  border: 2px solid var(--gold-star);
+  border-radius: 4px;
+  padding: 18px 22px;
+  position: relative;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+}
+
+.quote-red-plaque .q-lead {
+  font-family: var(--font-serif);
+  font-size: clamp(18px, 1.8vw, 24px);
+  font-weight: 800;
+  color: var(--gold-star);
+  line-height: 1.35;
+  margin-bottom: 6px;
+  white-space: pre-line;
+}
+
+.quote-red-plaque .q-source {
+  font-family: var(--font-poster);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--gold-light);
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed rgba(255, 222, 0, 0.3);
+}
+
+.quote-red-plaque .q-analysis {
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #FDF9EE;
+}
+
+/* 3.1 Ngoại giao Cây tre & 3 Huy hiệu Vàng */
+.bamboo-strategy-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.bamboo-strategy-item {
+  background: #FFF;
+  border: 1px solid rgba(24, 91, 51, 0.3);
+  border-left: 5px solid var(--bamboo-green);
+  padding: 12px;
+  border-radius: 4px;
+}
+
+.bamboo-strategy-item h5 {
+  font-family: var(--font-poster);
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--bamboo-green);
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.bamboo-strategy-item p {
+  font-size: 12.5px;
+  color: var(--charcoal-ink);
+  line-height: 1.4;
+}
+
+.metrics-emblem-deck {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.metric-emblem-box {
+  background: linear-gradient(135deg, var(--red-darkest) 0%, #7F1009 100%);
+  color: #FFF;
+  border: 2px solid var(--gold-metallic);
+  border-radius: 4px;
+  padding: 14px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+}
+
+.metric-emblem-box .m-num {
+  font-family: var(--font-poster);
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--gold-star);
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+.metric-emblem-box .m-unit {
+  font-family: var(--font-poster);
+  font-size: 11px;
+  font-weight: 800;
+  color: #FFF;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.metric-emblem-box .m-desc {
+  font-size: 11.5px;
+  color: var(--gold-light);
+  line-height: 1.35;
+}
+
+/* 3.2 Chiến dịch Vắc-xin Khẩn cấp */
+.vaccine-tactics-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vaccine-tactic-row {
+  background: #FFF;
+  border: 1px solid rgba(142, 17, 10, 0.2);
+  padding: 9px 14px;
+  font-size: 13px;
+  line-height: 1.45;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  border-radius: 3px;
+}
+
+.vaccine-tactic-row::before {
+  content: "★";
+  color: var(--red-flag);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.vaccine-summary-banner {
+  background: linear-gradient(90deg, #E6F4EA, #CEEAD6);
+  border-left: 5px solid var(--bamboo-green);
+  padding: 10px 16px;
+  font-size: 13px;
+  color: #0D4A2B;
+  font-weight: 700;
+  border-radius: 3px;
+}
+
+.vaccine-lessons-triad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.lesson-card-box {
+  background: #FFF;
+  border: 1px solid var(--gold-metallic);
+  padding: 10px;
+  border-radius: 3px;
+}
+
+.lesson-card-box h6 {
+  font-family: var(--font-poster);
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--red-flag);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.lesson-card-box p {
+  font-size: 11.5px;
+  color: var(--charcoal-ink);
+  line-height: 1.4;
+}
+
+/* 4.2 Sinh viên 3 Trụ cột */
+.student-triad-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.student-card-item {
+  background: #FFF;
+  border: 2px solid var(--gold-metallic);
+  border-radius: 4px;
+  padding: 18px 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.student-card-item .st-num {
+  font-family: var(--font-poster);
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--gold-dark);
+  line-height: 1;
+}
+
+.student-card-item .st-badge {
+  font-family: var(--font-poster);
+  font-size: 10px;
+  font-weight: 800;
+  color: var(--red-flag);
+  text-transform: uppercase;
+}
+
+.student-card-item h4 {
+  font-family: var(--font-poster);
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--red-darkest);
+}
+
+.student-card-item p {
+  font-size: 12.5px;
+  color: var(--charcoal-ink);
+  line-height: 1.5;
+}
+
+/* 4.3 Tuyên ngôn Bế mạc Hào hùng */
+.grand-proclamation-card {
+  background: radial-gradient(circle at center, #8E110A 0%, #4E0804 100%);
+  color: #FFF;
+  border: 3px solid var(--gold-star);
+  border-radius: 6px;
+  padding: 32px 28px;
+  text-align: center;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.4);
+}
+
+.grand-proclamation-card .p-star {
+  font-size: 32px;
+  color: var(--gold-star);
+  margin-bottom: 8px;
+}
+
+.grand-proclamation-card .p-quote {
+  font-family: var(--font-poster);
+  font-size: clamp(20px, 2.2vw, 30px);
+  font-weight: 900;
+  color: var(--gold-star);
+  line-height: 1.35;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  white-space: pre-line;
+  text-shadow: 0 0 16px rgba(255, 222, 0, 0.4);
+}
+
+.grand-proclamation-card .p-sub {
+  font-family: var(--font-poster);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.grand-proclamation-card .p-call {
+  font-size: 15px;
+  color: #FFF;
+  line-height: 1.6;
+}
+
+/* ==========================================================================
+   BOTTOM REVOLUTIONARY CONTROLS BAR
+   ========================================================================== */
+.revolutionary-footer {
+  height: var(--footer-height);
+  width: 100%;
+  background: linear-gradient(180deg, rgba(55, 7, 5, 0.95) 0%, rgba(30, 4, 3, 0.98) 100%);
+  border-top: 2px solid var(--gold-metallic);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 100;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.45);
+}
+
+.deck-counter-badge {
+  font-family: var(--font-poster);
+  font-size: 13px;
+  font-weight: 800;
+  color: #FFF;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 4px 14px;
+  border-radius: 3px;
+  border: 1px solid var(--gold-metallic);
+}
+
+.deck-counter-badge .c-highlight {
+  color: var(--gold-star);
+  font-size: 16px;
+}
+
+/* Timeline Dots */
+.timeline-dots-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timeline-dot-item {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid var(--gold-metallic);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.timeline-dot-item:hover {
+  background: var(--gold-star);
+}
+
+.timeline-dot-item.active {
+  background: var(--gold-star);
+  border-color: #FFF;
+  transform: scale(1.4);
+  box-shadow: 0 0 10px var(--gold-star);
+}
+
+/* Nav Direction Buttons */
+.deck-nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-arrow-btn {
+  height: 34px;
+  padding: 0 16px;
+  border-radius: 4px;
+  font-family: var(--font-poster);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  border: 1px solid var(--gold-metallic);
+  background: rgba(0, 0, 0, 0.35);
+  color: #FFF;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.nav-arrow-btn:hover {
+  background: var(--gold-metallic);
+  color: var(--red-darkest);
+  transform: translateY(-1px);
+}
+
+.nav-arrow-btn.next-highlight {
+  background: var(--red-flag);
+  border-color: var(--gold-star);
+  color: var(--gold-star);
+  box-shadow: 0 0 10px var(--red-glow);
+}
+
+.nav-arrow-btn.next-highlight:hover {
+  background: var(--gold-star);
+  color: var(--red-darkest);
+}
+
+.nav-arrow-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+@media (max-width: 1024px) {
+  .nav-chapter-links { display: none; }
+  .slide-grid-split { grid-template-columns: 1fr; gap: 14px; }
+  .dialectic-cards-grid, .triad-principles-grid, .bamboo-strategy-row, .metrics-emblem-deck, .student-triad-grid {
+    grid-template-columns: 1fr;
+  }
+}

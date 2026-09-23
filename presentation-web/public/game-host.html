@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bàn Quản Trò (Admin) — Đấu Trí Ngoại Giao</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/camind_logo.svg">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Merriweather:wght@400;700&family=JetBrains+Mono:wght@600;800&display=swap">
+  <style>
+    :root {
+      --red-flag: #C02018;
+      --red-deep: #8E110A;
+      --red-darkest: #4E0804;
+      --red-glow: rgba(192, 32, 24, 0.45);
+      
+      --gold-star: #FFDE00;
+      --gold-metallic: #E8B936;
+      --gold-dark: #AA7E16;
+      --gold-light: #FFF4BE;
+      --gold-glow: rgba(255, 222, 0, 0.35);
+
+      --cream-parchment: #FDF9EE;
+      --charcoal-ink: #1B1714;
+      --bamboo-green: #185B33;
+      --bamboo-emerald: #2E8B57;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 30%, #6E0E08 0%, #3A0503 65%, #1F0302 100%);
+      font-family: 'Montserrat', sans-serif;
+      color: #FFF;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    .bg-sunburst {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 180vmax;
+      height: 180vmax;
+      transform: translate(-50%, -50%);
+      background: repeating-conic-gradient(
+        from 0deg,
+        rgba(255, 222, 0, 0.035) 0deg 7.5deg,
+        transparent 7.5deg 15deg
+      );
+      pointer-events: none;
+      z-index: 1;
+      animation: spinRays 200s linear infinite;
+    }
+    @keyframes spinRays {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* ======================================================================
+       LOCK SCREEN: PASSWORD 2026 GATE
+       ====================================================================== */
+    .admin-gate-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 4, 3, 0.96);
+      backdrop-filter: blur(12px);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .admin-gate-overlay.hidden {
+      display: none;
+    }
+    .gate-login-card {
+      background: var(--cream-parchment);
+      color: var(--charcoal-ink);
+      border: 3px solid var(--gold-metallic);
+      border-radius: 8px;
+      padding: 32px 36px;
+      max-width: 440px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6), 0 0 30px var(--red-glow);
+    }
+    .gate-flag-banner {
+      width: 80px;
+      height: 54px;
+      margin: 0 auto 14px;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 2px solid var(--gold-metallic);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+    }
+    .gate-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--red-darkest);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .gate-sub {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+    .input-gate-pass {
+      width: 100%;
+      height: 52px;
+      border: 2px solid rgba(142, 17, 10, 0.3);
+      border-radius: 6px;
+      padding: 0 16px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: 0.15em;
+      color: var(--red-darkest);
+      background: #FFF;
+      margin-bottom: 14px;
+      outline: none;
+    }
+    .input-gate-pass:focus {
+      border-color: var(--red-flag);
+      box-shadow: 0 0 14px rgba(192, 32, 24, 0.3);
+    }
+    .btn-gate-submit {
+      width: 100%;
+      height: 50px;
+      background: linear-gradient(135deg, var(--red-flag), #8E110A);
+      color: var(--gold-star);
+      border: 2px solid var(--gold-star);
+      border-radius: 6px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 15px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(192, 32, 24, 0.4);
+      transition: transform 0.15s ease;
+    }
+    .btn-gate-submit:hover {
+      transform: translateY(-1px);
+      background: var(--red-flag);
+    }
+    .gate-error-text {
+      color: #C02018;
+      font-size: 12.5px;
+      font-weight: 800;
+      margin-top: 10px;
+      display: none;
+    }
+
+    /* ======================================================================
+       TOP BAR
+       ====================================================================== */
+    .host-header-bar {
+      height: 64px;
+      background: rgba(30, 4, 3, 0.95);
+      border-bottom: 2px solid var(--gold-metallic);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 20;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .host-brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .flag-vn-host {
+      width: 38px;
+      height: 25px;
+      border-radius: 3px;
+      overflow: hidden;
+      border: 1.5px solid var(--gold-metallic);
+    }
+    .brand-title-box h1 {
+      font-size: 16px;
+      font-weight: 900;
+      color: #FFF;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .brand-title-box span {
+      font-size: 10.5px;
+      color: var(--gold-metallic);
+      font-weight: 700;
+    }
+
+    .room-live-pill {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--gold-metallic);
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--gold-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .live-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #2ECC71;
+      box-shadow: 0 0 10px #2ECC71;
+      animation: pulseDot 1.5s infinite;
+    }
+    @keyframes pulseDot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .host-btn {
+      height: 34px;
+      padding: 0 14px;
+      border-radius: 4px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      border: 1px solid var(--gold-metallic);
+      background: rgba(232, 185, 54, 0.15);
+      color: var(--gold-light);
+    }
+    .host-btn:hover {
+      background: var(--gold-metallic);
+      color: var(--red-darkest);
+    }
+    .host-btn.primary {
+      background: var(--red-flag);
+      border-color: var(--gold-star);
+      color: var(--gold-star);
+      box-shadow: 0 0 12px var(--red-glow);
+    }
+    .host-btn.primary:hover {
+      background: var(--gold-star);
+      color: var(--red-darkest);
+    }
+
+    /* ======================================================================
+       STAGE: 2 PHASES (LOBBY VIEW vs PLAYING VIEW)
+       ====================================================================== */
+    .host-stage {
+      flex: 1;
+      padding: 14px 24px;
+      position: relative;
+      z-index: 10;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* PHASE 1: LOBBY QR & WAITING ROOM */
+    .lobby-stage-panel {
+      flex: 1;
+      display: flex;
+      gap: 24px;
+      align-items: stretch;
+      min-height: 0;
+    }
+    .lobby-stage-panel.hidden { display: none; }
+
+    .lobby-qr-column {
+      flex: 0 0 420px;
+      background: var(--cream-parchment);
+      color: var(--charcoal-ink);
+      border: 3px solid var(--gold-metallic);
+      border-radius: 8px;
+      padding: 24px 20px;
+      text-align: center;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .lobby-qr-column h2 {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--red-darkest);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .lobby-qr-column p {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 16px;
+    }
+    .qr-frame-host {
+      width: 210px;
+      height: 210px;
+      background: #FFF;
+      border: 2px solid var(--gold-metallic);
+      border-radius: 6px;
+      padding: 8px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    }
+    .qr-frame-host img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .url-badge-host {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: var(--red-flag);
+      background: #FFF;
+      padding: 8px 14px;
+      border-radius: 4px;
+      border: 1px dashed var(--red-flag);
+      margin-bottom: 18px;
+    }
+    .btn-start-mega {
+      width: 100%;
+      height: 52px;
+      background: linear-gradient(135deg, var(--red-flag), #8E110A);
+      color: var(--gold-star);
+      border: 2px solid var(--gold-star);
+      border-radius: 6px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 16px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      box-shadow: 0 6px 18px var(--red-glow);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn-start-mega:hover {
+      transform: scale(1.02);
+      background: var(--gold-star);
+      color: var(--red-darkest);
+    }
+
+    .lobby-players-column {
+      flex: 1;
+      background: rgba(0,0,0,0.35);
+      border: 2px solid var(--gold-metallic);
+      border-radius: 8px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    .lobby-players-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(232, 185, 54, 0.3);
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+    }
+    .lobby-players-head h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--gold-star);
+      text-transform: uppercase;
+    }
+    .lobby-chips-grid {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 8px;
+    }
+    .lobby-player-pill {
+      background: var(--cream-parchment);
+      color: var(--red-darkest);
+      border: 1px solid var(--gold-metallic);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.6); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* PHASE 2: PLAYING ARENA */
+    .playing-stage-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-height: 0;
+    }
+    .playing-stage-panel.hidden { display: none; }
+
+    .arenas-split-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      min-height: 0;
+    }
+
+    /* Team Cards */
+    .team-arena-card {
+      background: var(--cream-parchment);
+      border: 3px solid var(--gold-metallic);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.5);
+      overflow: hidden;
+      min-height: 0;
+    }
+    .team-arena-card.national { border-top: 8px solid var(--red-flag); }
+    .team-arena-card.global { border-top: 8px solid var(--bamboo-green); }
+
+    .team-arena-head {
+      padding: 12px 18px;
+      background: rgba(0,0,0,0.03);
+      border-bottom: 2px solid rgba(142, 17, 10, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .team-title-wrap h2 {
+      font-size: 18px;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+    .team-arena-card.national .team-title-wrap h2 { color: var(--red-darkest); }
+    .team-arena-card.global .team-title-wrap h2 { color: var(--bamboo-green); }
+
+    .team-title-wrap span {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--gold-dark);
+      text-transform: uppercase;
+    }
+
+    .team-score-stats-row {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      border-bottom: 2px solid rgba(142, 17, 10, 0.15);
+      background: #FFF;
+    }
+    .team-main-score-box {
+      text-align: center;
+      padding: 12px;
+      background: radial-gradient(circle at center, #FFF 0%, #F5E8CB 100%);
+      border-right: 1px solid rgba(142, 17, 10, 0.15);
+    }
+    .score-big-num {
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 1;
+    }
+    .team-arena-card.national .score-big-num { color: var(--red-flag); }
+    .team-arena-card.global .score-big-num { color: var(--bamboo-green); }
+
+    .team-metrics-table {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 10px 14px;
+      gap: 4px;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--charcoal-ink);
+    }
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed rgba(0,0,0,0.1);
+      padding-bottom: 2px;
+    }
+    .metric-row .val-correct { color: #27AE60; }
+    .metric-row .val-wrong { color: #C0392B; }
+
+    .leader-crown-bar {
+      background: linear-gradient(90deg, #1B1714 0%, #3A0503 100%);
+      color: var(--gold-light);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 800;
+      border-bottom: 1px solid var(--gold-metallic);
+    }
+    .leader-crown-bar .leader-name {
+      color: var(--gold-star);
+      font-size: 13.5px;
+    }
+
+    .streak-container-box {
+      padding: 10px 18px;
+      background: #FFF;
+      border-bottom: 2px solid rgba(142, 17, 10, 0.15);
+    }
+    .streak-labels-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--charcoal-ink);
+      margin-bottom: 4px;
+    }
+    .streak-progress-track {
+      width: 100%;
+      height: 16px;
+      background: #EAE3D2;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(0,0,0,0.15);
+    }
+    .streak-progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 8px;
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .team-arena-card.national .streak-progress-fill { background: linear-gradient(90deg, #E67E22, var(--red-flag)); }
+    .team-arena-card.global .streak-progress-fill { background: linear-gradient(90deg, #27AE60, var(--bamboo-green)); }
+
+    .team-members-scroll {
+      flex: 1;
+      padding: 10px 14px;
+      overflow-y: auto;
+      background: #FDF9EE;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: flex-start;
+      gap: 6px;
+      min-height: 0;
+    }
+    .member-chip {
+      background: #FFF;
+      border: 1px solid rgba(142, 17, 10, 0.2);
+      border-radius: 12px;
+      padding: 3px 8px;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--charcoal-ink);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .member-chip.is-leader {
+      background: var(--gold-light);
+      border-color: var(--gold-metallic);
+      color: var(--red-darkest);
+      font-weight: 800;
+    }
+
+    /* LEADER LIVE LOGS CONSOLE (YÊU CẦU QUAN TRỌNG) */
+    .leader-logs-panel {
+      flex: 0 0 160px;
+      background: rgba(15, 3, 2, 0.95);
+      border: 2px solid var(--gold-metallic);
+      border-radius: 8px;
+      padding: 10px 16px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+    .logs-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(232, 185, 54, 0.3);
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+      font-size: 11.5px;
+      font-weight: 800;
+      color: var(--gold-star);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    .logs-feed-box {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+    }
+    .log-entry {
+      padding: 5px 10px;
+      border-radius: 4px;
+      background: rgba(255,255,255,0.05);
+      border-left: 4px solid var(--gold-metallic);
+      line-height: 1.4;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      animation: fadeInLog 0.25s ease;
+    }
+    @keyframes fadeInLog {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .log-time { color: var(--gold-metallic); font-weight: 700; flex-shrink: 0; }
+    .log-entry.success { border-left-color: #2ECC71; background: rgba(46, 204, 113, 0.12); color: #A9DFBF; }
+    .log-entry.warn { border-left-color: #E74C3C; background: rgba(231, 76, 60, 0.12); color: #F5B7B1; }
+    .log-entry.swap { border-left-color: #9B59B6; background: rgba(155, 89, 182, 0.15); color: #D7BDE2; }
+
+    /* OVERLAYS: MỐC 50 & 4 BẢO BÌNH */
+    .overlay-alert-50 {
+      position: fixed;
+      inset: 0;
+      background: rgba(78, 8, 4, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px;
+    }
+    .overlay-alert-50.active { display: flex; }
+    .alert-50-box {
+      background: var(--cream-parchment);
+      color: var(--red-darkest);
+      border: 4px solid var(--gold-star);
+      border-radius: 10px;
+      padding: 28px 36px;
+      max-width: 680px;
+      box-shadow: 0 0 50px var(--red-glow), 0 20px 60px rgba(0,0,0,0.7);
+    }
+    .alert-50-box h2 {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--red-flag);
+      margin-bottom: 8px;
+    }
+
+    .overlay-pots-reveal {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 4, 3, 0.94);
+      backdrop-filter: blur(10px);
+      z-index: 150;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 30px;
+    }
+    .overlay-pots-reveal.active { display: flex; }
+    .pots-stage-header h2 {
+      font-size: clamp(26px, 3vw, 40px);
+      font-weight: 900;
+      color: var(--gold-star);
+      text-transform: uppercase;
+      text-shadow: 0 0 20px rgba(255,222,0,0.5);
+      margin-bottom: 4px;
+    }
+    .pots-display-row {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      margin: 20px 0;
+    }
+    .golden-urn-card {
+      width: 150px;
+      height: 200px;
+      background: radial-gradient(circle at center, #FFF4BE 0%, #D49B00 60%, #8A6400 100%);
+      border: 3px solid #FFF;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 25px var(--gold-glow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      color: var(--red-darkest);
+    }
+    .golden-urn-card.opened {
+      background: #FFF;
+      border-color: var(--gold-star);
+      transform: scale(1.15);
+      box-shadow: 0 0 40px var(--gold-star);
+    }
+    .pot-outcome-banner {
+      background: var(--cream-parchment);
+      color: var(--red-darkest);
+      border: 3px solid var(--gold-star);
+      border-radius: 8px;
+      padding: 14px 24px;
+      max-width: 760px;
+      font-size: 18px;
+      font-weight: 900;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      display: none;
+    }
+    .pot-outcome-banner.active { display: block; }
+  </style>
+</head>
+<body>
+
+  <div class="bg-sunburst" aria-hidden="true"></div>
+
+  <!-- ======================================================================
+       LOCK SCREEN: PASSWORD 2026
+       ====================================================================== -->
+  <div class="admin-gate-overlay" id="gate-overlay">
+    <div class="gate-login-card">
+      <div class="gate-flag-banner">
+        <svg viewBox="0 0 300 200" width="100%" height="100%">
+          <rect width="300" height="200" fill="#DA251D"/>
+          <polygon points="150,40 163.47,81.46 207.06,81.46 171.80,107.08 185.23,148.54 150,122.92 114.77,148.54 128.20,107.08 92.94,81.46 136.53,81.46" fill="#FFFF00"/>
+        </svg>
+      </div>
+      <h2 class="gate-title">BÀN QUẢN TRÒ (ADMIN)</h2>
+      <p class="gate-sub">Nhập mã xác thực để mở Dashboard điều hành lớp học</p>
+
+      <input type="password" id="gate-pass-input" class="input-gate-pass" placeholder="Mã bảo mật (2026)" maxlength="10" autofocus autocomplete="off">
+      <button id="gate-submit-btn" class="btn-gate-submit">MỞ KHÓA BÀN QUẢN TRÒ ➔</button>
+      <div id="gate-error" class="gate-error-text">Mật khẩu không chính xác! Vui lòng thử lại.</div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MAIN ADMIN DASHBOARD
+       ====================================================================== -->
+  <header class="host-header-bar">
+    <div class="host-brand-wrap">
+      <div class="flag-vn-host">
+        <svg viewBox="0 0 300 200" width="100%" height="100%">
+          <rect width="300" height="200" fill="#DA251D"/>
+          <polygon points="150,40 163.47,81.46 207.06,81.46 171.80,107.08 185.23,148.54 150,122.92 114.77,148.54 128.20,107.08 92.94,81.46 136.53,81.46" fill="#FFFF00"/>
+        </svg>
+      </div>
+      <div class="brand-title-box">
+        <h1>DASHBOARD QUẢN TRÒ ĐIỀU HÀNH</h1>
+        <span>TƯ TƯỞNG HỒ CHÍ MINH • MINIGAME 2 KHỐI</span>
+      </div>
+    </div>
+
+    <div class="room-live-pill">
+      <div class="live-dot"></div>
+      <span id="player-count-text">0 Sinh Viên Trong Phòng</span>
+    </div>
+
+    <div class="header-actions">
+      <button id="btn-host-reset" class="host-btn" title="Làm mới lại phòng chơi">
+        <span>🔄 Làm Mới</span>
+      </button>
+      <button id="btn-fullscreen" class="host-btn" title="Toàn màn hình">
+        <span>⛶ Toàn Màn Hình</span>
+      </button>
+      <a href="/" class="host-btn" title="Trở về Slide bài thuyết trình" style="text-decoration:none;">
+        <span>📜 Slide Thuyết Trình</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="host-stage">
+
+    <!-- ==================================================================
+         PHASE 1: LOBBY & QR CODE (TRƯỚC KHI BẤM BẮT ĐẦU)
+         ================================================================== -->
+    <div class="lobby-stage-panel" id="panel-lobby">
+      <div class="lobby-qr-column">
+        <h2>QUÉT MÃ THAM GIA</h2>
+        <p>Sinh viên dùng điện thoại quét mã hoặc truy cập link:</p>
+        <div class="qr-frame-host">
+          <img id="qr-img" src="" alt="Mã QR tham gia">
+        </div>
+        <div class="url-badge-host" id="qr-link-text">http://localhost:4000/play</div>
+        
+        <button id="btn-start-game" class="btn-start-mega">
+          <span>⚡ BẮT ĐẦU CHIA ĐỘI &amp; THI ĐẤU</span>
+        </button>
+      </div>
+
+      <div class="lobby-players-column">
+        <div class="lobby-players-head">
+          <h3>DANH SÁCH SINH VIÊN ĐÃ VÀO PHÒNG CHỜ (<span id="lobby-count-num">0</span>)</h3>
+          <span style="font-size:12px; color:var(--gold-metallic);">Hệ thống sẽ tự chia đều 50/50 và bốc ngẫu nhiên 2 Leader</span>
+        </div>
+        <div class="lobby-chips-grid" id="lobby-chips-container">
+          <!-- Injected via Socket -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================================================================
+         PHASE 2: PLAYING ARENA (SAU KHI BẤM BẮT ĐẦU)
+         ================================================================== -->
+    <div class="playing-stage-panel hidden" id="panel-playing">
+      
+      <div class="arenas-split-grid">
+        
+        <!-- TEAM 1: KHỐI NỘI LỰC -->
+        <section class="team-arena-card national">
+          <div class="team-arena-head">
+            <div style="font-size:24px;">🇻🇳</div>
+            <div class="team-title-wrap">
+              <h2>KHỐI NỘI LỰC</h2>
+              <span>SỨC MẠNH DÂN TỘC</span>
+            </div>
+            <div style="font-size:12px; font-weight:800; color:var(--red-flag);" id="team1-member-count">0 thành viên</div>
+          </div>
+
+          <div class="team-score-stats-row">
+            <div class="team-main-score-box">
+              <div class="score-big-num" id="team1-score">0</div>
+              <div style="font-size:11px; font-weight:800; color:#666; margin-top:2px;">TỔNG ĐIỂM</div>
+            </div>
+            <div class="team-metrics-table">
+              <div class="metric-row">
+                <span>📝 Đã trả lời:</span>
+                <span id="team1-total-answered">0</span>
+              </div>
+              <div class="metric-row">
+                <span>✅ Câu đúng:</span>
+                <span class="val-correct" id="team1-total-correct">0</span>
+              </div>
+              <div class="metric-row">
+                <span>❌ Câu sai:</span>
+                <span class="val-wrong" id="team1-total-wrong">0</span>
+              </div>
+              <div class="metric-row">
+                <span>🎯 Tỷ lệ đúng:</span>
+                <span id="team1-accuracy">100%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="leader-crown-bar">
+            <span>👑 TRƯỞNG ĐOÀN (LEADER):</span>
+            <span class="leader-name" id="team1-leader-name">Chưa chỉ định</span>
+          </div>
+
+          <div class="streak-container-box">
+            <div class="streak-labels-row">
+              <span>🔥 CHUỖI CÂU ĐÚNG MỞ BÌNH</span>
+              <span style="color:var(--red-flag); font-size:13px;" id="team1-streak-text">0 / 50</span>
+            </div>
+            <div class="streak-progress-track">
+              <div class="streak-progress-fill" id="team1-streak-fill"></div>
+            </div>
+          </div>
+
+          <div class="team-members-scroll" id="team1-members-container"></div>
+        </section>
+
+        <!-- TEAM 2: KHỐI NGOẠI LỰC -->
+        <section class="team-arena-card global">
+          <div class="team-arena-head">
+            <div style="font-size:24px;">🌐</div>
+            <div class="team-title-wrap">
+              <h2>KHỐI NGOẠI LỰC</h2>
+              <span>ĐOÀN KẾT QUỐC TẾ</span>
+            </div>
+            <div style="font-size:12px; font-weight:800; color:var(--bamboo-green);" id="team2-member-count">0 thành viên</div>
+          </div>
+
+          <div class="team-score-stats-row">
+            <div class="team-main-score-box">
+              <div class="score-big-num" id="team2-score">0</div>
+              <div style="font-size:11px; font-weight:800; color:#666; margin-top:2px;">TỔNG ĐIỂM</div>
+            </div>
+            <div class="team-metrics-table">
+              <div class="metric-row">
+                <span>📝 Đã trả lời:</span>
+                <span id="team2-total-answered">0</span>
+              </div>
+              <div class="metric-row">
+                <span>✅ Câu đúng:</span>
+                <span class="val-correct" id="team2-total-correct">0</span>
+              </div>
+              <div class="metric-row">
+                <span>❌ Câu sai:</span>
+                <span class="val-wrong" id="team2-total-wrong">0</span>
+              </div>
+              <div class="metric-row">
+                <span>🎯 Tỷ lệ đúng:</span>
+                <span id="team2-accuracy">100%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="leader-crown-bar">
+            <span>👑 TRƯỞNG ĐOÀN (LEADER):</span>
+            <span class="leader-name" id="team2-leader-name">Chưa chỉ định</span>
+          </div>
+
+          <div class="streak-container-box">
+            <div class="streak-labels-row">
+              <span>🔥 CHUỖI CÂU ĐÚNG MỞ BÌNH</span>
+              <span style="color:var(--bamboo-green); font-size:13px;" id="team2-streak-text">0 / 50</span>
+            </div>
+            <div class="streak-progress-track">
+              <div class="streak-progress-fill" id="team2-streak-fill"></div>
+            </div>
+          </div>
+
+          <div class="team-members-scroll" id="team2-members-container"></div>
+        </section>
+
+      </div>
+
+      <!-- LEADER LIVE LOGS CONSOLE (YÊU CẦU ĐẶC BIỆT) -->
+      <section class="leader-logs-panel">
+        <div class="logs-panel-head">
+          <span>📜 NHẬT KÝ LÃNH ĐẠO &amp; BIẾN ĐỘNG BẢO BÌNH (LIVE LOGS)</span>
+          <span style="font-size:11px; opacity:0.7;">Ghi nhận quyết định đúng/sai &amp; chọn bình của 2 Leader</span>
+        </div>
+        <div class="logs-feed-box" id="leader-logs-feed">
+          <div class="log-entry info">
+            <span class="log-time">[HỆ THỐNG]</span>
+            <span>Trận đấu đã sẵn sàng. Chờ các bước đi chiến lược từ 2 Trưởng đoàn!</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- OVERLAY 1: MỐC 50 ALARM -->
+  <div class="overlay-alert-50" id="overlay-alarm-50">
+    <div class="alert-50-box">
+      <h2>🚨 MỐC 50 CÂU ĐÚNG ĐÃ ĐẠT!</h2>
+      <p style="font-size:18px; line-height:1.5; margin-bottom:14px;">
+        <strong id="alarm-team-name" style="color:var(--red-flag);">Khối Nội Lực</strong> đã tích lũy đủ 50 câu đúng!<br>
+        Trưởng đoàn <strong id="alarm-leader-name" style="color:var(--gold-dark);">...</strong> đang nhận câu hỏi định đoạt trên điện thoại!
+      </p>
+    </div>
+  </div>
+
+  <!-- OVERLAY 2: 4 MYSTERY POTS ON PROJECTOR -->
+  <div class="overlay-pots-reveal" id="overlay-pots">
+    <div class="pots-stage-header">
+      <h2>🏺 4 BẢO BÌNH THỜI CUỘC ĐÃ MỞ RA!</h2>
+      <p>
+        Trưởng đoàn <strong id="pots-leader-text" style="color:var(--gold-star);">...</strong> đang trực tiếp chạm chọn 1 bình trên điện thoại!
+      </p>
+    </div>
+
+    <div class="pots-display-row">
+      <div class="golden-urn-card" id="host-pot-0">
+        <div style="font-size:52px; margin-bottom:10px;">🏺</div>
+        <div style="font-size:15px; font-weight:900;" class="urn-title">Bình Số 1</div>
+        <div style="font-size:11px; font-weight:800; margin-top:6px;" class="urn-badge">BÍ ẨN</div>
+      </div>
+      <div class="golden-urn-card" id="host-pot-1">
+        <div style="font-size:52px; margin-bottom:10px;">🏺</div>
+        <div style="font-size:15px; font-weight:900;" class="urn-title">Bình Số 2</div>
+        <div style="font-size:11px; font-weight:800; margin-top:6px;" class="urn-badge">BÍ ẨN</div>
+      </div>
+      <div class="golden-urn-card" id="host-pot-2">
+        <div style="font-size:52px; margin-bottom:10px;">🏺</div>
+        <div style="font-size:15px; font-weight:900;" class="urn-title">Bình Số 3</div>
+        <div style="font-size:11px; font-weight:800; margin-top:6px;" class="urn-badge">BÍ ẨN</div>
+      </div>
+      <div class="golden-urn-card" id="host-pot-3">
+        <div style="font-size:52px; margin-bottom:10px;">🏺</div>
+        <div style="font-size:15px; font-weight:900;" class="urn-title">Bình Số 4</div>
+        <div style="font-size:11px; font-weight:800; margin-top:6px;" class="urn-badge">BÍ ẨN</div>
+      </div>
+    </div>
+
+    <div class="pot-outcome-banner" id="pot-outcome-banner">
+      <!-- Injected when opened -->
+    </div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    // Password Gate Management
+    const gateOverlay = document.getElementById('gate-overlay');
+    const gatePassInput = document.getElementById('gate-pass-input');
+    const gateSubmitBtn = document.getElementById('gate-submit-btn');
+    const gateError = document.getElementById('gate-error');
+
+    function checkAuth() {
+      const savedPass = sessionStorage.getItem('admin_pass');
+      if (savedPass === '2026') {
+        socket.emit('admin_login', { password: '2026' });
+      }
+    }
+
+    gateSubmitBtn.addEventListener('click', () => {
+      const pass = gatePassInput.value.trim();
+      socket.emit('admin_login', { password: pass });
+    });
+
+    gatePassInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') gateSubmitBtn.click();
+    });
+
+    socket.on('admin_auth_success', () => {
+      sessionStorage.setItem('admin_pass', '2026');
+      gateOverlay.classList.add('hidden');
+    });
+
+    socket.on('admin_auth_failed', ({ message }) => {
+      gateError.textContent = message;
+      gateError.style.display = 'block';
+    });
+
+    // Check on load
+    checkAuth();
+
+    // Load QR Code & URL
+    fetch('/api/server-info')
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById('qr-img').src = data.qrDataUrl;
+        document.getElementById('qr-link-text').textContent = data.playUrl;
+      })
+      .catch(() => {});
+
+    // Elements
+    const panelLobby = document.getElementById('panel-lobby');
+    const panelPlaying = document.getElementById('panel-playing');
+    const lobbyCountNum = document.getElementById('lobby-count-num');
+    const lobbyChipsContainer = document.getElementById('lobby-chips-container');
+    const btnStartGame = document.getElementById('btn-start-game');
+
+    const team1Score = document.getElementById('team1-score');
+    const team1TotalAnswered = document.getElementById('team1-total-answered');
+    const team1TotalCorrect = document.getElementById('team1-total-correct');
+    const team1TotalWrong = document.getElementById('team1-total-wrong');
+    const team1Accuracy = document.getElementById('team1-accuracy');
+    const team1MemberCount = document.getElementById('team1-member-count');
+    const team1LeaderName = document.getElementById('team1-leader-name');
+    const team1StreakText = document.getElementById('team1-streak-text');
+    const team1StreakFill = document.getElementById('team1-streak-fill');
+    const team1MembersContainer = document.getElementById('team1-members-container');
+
+    const team2Score = document.getElementById('team2-score');
+    const team2TotalAnswered = document.getElementById('team2-total-answered');
+    const team2TotalCorrect = document.getElementById('team2-total-correct');
+    const team2TotalWrong = document.getElementById('team2-total-wrong');
+    const team2Accuracy = document.getElementById('team2-accuracy');
+    const team2MemberCount = document.getElementById('team2-member-count');
+    const team2LeaderName = document.getElementById('team2-leader-name');
+    const team2StreakText = document.getElementById('team2-streak-text');
+    const team2StreakFill = document.getElementById('team2-streak-fill');
+    const team2MembersContainer = document.getElementById('team2-members-container');
+
+    const playerCountText = document.getElementById('player-count-text');
+    const leaderLogsFeed = document.getElementById('leader-logs-feed');
+
+    const overlayAlarm = document.getElementById('overlay-alarm-50');
+    const alarmTeamName = document.getElementById('alarm-team-name');
+    const alarmLeaderName = document.getElementById('alarm-leader-name');
+
+    const overlayPots = document.getElementById('overlay-pots');
+    const potsLeaderText = document.getElementById('pots-leader-text');
+    const potOutcomeBanner = document.getElementById('pot-outcome-banner');
+
+    const btnReset = document.getElementById('btn-host-reset');
+    const btnFullscreen = document.getElementById('btn-fullscreen');
+
+    // Start Game Button
+    btnStartGame.addEventListener('click', () => {
+      socket.emit('host_start_game');
+    });
+
+    socket.on('admin_error', ({ message }) => {
+      alert(message);
+    });
+
+    // Room State Update
+    socket.on('room_state', (state) => {
+      playerCountText.textContent = `${state.totalLobbyCount} Sinh Viên Trong Phòng`;
+
+      if (state.status === 'LOBBY') {
+        panelLobby.classList.remove('hidden');
+        panelPlaying.classList.add('hidden');
+
+        // Update Lobby Chips
+        lobbyCountNum.textContent = state.lobbyPlayers.length;
+        lobbyChipsContainer.innerHTML = '';
+        state.lobbyPlayers.forEach(p => {
+          const pill = document.createElement('div');
+          pill.className = 'lobby-player-pill';
+          pill.innerHTML = `<span>★</span><span>${p.name}</span>`;
+          lobbyChipsContainer.appendChild(pill);
+        });
+      } else {
+        panelLobby.classList.add('hidden');
+        panelPlaying.classList.remove('hidden');
+
+        // Team 1
+        team1Score.textContent = state.team1.score;
+        team1TotalAnswered.textContent = state.team1.totalAnswered;
+        team1TotalCorrect.textContent = state.team1.totalCorrect;
+        team1TotalWrong.textContent = state.team1.totalWrong;
+        team1MemberCount.textContent = `${state.team1.memberCount} thành viên`;
+        team1LeaderName.textContent = state.team1.leaderName || 'Đang bốc thăm...';
+        team1StreakText.textContent = `${state.team1.streak} / 50`;
+        team1StreakFill.style.width = `${Math.min(100, (state.team1.streak / 50) * 100)}%`;
+        const acc1 = state.team1.totalAnswered > 0 ? Math.round((state.team1.totalCorrect / state.team1.totalAnswered) * 100) : 100;
+        team1Accuracy.textContent = `${acc1}%`;
+        renderMembers(team1MembersContainer, state.team1.members);
+
+        // Team 2
+        team2Score.textContent = state.team2.score;
+        team2TotalAnswered.textContent = state.team2.totalAnswered;
+        team2TotalCorrect.textContent = state.team2.totalCorrect;
+        team2TotalWrong.textContent = state.team2.totalWrong;
+        team2MemberCount.textContent = `${state.team2.memberCount} thành viên`;
+        team2LeaderName.textContent = state.team2.leaderName || 'Đang bốc thăm...';
+        team2StreakText.textContent = `${state.team2.streak} / 50`;
+        team2StreakFill.style.width = `${Math.min(100, (state.team2.streak / 50) * 100)}%`;
+        const acc2 = state.team2.totalAnswered > 0 ? Math.round((state.team2.totalCorrect / state.team2.totalAnswered) * 100) : 100;
+        team2Accuracy.textContent = `${acc2}%`;
+        renderMembers(team2MembersContainer, state.team2.members);
+      }
+    });
+
+    function renderMembers(container, members) {
+      container.innerHTML = '';
+      members.forEach(m => {
+        const chip = document.createElement('div');
+        chip.className = `member-chip ${m.isLeader ? 'is-leader' : ''}`;
+        chip.innerHTML = `${m.isLeader ? '👑' : '★'} ${m.name} <small>(${m.score}đ)</small>`;
+        container.appendChild(chip);
+      });
+    }
+
+    // Live Log Entry Added (YÊU CẦU QUAN TRỌNG)
+    socket.on('new_log_entry', (entry) => {
+      const logDiv = document.createElement('div');
+      logDiv.className = `log-entry ${entry.type}`;
+      logDiv.innerHTML = `<span class="log-time">[${entry.time}]</span><span>${entry.text}</span>`;
+      leaderLogsFeed.prepend(logDiv);
+    });
+
+    // Streak 50 Alert Triggered
+    socket.on('streak_50_reached', ({ teamKey, teamName, leaderName }) => {
+      alarmTeamName.textContent = teamName;
+      alarmLeaderName.textContent = leaderName;
+      overlayAlarm.classList.add('active');
+
+      setTimeout(() => {
+        overlayAlarm.classList.remove('active');
+      }, 3500);
+    });
+
+    // Leader Answered Correctly -> Show 4 Pots on Projector!
+    socket.on('host_show_pots', ({ teamKey, teamName, leaderName }) => {
+      potsLeaderText.textContent = `${leaderName} (${teamName})`;
+      potOutcomeBanner.className = 'pot-outcome-banner';
+      for (let i = 0; i < 4; i++) {
+        const c = document.getElementById(`host-pot-${i}`);
+        c.className = 'golden-urn-card';
+        c.querySelector('.urn-title').textContent = `Bình Số ${i + 1}`;
+        c.querySelector('.urn-badge').textContent = 'BÍ ẨN';
+      }
+      overlayPots.classList.add('active');
+    });
+
+    // Pot Revealed!
+    socket.on('pot_revealed', (data) => {
+      const chosenCard = document.getElementById(`host-pot-${data.chosenIndex}`);
+      if (chosenCard) {
+        chosenCard.className = 'golden-urn-card opened';
+        chosenCard.querySelector('.urn-title').textContent = data.potBadge;
+        chosenCard.querySelector('.urn-badge').textContent = data.potName;
+      }
+
+      data.allPots.forEach((pot, idx) => {
+        if (idx !== data.chosenIndex) {
+          const other = document.getElementById(`host-pot-${idx}`);
+          if (other) {
+            other.querySelector('.urn-badge').textContent = pot.badge;
+            other.style.opacity = '0.6';
+          }
+        }
+      });
+
+      potOutcomeBanner.textContent = `💥 KẾT QUẢ: ${data.outcomeDesc}`;
+      potOutcomeBanner.classList.add('active');
+
+      setTimeout(() => {
+        overlayPots.classList.remove('active');
+      }, 5500);
+    });
+
+    // Reset Game
+    btnReset.addEventListener('click', () => {
+      if (confirm('Làm mới lại phòng chờ? Mọi người sẽ trở về sảnh chờ.')) {
+        socket.emit('host_reset_game');
+      }
+    });
+
+    // Fullscreen
+    btnFullscreen.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    });
+  </script>
+</body>
+</html>
