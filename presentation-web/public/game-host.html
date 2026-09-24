@@ -79,7 +79,39 @@
       padding: 20px;
     }
     .admin-gate-overlay.hidden {
-      display: none;
+      display: none !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      opacity: 0 !important;
+    }
+    .btn-gate-config {
+      background: transparent;
+      border: 1px dashed var(--gold-dark);
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--gold-dark);
+      cursor: pointer;
+      margin-top: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      width: 100%;
+      justify-content: center;
+    }
+    .btn-gate-config:hover {
+      background: var(--gold-light);
+      color: var(--red-darkest);
+      border-style: solid;
+    }
+    .gate-status-text {
+      font-size: 11px;
+      color: #666;
+      margin-top: 8px;
+      font-weight: 600;
     }
     .gate-login-card {
       background: var(--cream-parchment);
@@ -820,6 +852,9 @@
       <input type="password" id="gate-pass-input" class="input-gate-pass" placeholder="Nhập mã bảo mật..." maxlength="20" autofocus autocomplete="off">
       <button id="gate-submit-btn" class="btn-gate-submit">MỞ KHÓA BÀN QUẢN TRÒ ➔</button>
       <div id="gate-error" class="gate-error-text">Mật khẩu không chính xác! Vui lòng thử lại.</div>
+
+      <button type="button" id="gate-btn-config" class="btn-gate-config">⚙️ Cài đặt URL Máy chủ VPS (Cloudflare)</button>
+      <div id="gate-server-status" class="gate-status-text">Đang kiểm tra kết nối máy chủ...</div>
     </div>
   </div>
 
@@ -1139,35 +1174,97 @@
     const gatePassInput = document.getElementById('gate-pass-input');
     const gateSubmitBtn = document.getElementById('gate-submit-btn');
     const gateError = document.getElementById('gate-error');
+    const gateBtnConfig = document.getElementById('gate-btn-config');
+    const gateServerStatus = document.getElementById('gate-server-status');
+
+    function updateGateStatusText() {
+      if (gateServerStatus) {
+        if (socket && socket.connected) {
+          gateServerStatus.innerHTML = '<span style="color:#10B981; font-weight:700;">● Đã kết nối Máy chủ VPS</span>';
+        } else {
+          gateServerStatus.innerHTML = '<span style="color:#F59E0B; font-weight:700;">● Chưa kết nối VPS (Bấm nút trên để cài URL)</span>';
+        }
+      }
+    }
+
+    if (gateBtnConfig) {
+      gateBtnConfig.addEventListener('click', () => {
+        if (btnConfigServer) btnConfigServer.click();
+      });
+    }
+
+    function attemptUnlockGate() {
+      const pass = gatePassInput.value.trim();
+      if (!pass) return;
+
+      if (pass === '2026') {
+        sessionStorage.setItem('admin_pass', '2026');
+        gateOverlay.classList.add('hidden');
+        gateOverlay.style.display = 'none';
+        gateError.style.display = 'none';
+
+        // Notify socket if connected
+        try {
+          if (socket && socket.connected) {
+            socket.emit('admin_login', { password: '2026' });
+          }
+        } catch (e) {}
+      } else {
+        gateError.textContent = 'Mật khẩu quản trò không chính xác! Vui lòng thử lại.';
+        gateError.style.display = 'block';
+        gatePassInput.value = '';
+        gatePassInput.focus();
+      }
+    }
 
     function checkAuth() {
       const savedPass = sessionStorage.getItem('admin_pass');
       if (savedPass === '2026') {
-        socket.emit('admin_login', { password: '2026' });
+        gateOverlay.classList.add('hidden');
+        gateOverlay.style.display = 'none';
+        try {
+          if (socket && socket.connected) {
+            socket.emit('admin_login', { password: '2026' });
+          }
+        } catch (e) {}
       }
     }
 
-    gateSubmitBtn.addEventListener('click', () => {
-      const pass = gatePassInput.value.trim();
-      socket.emit('admin_login', { password: pass });
+    gateSubmitBtn.addEventListener('click', attemptUnlockGate);
+    gatePassInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') attemptUnlockGate();
     });
 
-    gatePassInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') gateSubmitBtn.click();
+    socket.on('connect', () => {
+      updateGateStatusText();
+      const savedPass = sessionStorage.getItem('admin_pass');
+      if (savedPass === '2026') {
+        socket.emit('admin_login', { password: '2026' });
+      }
+    });
+
+    socket.on('disconnect', () => {
+      updateGateStatusText();
+    });
+
+    socket.on('connect_error', () => {
+      updateGateStatusText();
     });
 
     socket.on('admin_auth_success', () => {
       sessionStorage.setItem('admin_pass', '2026');
       gateOverlay.classList.add('hidden');
+      gateOverlay.style.display = 'none';
     });
 
     socket.on('admin_auth_failed', ({ message }) => {
-      gateError.textContent = message;
+      gateError.textContent = message || 'Mật khẩu không chính xác!';
       gateError.style.display = 'block';
     });
 
     // Check on load
     checkAuth();
+    updateGateStatusText();
 
     // Load QR Code & URL (Instantly works on Vercel & VPS Cloudflare)
     const hostOrigin = window.location.origin;
