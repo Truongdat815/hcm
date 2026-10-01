@@ -7,3 +7,7 @@ yarn-error.log*
 Thumbs.db
 .vscode/
 .idea/
+.env
+.env.*
+!.env.example
+presentation-web/config.generated.js

@@ -4,9 +4,10 @@
   "description": "Báo cáo chuyên đề Tư Tưởng Hồ Chí Minh & Đấu trí Ai Là Triệu Phú Online",
   "main": "presentation-web/server.js",
   "scripts": {
-    "start": "node presentation-web/server.js",
+    "start": "npm run build && node scripts/dev-server.js",
     "online": "node presentation-web/server.js --online",
-    "dev": "node presentation-web/server.js",
+    "dev": "npm run build && node scripts/dev-server.js",
+    "build": "node scripts/build-vercel-config.js",
     "postinstall": "cd presentation-web && npm install"
   },
   "dependencies": {
