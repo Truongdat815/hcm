@@ -1,4 +1,5 @@
 {
+  "buildCommand": "npm run build",
   "rewrites": [
     { "source": "/", "destination": "/presentation-web/index.html" },
     { "source": "/game", "destination": "/presentation-web/public/game-host.html" },
