@@ -11,3 +11,4 @@ Thumbs.db
 .env.*
 !.env.example
 presentation-web/config.generated.js
+presentation-web/public/config.generated.js

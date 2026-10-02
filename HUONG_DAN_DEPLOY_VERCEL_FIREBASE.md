@@ -43,7 +43,11 @@ GAME_QUESTION_COUNT
 ```
 
 Redeploy sau khi thêm hoặc thay đổi biến môi trường. Lệnh build sẽ sinh
-`presentation-web/config.js` tự động, không cần commit khóa Firebase vào repository.
+`presentation-web/config.generated.js` tự động, không cần commit khóa Firebase vào repository.
+
+> **Lưu ý cấu hình Build & Output Directory trên Vercel:**
+> - Trong repo đã có sẵn file `vercel.json` định nghĩa `"outputDirectory": "presentation-web"`.
+> - Trong Vercel Dashboard (**Settings > General > Build & Development Settings**), mục **Output Directory** chỉ cần để mặc định (TẮT Override), hoặc nếu bật Override thì điền chính xác là `presentation-web`. Không để là `public`.
 
 ## 4. Sử dụng
 

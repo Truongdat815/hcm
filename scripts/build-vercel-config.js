@@ -39,7 +39,13 @@ const output = `window.HCM_CONFIG = ${JSON.stringify({
   }
 }, null, 2)};\n`;
 
-fs.writeFileSync(path.join(__dirname, '..', 'presentation-web', 'config.generated.js'), output);
+const primaryPath = path.join(__dirname, '..', 'presentation-web', 'config.generated.js');
+fs.writeFileSync(primaryPath, output);
+const publicPath = path.join(__dirname, '..', 'presentation-web', 'public', 'config.generated.js');
+try {
+  fs.writeFileSync(publicPath, output);
+} catch (e) {}
+
 console.log(firebaseConfig.databaseURL
   ? 'Firebase config generated for Vercel.'
   : 'Firebase env is missing; browser will show a configuration error.');
