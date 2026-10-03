@@ -72,8 +72,14 @@
     </div>
     </section>
 
+    <section class="slide image-slide" data-source-page="7b" aria-label="Slide 8: Phần II, nội dung 2">
+      <h2 class="visually-hidden">Hình thức tổ chức đoàn kết quốc tế</h2>
+      <p class="eyebrow visually-hidden">Phần II • Nội dung 2</p>
+      <img src="assets/hinh-thuc-to-chuc-doan-ket-quoc-te.png" alt="Sơ đồ bốn tầng mặt trận đoàn kết quốc tế trong tư tưởng Hồ Chí Minh">
+    </section>
+
     <section class="slide compact" data-source-page="17" aria-label="Slide 16">
-      <header class="slide-header"><p class="eyebrow">Phần 2 • Nội dung 2</p><h2>Các Nguyên Tắc Đoàn Kết Quốc Tế Trong Tư Tưởng Hồ Chí Minh</h2></header>
+      <header class="slide-header"><p class="eyebrow">Phần II • Nội dung 3</p><h2>Các Nguyên Tắc Đoàn Kết Quốc Tế Trong Tư Tưởng Hồ Chí Minh</h2></header>
       <div class="grid two">
         <article class="card numbered red-card"><span class="number">1</span><h3>Thống Nhất Mục Tiêu &amp; Lợi Ích; "Có Lý, Có Tình"</h3><p><strong>Với phong trào cộng sản &amp; công nhân:</strong> Ngọn cờ Độc lập dân tộc gắn liền với Chủ nghĩa xã hội, trên nền tảng chủ nghĩa Mác – Lênin và chủ nghĩa quốc tế vô sản.</p><p><strong>Với các dân tộc &amp; lực lượng tiến bộ:</strong> Ngọn cờ Độc lập, Tự do, Bình đẳng và Hòa bình chân chính.</p><p>"Chính sách đối ngoại của Việt Nam là làm bạn với tất cả mọi nước dân chủ và không gây thù oán với một ai." <em>(Hồ Chí Minh, 1947)</em></p></article>
         <article class="card numbered gold-card"><span class="number">2</span><h3>Độc Lập, Tự Chủ, Tự Lực Tự Cường</h3><p><strong>Nội lực là quyết định, ngoại lực là quan trọng:</strong> "Tự lực cánh sinh, dựa vào sức mình là chính."</p><p><strong>Điều kiện nhận trợ lực quốc tế:</strong> "Muốn người ta giúp mình, thì trước hết mình phải tự giúp lấy mình đã."</p><p><strong>Thực lực – Ngoại giao:</strong> "Phải có thực lực, thực lực là cái chiêng, ngoại giao là cái tiếng, chiêng có to tiếng mới lớn."</p></article>
@@ -82,7 +88,7 @@
     </section>
 
     <section class="slide compact" data-source-page="18" aria-label="Slide 17">
-      <header class="slide-header"><p class="eyebrow">Phần 2 • Nội dung 3</p><h2>Kết Hợp Sức Mạnh Dân Tộc Với Sức Mạnh Thời Đại</h2></header>
+      <header class="slide-header"><p class="eyebrow">Phần II • Nội dung 4</p><h2>Kết Hợp Sức Mạnh Dân Tộc Với Sức Mạnh Thời Đại</h2></header>
       <div class="grid two">
         <article class="card red-card"><span class="symbol">⚑</span><h3>Sức Mạnh Dân Tộc (Nội Lực Tổng Hợp)</h3><p>Chủ nghĩa yêu nước nồng nàn + Ý thức tự lực tự cường + Khối đại đoàn kết toàn dân tộc + Bề dày truyền thống văn hóa kiên cường.</p></article>
         <article class="card gold-card"><span class="symbol">◎</span><h3>Sức Mạnh Thời Đại (Nguồn Lực Quốc Tế)</h3><p>Trào lưu cách mạng thế giới + Chủ nghĩa Mác – Lênin + Phong trào hòa bình, dân chủ, tiến bộ + Luật pháp quốc tế.</p></article>
@@ -232,7 +238,12 @@
         try { saved = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (error) { saved = {}; }
         const known = id => byId.has(id);
         const order = (saved.order || []).filter(known);
-        defaultOrder.forEach(id => { if (!order.includes(id)) order.push(id); });
+        defaultOrder.forEach((id, defaultIndex) => {
+          if (order.includes(id)) return;
+          const nextKnownId = defaultOrder.slice(defaultIndex + 1).find(nextId => order.includes(nextId));
+          const insertAt = nextKnownId ? order.indexOf(nextKnownId) : order.length;
+          order.splice(insertAt, 0, id);
+        });
         return { order, hidden: (saved.hidden || []).filter(known), deleted: (saved.deleted || []).filter(known) };
       }
       function save() { try { localStorage.setItem(KEY, JSON.stringify(layout)); } catch (error) { /* chế độ riêng tư */ } }
